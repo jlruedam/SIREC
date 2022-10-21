@@ -1,5 +1,14 @@
 //https://www.google.com/design/spec/components/cards.html#cards-content-blocks
 // Card resting elevation: 2dp
+:root{
+  /*Colores Ser Social*/
+
+  --azul-rey: #26438a;
+  --azul-cielo:#76aadb;
+  --naranja: #d57f23;
+}
+
+
 .card {
   border: 0;
   margin-bottom: 30px;
@@ -167,7 +176,7 @@
     &.bg-primary,
     &.card-rotate.bg-primary .front,
     &.card-rotate.bg-primary .back{
-      background: linear-gradient(60deg, $purple-400, $purple-600);
+      background: linear-gradient(60deg, var(--azul-rey), var(--azul-cielo));
     }
     .card-header-info .card-icon,
     .card-header-info .card-text,

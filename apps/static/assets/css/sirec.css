@@ -1,0 +1,24 @@
+:root{
+    /*Colores Ser Social*/
+
+    --azul-rey: #26438a;
+    --azul-cielo:#76aadb;
+    --naranja: #d57f23;
+}
+
+#logo_serSocial {
+    width: 16rem;
+    height: 4rem;
+}
+
+.myBaseClass {
+    background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
+    /* color: var(--naranja) !important; */
+    text-align: center;
+
+}
+
+.my-bg {
+
+    background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
+}

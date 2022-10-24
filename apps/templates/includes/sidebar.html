@@ -8,13 +8,55 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
         {% if request.user.is_authenticated %}
-
-          <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+        
+          <li class="nav-item {% if 'index' in segment %} my-bg {% endif %}">
             <a class="nav-link" href="/">
+              <i class="material-icons">dashboard</i>
+              <p>Gestión Solicitudes</p>
+            </a>
+          </li>
+
+          <li class="nav-item {% if 'legalizaciones' in segment %} my-bg  {% endif %}">
+            <a class="nav-link" href="/legalizaciones.html">
+              <i class="material-icons">library_books</i>
+              <p>Gestión Legalizaciones</p>
+            </a>
+          </li>
+
+          <li class="nav-item {% if 'auditoria-solicitudes' in segment %} my-bg  {% endif %}">
+            <a class="nav-link" href="/auditoria-solicitudes.html">
+              <i class="material-icons">content_paste</i>
+              <p>Auditoría Solicitudes</p>
+            </a>
+          </li>
+
+          <li class="nav-item {% if 'egresos' in segment %} my-bg  {% endif %}">
+            <a class="nav-link" href="/egresos.html">
+              <i class="material-icons">bubble_chart</i>
+              <p>Egresos</p>
+            </a>
+          </li>
+
+          <li class="nav-item {% if 'page-user' in segment %} my-bg  {% endif %}">
+            <a class="nav-link" href="/page-user.html">
+              <i class="material-icons">person</i>
+              <p>Perfil Usuario</p>
+            </a>
+          </li>
+
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'logout' %}" >
+              <i class="material-icons">directions_run</i>
+              <p>Logout</p>
+            </a>
+          </li>
+
+          <!-- <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+            <a class="nav-link" href="/index_.html">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
-          </li>
+          </li> 
           <li class="nav-item {% if 'page-user' in segment %} active {% endif %}">
             <a class="nav-link" href="/page-user.html">
               <i class="material-icons">person</i>
@@ -27,6 +69,8 @@
               <p>Table List</p>
             </a>
           </li>
+
+          
           <li class="nav-item {% if 'ui-typography' in segment %} active {% endif %}">
             <a class="nav-link" href="/ui-typography.html">
               <i class="material-icons">library_books</i>
@@ -59,21 +103,16 @@
             </a>
           </li>
 
-          <li class="nav-item ">
-            <a class="nav-link" href="{% url 'logout' %}" >
-              <i class="material-icons">directions_run</i>
-              <p>Logout</p>
-            </a>
-          </li>
+          
 
-          <li class="nav-item active-pro ">
+           <li class="nav-item active-pro ">
             <a class="nav-link" 
                target="_blank" rel="noopener noreferrer"  
                href="https://appseed.us/admin-dashboards/django-dashboard-material-pro">
               <i class="material-icons">unarchive</i>
               <p>PRO Version</p>
             </a>
-          </li>
+          </li> -->
 
         {% else %}
 

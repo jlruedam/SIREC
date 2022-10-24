@@ -21,4 +21,58 @@
 .my-bg {
 
     background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
+    
+}
+
+.my-bg:active > a{
+
+    background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
+    color: white !important;
+}
+
+
+
+.my-color-primary {
+    color: var(--azul-rey) !important;
+}
+.navBarContainer {
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+
+}
+
+.myNavBar {
+    background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
+    border-radius: 20px;
+    color: white;
+    width: 100%;
+    box-shadow: 2px 2px 2px 1px gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.myNavBar__list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 5px;
+    padding: 10px;
+}
+
+.myNavBar__element {
+    list-style: none;
+}
+
+.myNavBar__link {
+    text-decoration: none;
+    color: white;
+}
+
+.mytitle {
+    text-align: center;
 }

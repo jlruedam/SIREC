@@ -76,3 +76,19 @@
 .mytitle {
     text-align: center;
 }
+
+.myForm {
+    width: 100%;
+    margin: 10px 0 10px 0;
+    padding: 10px;
+    border: 1px solid var(--azul-cielo);
+    border-radius: 20px;
+}
+
+.myForm select {
+    border-radius: 10px;
+    border: 1px solid var(--azul-cielo);
+    text-align: center;
+    padding: 5px;
+    width: 10rem;
+}

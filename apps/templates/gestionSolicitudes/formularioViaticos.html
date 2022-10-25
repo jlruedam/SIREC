@@ -1,0 +1,55 @@
+{% block formViaticos %}
+
+<h2>
+    FORMULARIO VIÁTICOS
+    
+</h2>
+
+<form action="">
+
+    <label for="fecha_solicitud" class="myForm__label">Fecha Solicitud</label>
+    <input type="date" class="myForm__input" id="fecha_solicitud">
+
+    <label for="solicitud_id" class="myForm__label"># Solicitud</label>
+    <input type="text" class="myForm__input" id="solicitud_id" disabled>
+
+    <label for="lista-colaboradores" class="myForm__label">Colaborador</label>
+    <input list="listado-colaboradores" class="myForm__input" id="lista-colaboradores">
+
+    <datalist id="listado-colaboradores">
+        <option value="Alan Brito">
+        <option value="Elba Zurita">
+        <option value="Lucho Portuano">
+        <option value="Hela Icate">
+    </datalist>
+    <br>
+    <br>
+    <label for="selectTipoSolicitud" class="myForm__select">Selecione el tipo:</label>
+    <select name="selectTipoSolicitud" id="selectTipoSolicitud" class="myForm__select" disabled>
+        <option value=""></option>
+        <option value="Solicitado" selected>Solicitado</option>
+        <option value="Anticipo"></option>
+        <option value="Reembolso">Reembolso</option>
+    </select>
+
+    <label for="selectRegional" class="myForm__select">Regional:</label>
+    <select name="selectRegional" id="selectRegional" class="myForm__select" disabled>
+        <option value=""></option>
+        <option value="Solicitado" selected>Solicitado</option>
+        <option value="Anticipo"></option>
+        <option value="Reembolso">Reembolso</option>
+    </select>
+    <br>
+    <br>
+    <div>
+        <label for="observaciones-solicitud" class="myForm__label">Observaciones</label>
+        <textarea  name="observaciones-solicitud" class="myForm__input" id="observaciones-solicitud">...</textarea>
+    </div>
+    <br>
+    <br>
+    <h3>ACTIVIDADES</h3>
+    
+
+</form>
+
+{% endblock %}

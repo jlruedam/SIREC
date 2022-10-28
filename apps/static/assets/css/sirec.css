@@ -11,15 +11,16 @@
     height: 4rem;
 }
 
+.lineaDivisora {
+    border: 1px var(--azul-cielo) solid;
+}
 .myBaseClass {
     background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
     /* color: var(--naranja) !important; */
     text-align: center;
-
 }
 
 .my-bg {
-
     background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
     
 }
@@ -31,17 +32,17 @@
 }
 
 
-
 .my-color-primary {
     color: var(--azul-rey) !important;
 }
+
 .navBarContainer {
     padding: 2px;
     display: flex;
     justify-content: center;
     width: 100%;
     align-items: center;
-
+    opacity: 0.7;
 }
 
 .myNavBar {
@@ -62,10 +63,13 @@
     width: 100%;
     margin: 5px;
     padding: 10px;
+    height: 30px;
 }
 
 .myNavBar__element {
     list-style: none;
+    position: relative;
+    bottom: 20px; 
 }
 
 .myNavBar__link {
@@ -73,22 +77,134 @@
     color: white;
 }
 
-.mytitle {
+.myTitle {
     text-align: center;
+    color: gray;
+    letter-spacing: 10px; 
+    padding: 5px;
+    margin-left:5px ;
 }
 
-.myForm {
+.myFormContainer {
     width: 100%;
     margin: 10px 0 10px 0;
     padding: 10px;
     border: 1px solid var(--azul-cielo);
     border-radius: 20px;
+    box-shadow: 3px 2px 3px 1px gray;
 }
 
-.myForm select {
+/* .myFormContainer select {
     border-radius: 10px;
     border: 1px solid var(--azul-cielo);
     text-align: center;
     padding: 5px;
     width: 10rem;
+} */
+
+.myForm {
+    
+    padding: 5px;
+    text-align: center;
+}
+
+.myForm__legend {
+    
+    text-align: center;
+    width: 100%;
+    border-bottom:3px solid var(--azul-cielo) ;
+    border-top: 3px solid var(--azul-cielo);
+    border-radius: 10px;
+    
+}
+
+.myForm__section {
+    
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    
+ 
+}
+.myForm__item {
+     
+    margin: 0;
+    padding: 20px 10px 20px 10px;
+    height: 5rem;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    text-align: center;
+    flex-basis: 30rem;
+}
+
+.myForm__item_especial {
+    
+    text-align: center;
+    background: linear-gradient(240deg,var(--azul-cielo), var(--azul-rey)) !important;
+    margin-bottom: 20px;
+    margin-top: 35px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.myForm__label {
+    
+    padding: 3px;
+    width: 8rem;
+    
+}
+.myForm__label:hover {
+    
+    color: var(--naranja);
+    
+}
+
+.myForm__input {
+    border: var(--azul-cielo);
+}
+
+.myForm__select, .myForm__input {
+    border-radius: 10px;
+    border: 1px solid var(--azul-cielo);
+    text-align: center;
+    padding: 5px;
+    width: 10rem;
+    height: 2rem;
+}
+
+.myForm__textArea {
+    border-radius: 10px;
+    border: 1px solid var(--azul-cielo);
+    text-align: center;
+    padding: 5px;
+    width: 10rem;
+    min-height: 3rem;
+}
+
+.myForm__select_modify {
+    width: 30rem;
+    border-radius: 0;
+    border-bottom-left-radius: 50px;
+    border-top-right-radius: 50px;
+    font-size: 30px;
+    letter-spacing: 5px;
+    height: 5rem;
+    position: relative;
+    bottom: 50px;
+    background: linear-gradient(240deg,var(--azul-cielo), white) !important;
+    opacity: .8;
+    color: gray;
+}
+.myForm__select option {
+    background-color: var(--azul-cielo);
+    
+}
+
+
+.myForm__select_modify:hover {
+    background: linear-gradient(60deg,var(--azul-cielo), var(--naranja)) !important;
 }

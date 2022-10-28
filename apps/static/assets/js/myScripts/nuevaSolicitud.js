@@ -1,3 +1,5 @@
+const client = new XMLHttpRequest();
+
 const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
 const selectTipoSolicitud = document.querySelector('#selectTipoSolicitud')
 const btnNuevaSolicitud = document.querySelector('#BotonNuevaSolicitud');
@@ -28,6 +30,21 @@ function eligeTipoSolicitud(){
             contenedorFormViaticos.style.display = 'block';
             contenedorFormAnticipo.style.display = 'none';
             contenedorFormReembolso.style.display = 'none';
+
+            client.addEventListener("readystatechange", () => {
+                const isDone = client.readyState == 4;
+                const isOk = client.status == 200;
+                if(isDone && isOk){
+                    console.log(client.responseText);
+                }
+                else {
+                    console.log("ERROR");
+                }
+            });
+
+            client.open("GET", "/");
+            client.send();
+
             break;
         case 'Anticipo':
             contenedorFormViaticos.style.display = 'none';

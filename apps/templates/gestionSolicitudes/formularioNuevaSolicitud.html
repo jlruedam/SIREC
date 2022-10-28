@@ -1,29 +1,28 @@
 {% block formSolicitud %}
 
-<div class="myForm" id="formNuevaSolicitud" style="display:none;">
-    <form action="">
-        <label for="selectTipo" class="myForm__select">Selecione el tipo:</label>
-        <select name="selectTipo" id="selectTipoSolicitud" class="myForm__select" >
-            <option value=""></option>
+<div class="myFormContainer" id="formNuevaSolicitud">
+    
+    <div class="myForm__item myForm__item_especial">
+        <label for="selectTipo" class="myForm__label"></label>
+        <select name="selectTipo" id="selectTipoSolicitud" class="myForm__select myForm__select_modify " >
+            <option value="" selected><strong>Tipo Solicitud</strong></option>
             <option value="Viáticos">Viáticos</option>
             <option value="Anticipo">Anticipo</option>
             <option value="Reembolso">Reembolso</option>
         </select>
+    </div>
+    
 
-        <div id="contenedorFormViaticos" style="display:none;">
-            <p>contenedorFormViaticos</p>
-            {% include "gestionSolicitudes/formularioViaticos.html" %}
-        </div>
-        <div id="contenedorFormAnticipo" style="display:none;">
-            <p>contenedorFormAnticipo</p>
-            {% include "gestionSolicitudes/formularioAnticipo.html" %}
-        </div>
-        <div id="contenedorFormReembolso" style="display:none;">
-            <p>contenedorFormReembolso</p>
-            {% include "gestionSolicitudes/formularioReembolso.html" %}
-
-        </div>
-    </form>
+    <div id="contenedorFormViaticos">
+        {% include "gestionSolicitudes/formularioViaticos.html" %}
+    </div>
+    <div id="contenedorFormAnticipo" style="display:none;">
+        {% include "gestionSolicitudes/formularioAnticipo.html" %}
+    </div>
+    <div id="contenedorFormReembolso" style="display:none;">
+        {% include "gestionSolicitudes/formularioReembolso.html" %}
+    </div>
+   
 </div>
 
 

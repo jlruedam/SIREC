@@ -1,8 +1,135 @@
 {% block formAnticipo %}
 
-<h2>
+
+
+<h2 class="myTitle">
     FORMULARIO ANTICIPO
 </h2>
+
+<hr class="lineaDivisora">
+
+<form action="" class="myForm">
+    {% csrf_token %}
+    <div class="myForm__section">
+
+        <div class="myForm__item">
+            <label for="solicitud_id" class="myForm__label"># Solicitud  </label>
+            <span class="myForm__input" id="solicitud_id" >{{solicitudes}}</span>
+        </div>
+        
+        <div class="myForm__item">
+            <label for="fecha_solicitud" class="myForm__label">Fecha Solicitud</label>
+            <input type="date" class="myForm__input" id="fecha_solicitud" name="fecha_solicitud">
+        </div>
+
+        <div class="myForm__item">
+            <label for="lista-colaboradores" class="myForm__label">Colaborador</label>
+            <input list="listado-colaboradores" class="myForm__input" id="lista-colaboradores">
+            <datalist id="listado-colaboradores">
+                {% for colaborador in colaboradores %}
+                <option value="{{colaborador}}">
+                {% endfor %}
+            </datalist>
+        </div>
+        
+        <div class="myForm__item">
+            <label for="selectTipoSolicitud" class="myForm__label">Estado:</label>
+            <select name="selectTipoSolicitud" id="selectTipoSolicitud" class="myForm__select" disabled>
+                <option value=""></option>
+                <option value="Solicitado" selected>Solicitado</option>
+                <option value="Anticipo"></option>
+                <option value="Reembolso">Reembolso</option>
+                    
+            </select>
+        </div>
+        
+        <div class="myForm__item">
+            <label for="selectRegional" class="myForm__label">Regional:</label>
+            <select name="selectRegional" id="selectRegional" class="myForm__select">
+                {% for regional in regionales%}
+                <option value="{{regional.regional}}">{{regional.regional}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="myForm__item">
+            <label for="observaciones-solicitud" class="myForm__label">Observaciones</label>
+            <textarea  name="observaciones-solicitud" class="myForm__textArea" id="observaciones-solicitud">...</textarea>
+        </div>
+        
+    </div>
+    
+    <fieldset class="myForm__fieldset">
+        <legend class="myForm__legend"><h3 class="myTitle">ACTIVIDADES</h3></legend>
+
+        <div class="myForm__section">
+
+            <div class="myForm__item">
+                <label for="fecha_actividad" class="myForm__label">Fecha actividad</label>
+                <input type="date" class="myForm__input" id="fecha_actividad">
+            </div>
+            
+            <div class="myForm__item">
+                <label for="lista-municipios" class="myForm__label">Municipio</label>
+                <input list="listado-municipios" class="myForm__input" id="lista-municipios">
+                <datalist id="listado-municipios">
+                    {% for municipio in municipios%}
+                    <option value="{{municipio}}">
+                    {% endfor %}  
+                </datalist>
+            </div>
+           
+
+            <div class="myForm__item">
+                <label for="proyecto" class="myForm__label">Proyecto</label>
+                <input type="text" class="myForm__input" id="proyecto" >
+            </div>
+           
+
+            <div class="myForm__item">
+                <label for="Concepto_descripcion" class="myForm__label">Concepto / Descripción</label>
+                <textarea  name="Concepto_descripcion" class="myForm__input" id="Concepto_descripcion">...</textarea>
+            </div>
+
+            <div class="myForm__item"></div>  
+
+            <div class="myForm__item">
+                <label for="valor_total_actividad" class="myForm__label">Valor total actividad: $</label>
+                <input type="number" class="myForm__input" id="valor_total_actividad" >
+            </div>
+            
+        </div>
+
+        <fieldset class="myForm__fieldset">
+            <legend class="myForm__legend"><h4 class="myTitle">GASTOS ADICIONALES</h4></legend>
+
+            <div class="myForm__section">
+
+                <div class="myForm__item">
+                    <label for="fecha_solicitud" class="myForm__label">Fecha Gasto</label>
+                    <input type="date" class="myForm__input" id="fecha_solicitud">
+                </div>
+                
+                <div class="myForm__item">
+                    <label for="proyecto" class="myForm__label">Descripción</label>
+                    <input type="text" class="myForm__input" id="proyecto" >
+                </div>
+                
+                <div class="myForm__item">
+                    <label for="valor_total_actividad" class="myForm__label">Valor: $</label>
+                    <input type="number" class="myForm__input" id="valor_total_actividad" >
+                </div>
+                
+                <div class="myForm__item"></div>
+        
+            </div>
+            
+        </fieldset>
+
+    </fieldset>
+    
+
+</form>
 
 
 {% endblock %}

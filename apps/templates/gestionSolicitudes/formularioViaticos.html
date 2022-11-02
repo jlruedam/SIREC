@@ -7,14 +7,14 @@
 <hr class="lineaDivisora">
 
 <form action="" class="myForm">
-
+    {% csrf_token %}
     <div class="myForm__section">
 
         <div class="myForm__item">
-            <label for="solicitud_id" class="myForm__label"># Solicitud</label>
-            <input type="text" class="myForm__input" id="solicitud_id" disabled>
+            <label for="solicitud_id" class="myForm__label"># Solicitud  </label>
+            <span class="myForm__input" id="solicitud_id" >{{solicitudes}}</span>
         </div>
-
+        
         <div class="myForm__item">
             <label for="fecha_solicitud" class="myForm__label">Fecha Solicitud</label>
             <input type="date" class="myForm__input" id="fecha_solicitud" name="fecha_solicitud">
@@ -24,10 +24,9 @@
             <label for="lista-colaboradores" class="myForm__label">Colaborador</label>
             <input list="listado-colaboradores" class="myForm__input" id="lista-colaboradores">
             <datalist id="listado-colaboradores">
-                <option value="Alan Brito">
-                <option value="Elba Zurita">
-                <option value="Lucho Portuano">
-                <option value="Hela Icate">
+                {% for colaborador in colaboradores %}
+                <option value="{{colaborador}}">
+                {% endfor %}
             </datalist>
         </div>
         
@@ -38,16 +37,16 @@
                 <option value="Solicitado" selected>Solicitado</option>
                 <option value="Anticipo"></option>
                 <option value="Reembolso">Reembolso</option>
+                    
             </select>
         </div>
         
         <div class="myForm__item">
             <label for="selectRegional" class="myForm__label">Regional:</label>
-            <select name="selectRegional" id="selectRegional" class="myForm__select" disabled>
-                <option value=""></option>
-                <option value="Solicitado" selected>Nivel Central</option>
-                <option value="Anticipo"></option>
-                <option value="Reembolso">Reembolso</option>
+            <select name="selectRegional" id="selectRegional" class="myForm__select">
+                {% for regional in regionales%}
+                <option value="{{regional.regional}}">{{regional.regional}}</option>
+                {% endfor %}
             </select>
         </div>
         
@@ -72,10 +71,9 @@
                 <label for="lista-municipios" class="myForm__label">Municipio</label>
                 <input list="listado-municipios" class="myForm__input" id="lista-municipios">
                 <datalist id="listado-municipios">
-                    <option value="Tierra perdida">
-                    <option value="Wakanda">
-                    <option value="Muy muy lejano">
-                    <option value="Narnia">
+                    {% for municipio in municipios%}
+                    <option value="{{municipio}}">
+                    {% endfor %}  
                 </datalist>
             </div>
            
@@ -125,25 +123,37 @@
                     <div class="myForm__section">
 
                         <div class="myForm__item">
-                            <label for="lista-municipios" class="myForm__label">Sede Principal</label>
-                            <input list="listado-municipios" class="myForm__input" id="lista-municipios">
-                            <datalist id="listado-municipios">
-                                <option value="Tierra perdida">
-                                <option value="Wakanda">
-                                <option value="Muy muy lejano">
-                                <option value="Narnia">
-                            </datalist>
+                            <!-- <label for="lista-municipios-sedes" class="myForm__label">Sede Principal</label>
+                            <input list="listado-municipios-sedes" class="myForm__input" id="lista-municipios-sedes">
+                            <datalist id="listado-municipios-sedes">
+                                {% for municipio in municipios%}
+                                    {% if municipio.es_sede  %}
+                                    <option value="{{municipio}}">
+                                    {% endif %}
+                                {% endfor %}  
+                            </datalist> -->
+                            
+                            <label for="lista-municipios-sedes" class="myForm__label">Sede Principal</label>
+                            <select  class="myForm__input" id="lista-municipios-sedes">
+                                <option></option>
+                                {% for municipio in municipios%}
+                                    {% if municipio.es_sede  %}
+                                    <option value="{{municipio}}">{{municipio}}</option>
+                                    {% endif %}
+                                {% endfor %}  
+                            </select>
                         </div>
                         
                         <div class="myForm__item">
-                            <label for="lista-municipios" class="myForm__label">Destino</label>
-                            <input list="listado-municipios" class="myForm__input" id="lista-municipios">
-                            <datalist id="listado-municipios">
-                                <option value="Tierra perdida">
-                                <option value="Wakanda">
-                                <option value="Muy muy lejano">
-                                <option value="Narnia">
-                            </datalist>
+                            <label for="lista-municipios-destinos" class="myForm__label">Destino</label>
+                            <select  class="myForm__input" id="lista-municipios-destinos">
+                                <option></option>
+                                {% for municipio in municipios%}
+                                    {% if municipio.es_sede  %}
+                                    <option value="{{municipio}}">{{municipio}}</option>
+                                    {% endif %}
+                                {% endfor %}  
+                            </select>
                         </div>
 
                         <div class="myForm__item">
@@ -151,11 +161,15 @@
                             <input type="text" class="myForm__input" id="valor_transporte" disabled >
                         </div>
                         
-                        
-
                         <div class="myForm__item">
                             <label for="valor_viatico" class="myForm__label">Víatico: $</label>
                             <input type="text" class="myForm__input" id="valor_viatico" disabled >
+                        </div>
+
+                        <div class="myForm__item">
+                            <button class="myButton" id="btnCargarViatico" type="button">
+                                <img src="../../static/assets/img/icons8-más-2-matemáticas-40.png" alt="">
+                            </button>
                         </div>
                         
                     </div>
@@ -169,7 +183,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="tablaViaticos">
                                     <thead class="">
                                     <th>
                                         id_viatico
@@ -193,7 +207,13 @@
                                         Transporte
                                     </th>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="bodyTablaViaticos">
+                                        
+                                        <tr>
+                                            <td>
+
+                                            </td>
+                                        </tr>
                                     
                                     </tbody>
                                 </table>

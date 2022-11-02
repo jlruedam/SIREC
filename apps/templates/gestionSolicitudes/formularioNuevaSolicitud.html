@@ -1,6 +1,6 @@
 {% block formSolicitud %}
 
-<div class="myFormContainer" id="formNuevaSolicitud">
+<div class="myFormContainer" id="formNuevaSolicitud" style="display:none;">
     
     <div class="myForm__item myForm__item_especial">
         <label for="selectTipo" class="myForm__label"></label>
@@ -13,7 +13,7 @@
     </div>
     
 
-    <div id="contenedorFormViaticos">
+    <div id="contenedorFormViaticos" style="display:none;">
         {% include "gestionSolicitudes/formularioViaticos.html" %}
     </div>
     <div id="contenedorFormAnticipo" style="display:none;">

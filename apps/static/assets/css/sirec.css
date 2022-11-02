@@ -208,3 +208,28 @@
 .myForm__select_modify:hover {
     background: linear-gradient(60deg,var(--azul-cielo), var(--naranja)) !important;
 }
+
+.myButton {
+    border: 0;
+}
+.myButton img {
+    width: 50px;
+    height: 50px;
+    border: 0;
+}
+
+.myButton img:hover {
+    width: 60px;
+    height: 60px;
+    border:0;
+    background: transparent;
+}
+
+.myButton img:active {
+    width: 60px;
+    height: 60px;
+    opacity: 0.5;
+    border:0;
+
+}
+

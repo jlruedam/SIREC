@@ -6,10 +6,17 @@ Copyright (c) 2019 - present AppSeed.us
 from django.contrib import admin
 from apps.home import models
 
+
 class ColaboradorAdmin(admin.ModelAdmin):
 
     list_display = ('id','cedula', 'nombre','jefe_inmediato','created_at', 'updated_at')
     search_fields = ('cedula', 'nombre')
+    # fields = ('id_colaborador', 'nombre', 'activo')
+
+class RegionalAdmin(admin.ModelAdmin):
+
+    list_display = ('id','regional')
+    search_fields = ('regional',)
     # fields = ('id_colaborador', 'nombre', 'activo')
 
 class MunicipioAdmin(admin.ModelAdmin):
@@ -42,7 +49,6 @@ class SolicitudRecursoAdmin(admin.ModelAdmin):
     search_fields = ('colaborador', 'estado', 'operacion', 'fecha')
     # fields = ('id_colaborador', 'nombre', 'activo')
     
-
 class ActividadAdmin(admin.ModelAdmin):
 
     list_display = ('id','solicitud', 'proyecto','concepto', 'valor', 'created_at', 'created_at')
@@ -56,7 +62,7 @@ admin.site.register(models.TipoOperacion, TipoOperacionAdmin)
 admin.site.register(models.Ruta, RutaAdmin)
 admin.site.register(models.SolicitudRecurso, SolicitudRecursoAdmin)
 admin.site.register(models.Actividad, ActividadAdmin)
-
+admin.site.register(models.Regional, RegionalAdmin)
 
 
 

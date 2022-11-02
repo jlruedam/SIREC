@@ -80,7 +80,6 @@ class TipoOperacion(models.Model):
     def __str__(self) -> str:
         return "{}".format(self.operacion)
 
-
 class Ruta(models.Model):
     id = models.AutoField(primary_key =True)
     origen = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='municipio_sede')
@@ -125,8 +124,6 @@ class SolicitudRecurso(models.Model):
     def __str__(self) -> str:
         return " Solicitud #{} - {}".format(self.id, self.operacion)
 
-
-
 class Actividad(models.Model):
     id = models.AutoField(primary_key =True)
     solicitud = models.ForeignKey(SolicitudRecurso, on_delete = models.CASCADE)
@@ -147,6 +144,20 @@ class Actividad(models.Model):
     def __str__(self) -> str:
         return "{} - {} - {}".format(self.id, self.concepto, self.valor)
 
+class Regional(models.Model):
+    id = models.AutoField(primary_key =True)
+    regional = models.CharField(max_length = 50)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
 
+    class meta:
+        verbose_name="Regional"
+        verbose_name_plural="Regionales"
+        db_table="Regionales"
+        ordering=["id","regional"]
+
+    def __str__(self) -> str:
+        return "{}".format(self.regional)
+    
 
 

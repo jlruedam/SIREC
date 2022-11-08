@@ -1,64 +1,41 @@
+const rutas = [];
+const camposTabla = 7;
 const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
 const selectTipoSolicitud = document.querySelector('#selectTipoSolicitud')
 const btnNuevaSolicitud = document.querySelector('#BotonNuevaSolicitud');
 const contenedorFormViaticos = document.querySelector('#contenedorFormViaticos');
 const contenedorFormAnticipo= document.querySelector('#contenedorFormAnticipo'); 
 const contenedorFormReembolso = document.querySelector('#contenedorFormReembolso'); 
-const selectSedeRuta = document.querySelector('#lista-municipios-sedes')
-const selectDestinoRuta = document.querySelector('#lista-municipios-destinos')
-const valorTranporte = document.querySelector('#valor_transporte')
-const valorViatico= document.querySelector('#valor_viatico')
-const pernoctar = document.querySelector('#Si_pernocta')
-const btnCargarViatico = document.querySelector('#btnCargarViatico')
-const tablaViaticos = document.querySelector('#tablaViaticos')
-const bodyTablaViaticos = document.querySelector('#bodyTablaViaticos')
+const selectSedeRuta = document.querySelector('#lista-municipios-sedes');
+const selectDestinoRuta = document.querySelector('#lista-municipios-destinos');
+const valorTranporte = document.querySelector('#valor_transporte');
+const valorViatico= document.querySelector('#valor_viatico');
+const pernoctar = document.querySelector('#Si_pernocta');
+const btnCargarViatico = document.querySelector('#btnCargarViatico');
+const tablaViaticos = document.querySelector('#tablaViaticos');
+const bodyTablaViaticos = document.querySelector('#bodyTablaViaticos');
+const fechaActividad = document.querySelector('#fecha_actividad');
+const diasViatico = document.querySelector('#dias_actividad');
 
 
 btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
 selectTipoSolicitud.addEventListener('change',eligeTipoSolicitud );
 selectSedeRuta.addEventListener('change', cargarSedeDestino);
 selectDestinoRuta.addEventListener('change',cargarSedeDestino);
-btnCargarViatico.addEventListener('click',cargarViatico )
+btnCargarViatico.addEventListener('click',cargarViatico );
+tablaViaticos.addEventListener('dblclick', eliminarViatico);
+// fechaActividad = addEventListener('load', cargarFechaActividad);
 
-var rutas = {}
 
-function cargarViatico(){
 
-    console.log(rutas);
-    
+// function cargarFechaActividad(){
+//     var today = new Date();
+//     fechaActividad.defaultValue = today;
+// }
 
-    var ruta = {
-        "origen": selectSedeRuta.options[selectSedeRuta.selectedIndex].value,
-        "destino": selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value,
-        "transporte": valorTranporte.value,
-        "viaticos": valorViatico.value
-    }
 
-    console.log(ruta);
 
-    rutas[rutas.length +1] = ruta
-    console.log(rutas);
-    
-    for (var i=0; i <= 3; i++){
-        var hilera = document.createElement("tr")
 
-        for(var j=0; j<7;j++){
-
-            var celda = document.createElement("td");
-            var textoCelda = document.createTextNode("celda en la hilera "+i+"columna"+j);
-            celda.appendChild(textoCelda);
-            hilera.appendChild(celda);
-        }
-        bodyTablaViaticos.appendChild(hilera);
-
-    }
-    
-    tablaViaticos.appendChild(bodyTablaViaticos);
-    tablaViaticos.setAttribute("border","2");
-
-    
-
-}
 
 
 function cargarSedeDestino(){
@@ -84,16 +61,8 @@ function cargarSedeDestino(){
     });  
 }
 
-
 function muestraOcultaFormulario(){  
-    formDisplay=formNuevaSolicitud.style.display;
-    if (formDisplay == "none") {
-        formNuevaSolicitud.style.display = "block";
-    }
-    else {
-        formNuevaSolicitud.style.display = "none";
-    }
-   
+    formNuevaSolicitud.classList.toggle('inactive');
 }
 
 function eligeTipoSolicitud(){
@@ -103,12 +72,11 @@ function eligeTipoSolicitud(){
             contenedorFormViaticos.style.display = 'block';
             contenedorFormAnticipo.style.display = 'none';
             contenedorFormReembolso.style.display = 'none';
-            
             break;
         case 'Anticipo':
             contenedorFormViaticos.style.display = 'none';
-            contenedorFormAnticipo.style.display = 'block';
             contenedorFormReembolso.style.display = 'none';
+            contenedorFormAnticipo.style.display = 'block';
             break;
         case 'Reembolso':
             contenedorFormViaticos.style.display = 'none';
@@ -121,4 +89,52 @@ function eligeTipoSolicitud(){
             contenedorFormReembolso.style.display = 'none';
     }
 
+}
+
+function cargarViatico(){
+
+    console.log("LAS RUTAS SON:",rutas);
+    
+
+    var ruta = {
+        "origen": selectSedeRuta.options[selectSedeRuta.selectedIndex].value,
+        "destino": selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value,
+        "diasActividad":diasViatico.value,
+        "pernoctar":pernoctar.checked,
+        "viaticos": valorViatico.value,
+        "transporte": valorTranporte.value
+    }
+
+    
+    var idRuta = rutas.push(ruta);
+
+    var hilera = document.createElement("tr")
+    var celda = document.createElement("td");
+    var textoCelda = document.createTextNode(idRuta);
+    celda.appendChild(textoCelda);
+    hilera.setAttribute('id',idRuta);
+    hilera.appendChild(celda);
+
+    for (const campo in rutas[idRuta-1]){
+        console.log(rutas[idRuta-1][campo]);
+        celda = document.createElement("td");
+        textoCelda = document.createTextNode(rutas[idRuta-1][campo]);
+        celda.appendChild(textoCelda);
+        hilera.appendChild(celda);
+    }    
+
+    
+
+    
+    bodyTablaViaticos.appendChild(hilera);
+
+    tablaViaticos.appendChild(bodyTablaViaticos);
+    tablaViaticos.setAttribute("border","2");
+
+}
+
+function eliminarViatico(e){
+    console.log("Eliminar Viático");
+    
+    // console.log(btnEliminarViatico.parentNode.ATTRIBUTE_NODE('id'));
 }

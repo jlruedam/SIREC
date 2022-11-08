@@ -6,6 +6,13 @@
     --naranja: #d57f23;
 }
 
+.inactive {
+    opacity: 0;
+    transition: 1s;
+    /* display: none; */
+    
+}
+
 #logo_serSocial {
     width: 16rem;
     height: 4rem;
@@ -43,14 +50,18 @@
     width: 100%;
     align-items: center;
     opacity: 0.7;
+    transition: 2s;
+    margin: 40px 0 40px 0;
 }
 
 .myNavBar {
     background: linear-gradient(60deg,var(--azul-cielo), var(--azul-rey)) !important;
-    border-radius: 20px;
+    /* border-radius: 20px; */
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
     color: white;
     width: 100%;
-    box-shadow: 2px 2px 2px 1px gray;
+    box-shadow: 18px 30px 15px 0px gray;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,27 +73,49 @@
     align-items: center;
     width: 100%;
     margin: 5px;
-    padding: 10px;
-    height: 30px;
+    padding: 0px;
+    height: 2px;
 }
 
 .myNavBar__element {
     list-style: none;
     position: relative;
-    bottom: 20px; 
+    bottom:40px;
+    margin: 0;
+    padding: 0; 
+    cursor: pointer;
+}
+
+.myNavBar__element:hover {
+    opacity: 0.7;
+    zoom: 1.1;
+    bottom: 43px;
 }
 
 .myNavBar__link {
     text-decoration: none;
     color: white;
+    padding: 0;
+    margin: 0;
+
 }
 
-.myTitle {
+.myTitle { 
     text-align: center;
     color: gray;
     letter-spacing: 10px; 
-    padding: 5px;
-    margin-left:5px ;
+    padding: 10px 10px 50px 10px;
+    margin: 20px 0 0 0;
+    text-shadow: 28px 30px 15px gray;
+}
+
+.mySubtitle {
+    text-align: center;
+    color: gray;
+    letter-spacing: 10px; 
+    padding: 10px 10px 10px 10px;
+    margin: 0;
+    text-shadow: 28px 30px 15px gray;
 }
 
 .myFormContainer {
@@ -91,7 +124,8 @@
     padding: 10px;
     border: 1px solid var(--azul-cielo);
     border-radius: 20px;
-    box-shadow: 3px 2px 3px 1px gray;
+    box-shadow: 18px 30px 15px 0px gray;
+    transition: 1s;
 }
 
 /* .myFormContainer select {
@@ -106,6 +140,11 @@
     
     padding: 5px;
     text-align: center;
+    
+}
+
+.contenedorForm {
+    transition: 1s;
 }
 
 .myForm__legend {
@@ -163,9 +202,12 @@
     
 }
 
-.myForm__input {
+/* .myForm__input {
     border: var(--azul-cielo);
-}
+    border: 1px solid var(--azul-cielo);
+    border-radius: 10px;
+    cursor: pointer;
+} */
 
 .myForm__select, .myForm__input {
     border-radius: 10px;
@@ -174,7 +216,11 @@
     padding: 5px;
     width: 10rem;
     height: 2rem;
+    cursor: pointer;
+    box-shadow: 10px 10px 15px 0px gray;
 }
+
+
 
 .myForm__textArea {
     border-radius: 10px;
@@ -183,6 +229,14 @@
     padding: 5px;
     width: 10rem;
     min-height: 3rem;
+    box-shadow: 10px 10px 15px 0px gray;
+}
+
+.myForm__radius {
+    width: 10rem;
+    border: 1px solid var(--azul-cielo);
+    border-radius: 60%;  
+    
 }
 
 .myForm__select_modify {
@@ -198,6 +252,7 @@
     background: linear-gradient(240deg,var(--azul-cielo), white) !important;
     opacity: .8;
     color: gray;
+    box-shadow: 10px 10px 15px 0px gray;
 }
 .myForm__select option {
     background-color: var(--azul-cielo);

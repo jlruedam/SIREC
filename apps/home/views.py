@@ -3,7 +3,6 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 
-from xmlrpc.client import boolean
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -11,6 +10,7 @@ from django.template import loader
 from django.urls import reverse
 from apps.home.models import SolicitudRecurso, Colaborador, Regional, Municipio, Ruta
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
 @login_required(login_url="/login/")
 def index(request):
@@ -40,12 +40,13 @@ def pages(request):
             municipios = Municipio.objects.all()
 
             numero_solicitudes = len(solicitudes)+1
-
+            usuario_actual = User.objects.get(username=request.user.username)
             context = {
                 "solicitudes": str(numero_solicitudes),
                 "colaboradores": colaboradores,
                 "regionales": regionales,
-                "municipios":municipios
+                "municipios":municipios,
+                "usuario_actual":usuario_actual
             }
             
 

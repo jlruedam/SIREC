@@ -1,6 +1,6 @@
 {% block formViaticos %}
 
-<h2 class="myTitle">
+<h2 class="mySubtitle">
     FORMULARIO VIÁTICOS
 </h2>
 
@@ -10,24 +10,16 @@
     {% csrf_token %}
     <div class="myForm__section">
 
-        <div class="myForm__item">
-            <label for="solicitud_id" class="myForm__label"># Solicitud  </label>
-            <span class="myForm__input" id="solicitud_id" >{{solicitudes}}</span>
-        </div>
-        
-        <div class="myForm__item">
-            <label for="fecha_solicitud" class="myForm__label">Fecha Solicitud</label>
-            <input type="date" class="myForm__input" id="fecha_solicitud" name="fecha_solicitud">
-        </div>
 
         <div class="myForm__item">
-            <label for="lista-colaboradores" class="myForm__label">Colaborador</label>
-            <input list="listado-colaboradores" class="myForm__input" id="lista-colaboradores">
+            <label for="colaborador-solicitante" class="myForm__label">Colaborador</label>
+            <!-- <input list="listado-colaboradores" class="myForm__input" id="lista-colaboradores">
             <datalist id="listado-colaboradores">
                 {% for colaborador in colaboradores %}
                 <option value="{{colaborador}}">
                 {% endfor %}
-            </datalist>
+            </datalist> -->
+            <input type="text" class="myForm__input" id="colaborador-solicitante" value="{{usuario_actual}}" disabled>
         </div>
         
         <div class="myForm__item">
@@ -58,13 +50,13 @@
     </div>
     
     <fieldset class="myForm__fieldset">
-        <legend class="myForm__legend"><h3 class="myTitle">ACTIVIDADES</h3></legend>
+        <legend class="myForm__legend"><h3 class="mySubtitle">ACTIVIDADES</h3></legend>
 
         <div class="myForm__section">
 
             <div class="myForm__item">
                 <label for="fecha_actividad" class="myForm__label">Fecha actividad</label>
-                <input type="date" class="myForm__input" id="fecha_actividad">
+                <input type="date" class="myForm__input" id="fecha_actividad" name="fecha_actividad">
             </div>
             
             <div class="myForm__item">
@@ -89,17 +81,17 @@
                 <textarea  name="Concepto_descripcion" class="myForm__input" id="Concepto_descripcion">...</textarea>
             </div>
 
-            <div class="myForm__item"></div>  
+            
 
-            <div class="myForm__item">
+            <!-- <div class="myForm__item">
                 <label for="valor_total_actividad" class="myForm__label">Valor total actividad: $</label>
                 <input type="number" class="myForm__input" id="valor_total_actividad" >
-            </div>
+            </div> -->
             
         </div>
         
             <fieldset class="myForm__fieldset">
-                <legend class="myForm__legend"><h4 class="myTitle">ESTADÍA</h4></legend>
+                <legend class="myForm__legend"><h4 class="mySubtitle">ESTADÍA</h4></legend>
 
                 <div class="myForm__section">
 
@@ -111,14 +103,14 @@
     
                     <div class="myForm__item">
                         <label for="Si_pernocta" class="myForm__label">Pernoctar</label>
-                        <input type="radio" class="myForm__input" id="Si_pernocta" name="pernoctado" value="Si">
+                        <input type="radio" class="myForm__radius" id="Si_pernocta" name="pernoctado" value="Si">
                         <label for="No_pernocta" class="myForm__label">No Pernoctar</label>
-                        <input type="radio" class="myForm__input" id="No_pernocta" name="pernoctado" value="No">
+                        <input type="radio" class="myForm__radius" id="No_pernocta" name="pernoctado" value="No">
                     </div>
                 </div>
 
                 <fieldset class="myForm__fieldset">
-                    <legend class="myForm__legend"><h5 class="myTitle">RUTA</h5></legend>
+                    <legend class="myForm__legend"><h5 class="mySubtitle">RUTA</h5></legend>
 
                     <div class="myForm__section">
 
@@ -208,12 +200,6 @@
                                     </th>
                                     </thead>
                                     <tbody id="bodyTablaViaticos">
-                                        
-                                        <tr>
-                                            <td>
-
-                                            </td>
-                                        </tr>
                                     
                                     </tbody>
                                 </table>
@@ -227,7 +213,7 @@
             </fieldset>
 
         <fieldset class="myForm__fieldset">
-            <legend class="myForm__legend"><h4 class="myTitle">GASTOS ADICIONALES</h4></legend>
+            <legend class="myForm__legend"><h4 class="mySubtitle">GASTOS ADICIONALES</h4></legend>
 
             <div class="myForm__section">
 

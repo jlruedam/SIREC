@@ -104,19 +104,23 @@ function cargarViatico(){
     for(let r of rutas){
         console.log(r.origen + "/" + [ruta.origen] + "-" + r.destino + "/" + [ruta.destino]);
         if((r.origen === ruta.origen) && (r.destino === ruta.destino)){
-            console.log("Ruta ya existente");
+            
             alert('Esta ruta ya fue seleccionada, seleccione otra diferente.');
             rutaExistente = true;
             break;
         }
     }
 
-    if(!rutaExistente){
+    if(ruta.origen === ruta.destino){
+
+        alert('El origen y el Destino no pueden ser iguales.');
+
+    }else if(!rutaExistente){
         let idRuta = rutas.push(ruta);
         let hilera = document.createElement("tr");
         let celda = document.createElement("td");
         let textoCelda = document.createTextNode(idRuta);
-        const btnBorrar = document.createElement('button');
+        let btnBorrar = document.createElement('button');
 
         celda.appendChild(textoCelda);
         celda.style.display = "none";

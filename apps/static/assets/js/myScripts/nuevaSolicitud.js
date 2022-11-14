@@ -35,15 +35,10 @@ tablaViaticos.addEventListener('click', eliminarViatico);
 //     fechaActividad.defaultValue = today;
 // }
 
-
-
-
-
-
 function cargarSedeDestino(){
-    var sedeSeleccionada = selectSedeRuta.options[selectSedeRuta.selectedIndex].value;
-    var destinoSeleccionado = selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value;
-    var pernoctado = pernoctar.checked
+    let sedeSeleccionada = selectSedeRuta.options[selectSedeRuta.selectedIndex].value;
+    let destinoSeleccionado = selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value;
+    let pernoctado = pernoctar.checked
     $.ajax({
         url:"datos-ruta/?sede="+sedeSeleccionada + "&destino="+destinoSeleccionado + "&pernoctar="+pernoctado,
         type:"GET",
@@ -68,7 +63,7 @@ function muestraOcultaFormulario(){
 }
 
 function eligeTipoSolicitud(){
-    console.log("El tipo de solicitud es:", selectTipoSolicitud.value);
+    // console.log("El tipo de solicitud es:", selectTipoSolicitud.value);
     switch(selectTipoSolicitud.value) {
         case 'Viáticos':
             contenedorFormViaticos.style.display = 'block';
@@ -104,48 +99,55 @@ function cargarViatico(){
         "transporte": valorTranporte.value
     }
     //validar que la ruta no se encuentra en la tabla para el mismo origen-destino.
+    let rutaExistente = false;
+
     for(let r of rutas){
         console.log(r.origen + "/" + [ruta.origen] + "-" + r.destino + "/" + [ruta.destino]);
-        if(r.origen === ruta.origen && r.destino === ruta.destino){
+        if((r.origen === ruta.origen) && (r.destino === ruta.destino)){
             console.log("Ruta ya existente");
+            alert('Esta ruta ya fue seleccionada, seleccione otra diferente.');
+            rutaExistente = true;
+            break;
         }
     }
 
-    
-    let idRuta = rutas.push(ruta);
-    let hilera = document.createElement("tr")
-    let celda = document.createElement("td");
-    let textoCelda = document.createTextNode(idRuta);
-    let btnBorrar = document.createElement('button')
+    if(!rutaExistente){
+        let idRuta = rutas.push(ruta);
+        let hilera = document.createElement("tr");
+        let celda = document.createElement("td");
+        let textoCelda = document.createTextNode(idRuta);
+        const btnBorrar = document.createElement('button');
 
-    celda.appendChild(textoCelda);
-    celda.style.display = "none";
-    hilera.setAttribute('id',idRuta);
-    hilera.appendChild(celda);
-
-    btnBorrar.innerHTML="🗑️";
-    btnBorrar.setAttribute('id', "botonBorrarRuta");
-    btnBorrar.setAttribute('type', "button");
-    btnBorrar.setAttribute('ruta', idRuta);
-
-    
-
-    for (let campo in rutas[idRuta-1]){
-        console.log(rutas[idRuta-1][campo]);
-        celda = document.createElement("td");
-        textoCelda = document.createTextNode(rutas[idRuta-1][campo]);
         celda.appendChild(textoCelda);
+        celda.style.display = "none";
+        hilera.setAttribute('id',idRuta);
         hilera.appendChild(celda);
-    }  
+
+        btnBorrar.innerHTML="🗑️";
+        btnBorrar.setAttribute('id', "botonBorrarRuta");
+        btnBorrar.setAttribute('type', "button");
+        btnBorrar.setAttribute('ruta', idRuta);
+
+        for (let campo in rutas[idRuta-1]){
+            console.log(rutas[idRuta-1][campo]);
+            celda = document.createElement("td");
+            textoCelda = document.createTextNode(rutas[idRuta-1][campo]);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+        }  
+
+        celda = document.createElement("td");
+        celda.appendChild(btnBorrar);
+        hilera.appendChild(celda);
+        
+        bodyTablaViaticos.appendChild(hilera);
+        tablaViaticos.appendChild(bodyTablaViaticos);
+    }
     
-    celda = document.createElement("td");
-    celda.appendChild(btnBorrar);
-    hilera.appendChild(celda);
-    
-    bodyTablaViaticos.appendChild(hilera);
-    tablaViaticos.appendChild(bodyTablaViaticos);
 }
 
+    
+    
 function eliminarViatico(e){
        
     let btn = e.path[0]

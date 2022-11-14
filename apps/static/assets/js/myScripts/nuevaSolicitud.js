@@ -95,16 +95,20 @@ function eligeTipoSolicitud(){
 
 function cargarViatico(){
 
-    console.log("LAS RUTAS SON:",rutas);
-    
-
-    var ruta = {
+    let ruta = {
         "origen": selectSedeRuta.options[selectSedeRuta.selectedIndex].value,
         "destino": selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value,
         "diasActividad":diasViatico.value,
         "pernoctar":pernoctar.checked,
         "viaticos": valorViatico.value,
         "transporte": valorTranporte.value
+    }
+    //validar que la ruta no se encuentra en la tabla para el mismo origen-destino.
+    for(let r of rutas){
+        console.log(r.origen + "/" + [ruta.origen] + "-" + r.destino + "/" + [ruta.destino]);
+        if(r.origen === ruta.origen && r.destino === ruta.destino){
+            console.log("Ruta ya existente");
+        }
     }
 
     
@@ -114,14 +118,17 @@ function cargarViatico(){
     let textoCelda = document.createTextNode(idRuta);
     let btnBorrar = document.createElement('button')
 
+    celda.appendChild(textoCelda);
+    celda.style.display = "none";
+    hilera.setAttribute('id',idRuta);
+    hilera.appendChild(celda);
+
     btnBorrar.innerHTML="🗑️";
     btnBorrar.setAttribute('id', "botonBorrarRuta");
     btnBorrar.setAttribute('type', "button");
     btnBorrar.setAttribute('ruta', idRuta);
 
-    celda.appendChild(textoCelda);
-    hilera.setAttribute('id',idRuta);
-    hilera.appendChild(celda);
+    
 
     for (let campo in rutas[idRuta-1]){
         console.log(rutas[idRuta-1][campo]);
@@ -136,16 +143,17 @@ function cargarViatico(){
     hilera.appendChild(celda);
     
     bodyTablaViaticos.appendChild(hilera);
-
     tablaViaticos.appendChild(bodyTablaViaticos);
-    tablaViaticos.setAttribute("border","1");
-
 }
 
 function eliminarViatico(e){
-    btn = e.path[0]
+       
+    let btn = e.path[0]
     if(btn.id === "botonBorrarRuta"){
+        let idRuta = btn.attributes[2].nodeValue;
         document.getElementById(btn.attributes[2].nodeValue).remove();
+        rutas.pop(idRuta-1)
+        console.log(rutas);
     }
     
 }

@@ -16,6 +16,7 @@ const tablaViaticos = document.querySelector('#tablaViaticos');
 const bodyTablaViaticos = document.querySelector('#bodyTablaViaticos');
 const fechaActividad = document.querySelector('#fecha_actividad');
 const diasViatico = document.querySelector('#dias_actividad');
+const botonBorrarRuta = document.querySelector('#botonBorrarRuta');
 
 
 btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
@@ -23,7 +24,8 @@ selectTipoSolicitud.addEventListener('change',eligeTipoSolicitud );
 selectSedeRuta.addEventListener('change', cargarSedeDestino);
 selectDestinoRuta.addEventListener('change',cargarSedeDestino);
 btnCargarViatico.addEventListener('click',cargarViatico );
-tablaViaticos.addEventListener('dblclick', eliminarViatico);
+tablaViaticos.addEventListener('click', eliminarViatico);
+// botonBorrarRuta.addEventListener('click', eliminarViatico);
 // fechaActividad = addEventListener('load', cargarFechaActividad);
 
 
@@ -106,35 +108,44 @@ function cargarViatico(){
     }
 
     
-    var idRuta = rutas.push(ruta);
+    let idRuta = rutas.push(ruta);
+    let hilera = document.createElement("tr")
+    let celda = document.createElement("td");
+    let textoCelda = document.createTextNode(idRuta);
+    let btnBorrar = document.createElement('button')
 
-    var hilera = document.createElement("tr")
-    var celda = document.createElement("td");
-    var textoCelda = document.createTextNode(idRuta);
+    btnBorrar.innerHTML="🗑️";
+    btnBorrar.setAttribute('id', "botonBorrarRuta");
+    btnBorrar.setAttribute('type', "button");
+    btnBorrar.setAttribute('ruta', idRuta);
+
     celda.appendChild(textoCelda);
     hilera.setAttribute('id',idRuta);
     hilera.appendChild(celda);
 
-    for (const campo in rutas[idRuta-1]){
+    for (let campo in rutas[idRuta-1]){
         console.log(rutas[idRuta-1][campo]);
         celda = document.createElement("td");
         textoCelda = document.createTextNode(rutas[idRuta-1][campo]);
         celda.appendChild(textoCelda);
         hilera.appendChild(celda);
-    }    
-
+    }  
     
-
+    celda = document.createElement("td");
+    celda.appendChild(btnBorrar);
+    hilera.appendChild(celda);
     
     bodyTablaViaticos.appendChild(hilera);
 
     tablaViaticos.appendChild(bodyTablaViaticos);
-    tablaViaticos.setAttribute("border","2");
+    tablaViaticos.setAttribute("border","1");
 
 }
 
 function eliminarViatico(e){
-    console.log("Eliminar Viático");
+    btn = e.path[0]
+    if(btn.id === "botonBorrarRuta"){
+        document.getElementById(btn.attributes[2].nodeValue).remove();
+    }
     
-    // console.log(btnEliminarViatico.parentNode.ATTRIBUTE_NODE('id'));
 }

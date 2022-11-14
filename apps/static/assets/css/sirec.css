@@ -13,6 +13,17 @@
     
 }
 
+#botonBorrarRuta{
+    border: 0;
+    background-color: transparent;
+}
+
+#botonBorrarRuta:hover{
+    font-size: 1.8rem;
+}
+
+
+
 #logo_serSocial {
     width: 16rem;
     height: 4rem;

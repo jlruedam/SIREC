@@ -164,7 +164,6 @@
                         </div>
                         
                         <div class="myForm__item">
-                            
                             <button class="myButton" id="btnCargarViatico" type="button">
                                 <img src="../../static/assets/img/icons8-más-2-matemáticas-40.png" alt="">
                             </button>
@@ -230,22 +229,51 @@
             <div class="myForm__section">
 
                 <div class="myForm__item">
-                    <label for="fecha_solicitud" class="myForm__label">Fecha Gasto</label>
-                    <input type="date" class="myForm__input" id="fecha_solicitud">
+                    <label for="tipoGasto" class="myForm__label">Tipo de Gasto</label>
+                    <input list="listadoTiposGastos" class="myForm__input" id="tipoGasto">
+                    <datalist id="listadoTiposGastos">
+                        <option value="Alimentación">
+                        <option value="Transporte local">    
+                        <option value="Transporte intermunicipal">
+                        <option value="Alquiler de Equipos o herramientas"> 
+                        <option value="Otro">     
+                    </datalist>
+                </div>
+
+
+                <div class="myForm__item">
+                    <label for="descripcionGastoAdicional" class="myForm__label">Descripción</label>
+                    <textarea  name="descripcionGastoAdicional" class="myForm__textArea" id="descripcionGastoAdicional">...</textarea>
                 </div>
                 
                 <div class="myForm__item">
-                    <label for="proyecto" class="myForm__label">Descripción</label>
-                    <input type="text" class="myForm__input" id="proyecto" >
+                    <label for="municipioGastoAdicional" class="myForm__label">Lugar del gasto</label>
+                    <input list="listadoMunicipios" class="myForm__input" id="municipioGastoAdicional">
+                    <datalist id="listadoMunicipios">
+                        {% for municipio in municipios%}
+                            <option value="{{municipio}}">{{municipio}}</option>
+                        {% endfor %} 
+                    </datalist>
                 </div>
+
                 
+
+                
+
                 <div class="myForm__item">
-                    <label for="valor_total_actividad" class="myForm__label">Valor: $</label>
-                    <input type="number" class="myForm__input" id="valor_total_actividad" >
+                    <label for="valorGastoAdicional" class="myForm__label">Valor: $</label>
+                    <input type="number" class="myForm__input" id="valorGastoAdicional" >
                 </div>
                 
                 <div class="myForm__item"></div>
-        
+            </div>
+
+            <div class="myForm__section">
+                <div class="myForm__item">
+                    <button class="myButton" id="btnCargarGastoAdicional" type="button">
+                        <img src="../../static/assets/img/icons8-más-2-matemáticas-40.png" alt="">
+                    </button>
+                </div>
             </div>
 
             <div class="myForm__section">
@@ -257,41 +285,40 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                        <table class="table table-hover" id="tablaViaticos">
+                        <table class="table table-hover" id="tablaGastosAdicionales">
                             <thead class="">
+                            
                             <!-- <th>
-                                Número de ruta
+                                # Gasto adicional
                             </th> -->
                             <th>
-                                Sede Principal
+                                Tipo de Gasto
                             </th>
                             <th>
-                                Destino
+                                Descripción
                             </th>
                             <th>
-                                Cantidad días
+                                Valor
                             </th>
                             <th>
-                                Pernoctado
-                            </th>
-                            <th>
-                                Viático
-                            </th>
-                            <th>
-                                Transporte
-                            </th>
-                            
+                                Lugar del Gasto
                             <th>
                                 Eliminar
                             </th>
                             </thead>
-                            <tbody id="bodyTablaViaticos">
+                            <tbody id="bodyTablaGastosAdicionales">
                             
                             </tbody>
                         </table>
                         </div>
                     </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="myForm__section">
+                <div class="myForm__item">
+                    <button type="button" class="myButton myButton_submit">Enviar Solicitud</button>
                 </div>
             </div>
             

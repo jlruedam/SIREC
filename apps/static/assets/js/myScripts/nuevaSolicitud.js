@@ -1,4 +1,5 @@
 const rutas = [];
+const gastosAdicionales = [];
 const camposTabla = 8;
 const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
 const selectTipoSolicitud = document.querySelector('#selectTipoSolicitud')
@@ -18,6 +19,14 @@ const fechaActividad = document.querySelector('#fecha_actividad');
 const diasViatico = document.querySelector('#dias_actividad');
 const botonBorrarRuta = document.querySelector('#botonBorrarRuta');
 const rutaAprobada = document.querySelector('#rutaAprobada');
+const btnCargarGastoAdicional = document.querySelector("#btnCargarGastoAdicional");
+const tipoGasto = document.querySelector('#tipoGasto');
+const descripcionGastoAdicional = document.querySelector('#descripcionGastoAdicional');
+const valorGastoAdicional = document.querySelector('#valorGastoAdicional');
+const municipioGastoAdicional = document.querySelector('#municipioGastoAdicional');
+const tablaGastosAdicionales = document.querySelector('#tablaGastosAdicionales');
+const bodyTablaGastosAdicionales = document.querySelector('#bodyTablaGastosAdicionales');
+
 
 
 btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
@@ -26,6 +35,7 @@ selectSedeRuta.addEventListener('change', cargarSedeDestino);
 selectDestinoRuta.addEventListener('change',cargarSedeDestino);
 btnCargarViatico.addEventListener('click',cargarViatico );
 tablaViaticos.addEventListener('click', eliminarViatico);
+btnCargarGastoAdicional.addEventListener('click', cargarGastoAdicional);
 // botonBorrarRuta.addEventListener('click', eliminarViatico);
 // fechaActividad = addEventListener('load', cargarFechaActividad);
 
@@ -171,4 +181,51 @@ function eliminarViatico(e){
         console.log(rutas);
     }
     
+}
+
+function cargarGastoAdicional(){
+    console.log("Cargar Adicional: ");
+    let adicional = {
+        "tipoGasto":tipoGasto.value,
+        "descripcion": descripcionGastoAdicional.value,
+        "valor":valorGastoAdicional.value,
+        "municipio": municipioGastoAdicional.value
+    }
+    console.log(adicional);
+
+    if(adicional.tipoGasto.length == 0){
+        alert("Debe ingresar un tipo de gasto");
+    }else if(adicional.descripcion.length == 0){
+        alert("Debe diligenciar la descripcion del gasto");
+    }else if(adicional.municipio.length == 0){
+        alert("Debe indicar el lugar del gasto");
+    }else if(adicional.valor <= 0){
+        alert("Debe registrar un valor mayor que $0");
+    }else {
+        gastosAdicionales.push(adicional);
+
+        let btnBorrar = document.createElement('button');
+        let hilera = document.createElement("tr");
+
+        btnBorrar.innerHTML="🗑️";
+        btnBorrar.setAttribute('id', "botonBorrarAdicional");
+        btnBorrar.setAttribute('type', "button");
+
+        for (let campo in adicional){
+            celda = document.createElement("td");
+            textoCelda = document.createTextNode(adicional[campo].substring(0,50));
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+        }
+    
+        celda = document.createElement("td");
+        celda.appendChild(btnBorrar);
+        hilera.appendChild(celda);
+    
+        bodyTablaGastosAdicionales.appendChild(hilera);
+        tablaGastosAdicionales.appendChild(bodyTablaGastosAdicionales);
+    }
+
+    
+
 }

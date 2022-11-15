@@ -163,7 +163,9 @@ class GastoAdicional(models.Model):
     id = models.AutoField(primary_key =True)
     Actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
     fecha = models.DateField()
+    tipo = models.CharField(max_length=20)
     descripcion = models.CharField(max_length = 150)
+    valor = models.FloatField()
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 

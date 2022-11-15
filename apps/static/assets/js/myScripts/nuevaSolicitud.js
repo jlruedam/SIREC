@@ -26,7 +26,7 @@ const valorGastoAdicional = document.querySelector('#valorGastoAdicional');
 const municipioGastoAdicional = document.querySelector('#municipioGastoAdicional');
 const tablaGastosAdicionales = document.querySelector('#tablaGastosAdicionales');
 const bodyTablaGastosAdicionales = document.querySelector('#bodyTablaGastosAdicionales');
-
+const botonBorrarAdicional = document.querySelector('#botonBorrarAdicional');
 
 
 btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
@@ -35,7 +35,9 @@ selectSedeRuta.addEventListener('change', cargarSedeDestino);
 selectDestinoRuta.addEventListener('change',cargarSedeDestino);
 btnCargarViatico.addEventListener('click',cargarViatico );
 tablaViaticos.addEventListener('click', eliminarViatico);
+tablaGastosAdicionales.addEventListener('click', eliminarGastoAdicional);
 btnCargarGastoAdicional.addEventListener('click', cargarGastoAdicional);
+
 // botonBorrarRuta.addEventListener('click', eliminarViatico);
 // fechaActividad = addEventListener('load', cargarFechaActividad);
 
@@ -177,7 +179,7 @@ function eliminarViatico(e){
     if(btn.id === "botonBorrarRuta"){
         let idRuta = btn.attributes[2].nodeValue;
         document.getElementById(btn.attributes[2].nodeValue).remove();
-        rutas.pop(idRuta-1)
+        rutas.pop(idRuta-1);
         console.log(rutas);
     }
     
@@ -202,14 +204,22 @@ function cargarGastoAdicional(){
     }else if(adicional.valor <= 0){
         alert("Debe registrar un valor mayor que $0");
     }else {
-        gastosAdicionales.push(adicional);
+        let idAdicional=gastosAdicionales.push(adicional);
 
         let btnBorrar = document.createElement('button');
         let hilera = document.createElement("tr");
+        let celda = document.createElement("td");
+        let textoCelda = document.createTextNode(idAdicional);
+
+        celda.appendChild(textoCelda);
+        celda.style.display = "none";
+        hilera.setAttribute('id',idAdicional);
+        hilera.appendChild(celda);
 
         btnBorrar.innerHTML="🗑️";
         btnBorrar.setAttribute('id', "botonBorrarAdicional");
         btnBorrar.setAttribute('type', "button");
+        btnBorrar.setAttribute('ruta', idAdicional);
 
         for (let campo in adicional){
             celda = document.createElement("td");
@@ -227,5 +237,17 @@ function cargarGastoAdicional(){
     }
 
     
+
+}
+
+function eliminarGastoAdicional(e){
+    console.log(e);
+    let btn = e.path[0];;
+    if(btn.id === "botonBorrarAdicional"){
+        let idAdicional = btn.attributes[2].nodeValue;
+        document.getElementById(btn.attributes[2].nodeValue).remove();
+        gastosAdicionales.pop(idAdicional-1);
+        console.log(gastosAdicionales);
+    }
 
 }

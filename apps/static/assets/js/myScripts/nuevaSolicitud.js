@@ -95,14 +95,13 @@ function cargarViatico(){
         "destino": selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value,
         "diasActividad":diasViatico.value,
         "pernoctar":pernoctar.checked,
-        "viaticos": valorViatico.value,
-        "transporte": valorTranporte.value
+        "viaticos": "$ " + valorViatico.value,
+        "transporte":"$ "+ valorTranporte.value
     }
     //validar que la ruta no se encuentra en la tabla para el mismo origen-destino.
     let rutaExistente = false;
 
     for(let r of rutas){
-        console.log(r.origen + "/" + [ruta.origen] + "-" + r.destino + "/" + [ruta.destino]);
         if((r.origen === ruta.origen) && (r.destino === ruta.destino)){
             
             alert('Esta ruta ya fue seleccionada, seleccione otra diferente.');
@@ -111,8 +110,10 @@ function cargarViatico(){
         }
     }
 
-    if(ruta.origen === ruta.destino){
+    if(ruta.origen.length == 0 || ruta.destino.length == 0){
+        alert('Debe diligenciar la ruta con su origen y destino.');
 
+    }else if(ruta.origen === ruta.destino){
         alert('El origen y el Destino no pueden ser iguales.');
 
     }else if(!rutaExistente){
@@ -149,9 +150,7 @@ function cargarViatico(){
     }
     
 }
-
-    
-    
+  
 function eliminarViatico(e){
        
     let btn = e.path[0]

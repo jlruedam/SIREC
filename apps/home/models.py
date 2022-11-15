@@ -80,28 +80,6 @@ class TipoOperacion(models.Model):
     def __str__(self) -> str:
         return "{}".format(self.operacion)
 
-class Ruta(models.Model):
-    id = models.AutoField(primary_key =True)
-    origen = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='municipio_sede')
-    destino = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='municipio_destino')
-    transporte = models.FloatField(default=0.0)
-    viatico_pernoctado = models.FloatField(default=0.0)
-    viatico_pernoctado_sede = models.FloatField(default=0.0)
-    viatico_sin_pernoctar = models.FloatField(default=0.0)
-    viatico_sin_pernoctar_sede = models.FloatField(default=0.0)
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
-
-
-    class meta:
-        verbose_name="Ruta"
-        verbose_name_plural="Rutas"
-        db_table="Rutas"
-        ordering=["id","Origen","Destino"]
-
-    def __str__(self) -> str:
-        return "{} - {} - {}".format(self.id, self.origen, self.destino)
-
 class SolicitudRecurso(models.Model):
     id = models.AutoField(primary_key =True)
     colaborador = models.ForeignKey(Colaborador, models.SET_NULL, blank=True,null=True)
@@ -144,6 +122,60 @@ class Actividad(models.Model):
     def __str__(self) -> str:
         return "{} - {} - {}".format(self.id, self.concepto, self.valor)
 
+class TablaViaticos(models.Model):
+    id = models.AutoField(primary_key =True)
+    origen = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='municipio_sede')
+    destino = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='municipio_destino')
+    transporte = models.FloatField(default=0.0)
+    viatico_pernoctado = models.FloatField(default=0.0)
+    viatico_pernoctado_sede = models.FloatField(default=0.0)
+    viatico_sin_pernoctar = models.FloatField(default=0.0)
+    viatico_sin_pernoctar_sede = models.FloatField(default=0.0)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+
+    class meta:
+        verbose_name="Tabla Viaticos"
+        verbose_name_plural="Tabla Viaticos"
+        db_table="Tabla Viaticos"
+        ordering=["id","Origen","Destino"]
+
+    def __str__(self) -> str:
+        return "Viaticos de Ruta {} - {} - {}".format(self.id, self.origen, self.destino)
+
+class Viatico(TablaViaticos):
+    actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
+    num_dias = models.IntegerField()
+    esPernoctado = models.BooleanField(default=False)
+    rutaAprobada = models.BooleanField(default=False)
+
+    class meta:
+        verbose_name="Viatico"
+        verbose_name_plural="Viaticos"
+        db_table="Viaticos"
+        ordering=["id","Origen","Destino"]
+
+    def __str__(self) -> str:
+        return "Viatico {} - {} - {}".format(self.id, self.origen, self.destino)
+
+class GastoAdicional(models.Model):
+    id = models.AutoField(primary_key =True)
+    Actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
+    fecha = models.DateField()
+    descripcion = models.CharField(max_length = 150)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+    class meta:
+        verbose_name="Gasto adicional"
+        verbose_name_plural="Gastos adicionales"
+        db_table="GastosAdicionales"
+        ordering=["id","regional"]
+
+    def __str__(self) -> str:
+        return "{}".format(self.regional)
+    
 class Regional(models.Model):
     id = models.AutoField(primary_key =True)
     regional = models.CharField(max_length = 50)

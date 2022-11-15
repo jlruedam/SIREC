@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
-from apps.home.models import SolicitudRecurso, Colaborador, Regional, Municipio, Ruta
+from apps.home.models import SolicitudRecurso, Colaborador, Regional, Municipio, TablaViaticos
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
@@ -71,21 +71,21 @@ def data_ruta(request):
     pernoctar = request.GET["pernoctar"]
     data = {
         "transporte":0,
-        "viaticos": 0
+        "viaticos": 0,
     }
     if len(sede) and len(destino):
-        rutaSeleccionada = Ruta.objects.all().filter(origen = sede[0], destino=destino[0])
+        rutaSeleccionada = TablaViaticos.objects.all().filter(origen = sede[0], destino=destino[0])
     
         if len(rutaSeleccionada) > 0:
            
-
-            if sede[0].es_sede:
+            if destino[0].es_sede:
                 
                 if pernoctar == "true":
                     viaticos = rutaSeleccionada[0].viatico_pernoctado_sede
                 else:
                     viaticos = rutaSeleccionada[0].viatico_sin_pernoctar_sede
             else:
+
                 if pernoctar == "true":
                     viaticos = rutaSeleccionada[0].viatico_pernoctado
                 else:
@@ -93,5 +93,11 @@ def data_ruta(request):
 
             data["transporte"] = rutaSeleccionada[0].transporte
             data["viaticos"] = viaticos
+            data["rutaAprobada"] = True
+
+        else:
+            data["rutaAprobada"] = False
+
+        
                    
     return JsonResponse(data)

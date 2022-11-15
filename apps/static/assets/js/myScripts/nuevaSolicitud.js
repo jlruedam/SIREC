@@ -1,5 +1,5 @@
 const rutas = [];
-const camposTabla = 7;
+const camposTabla = 8;
 const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
 const selectTipoSolicitud = document.querySelector('#selectTipoSolicitud')
 const btnNuevaSolicitud = document.querySelector('#BotonNuevaSolicitud');
@@ -17,6 +17,7 @@ const bodyTablaViaticos = document.querySelector('#bodyTablaViaticos');
 const fechaActividad = document.querySelector('#fecha_actividad');
 const diasViatico = document.querySelector('#dias_actividad');
 const botonBorrarRuta = document.querySelector('#botonBorrarRuta');
+const rutaAprobada = document.querySelector('#rutaAprobada');
 
 
 btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
@@ -44,7 +45,14 @@ function cargarSedeDestino(){
         type:"GET",
         success:function(response){
             console.log(response);
-            console.log(pernoctar.checked)
+            console.log("¿La ruta existe en al tabla de viaticos?"+response["rutaAprobada"]);
+            if(response["rutaAprobada"]){
+                rutaAprobada.innerHTML="😁 Ruta existe en tabla de viáticos ";
+                rutaAprobada.setAttribute('aprobada', "ok");
+            }else{
+                rutaAprobada.innerHTML="🙁 La ruta no se encuentra en la tabla de viáticos; por lo tanto, al agregarla los valores estarán en cero y pasarán a revisión por parte de contablidad";
+                rutaAprobada.setAttribute('aprobada', "pendiente");
+            }
             valorTranporte.value = response["transporte"]
             valorViatico.value = response["viaticos"]
             console.log("Petición exitosa");
@@ -96,7 +104,9 @@ function cargarViatico(){
         "diasActividad":diasViatico.value,
         "pernoctar":pernoctar.checked,
         "viaticos": "$ " + valorViatico.value,
-        "transporte":"$ "+ valorTranporte.value
+        "transporte":"$ "+ valorTranporte.value,
+        "estado": rutaAprobada.getAttribute("aprobada")
+
     }
     //validar que la ruta no se encuentra en la tabla para el mismo origen-destino.
     let rutaExistente = false;

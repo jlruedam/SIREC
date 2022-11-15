@@ -158,7 +158,13 @@
                             <input type="text" class="myForm__input" id="valor_viatico" disabled >
                         </div>
 
+
+                        <div style="text-align:center; width: 100%;">
+                            <p><span id="rutaAprobada"></span></p>
+                        </div>
+                        
                         <div class="myForm__item">
+                            
                             <button class="myButton" id="btnCargarViatico" type="button">
                                 <img src="../../static/assets/img/icons8-más-2-matemáticas-40.png" alt="">
                             </button>
@@ -199,6 +205,9 @@
                                         Transporte
                                     </th>
                                     <th>
+                                        Estado
+                                    </th>
+                                    <th>
                                         Eliminar
                                     </th>
                                     </thead>
@@ -237,6 +246,53 @@
                 
                 <div class="myForm__item"></div>
         
+            </div>
+
+            <div class="myForm__section">
+                <div class="col-md-12">
+                    <div class="card card-plain">
+                    <div class="card-header card-header-primary my-bg">
+                        <h4 class="card-title mt-0"> Gastos adicionales </h4>
+                        <p class="card-category"> Detalle de adicionales </p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                        <table class="table table-hover" id="tablaViaticos">
+                            <thead class="">
+                            <!-- <th>
+                                Número de ruta
+                            </th> -->
+                            <th>
+                                Sede Principal
+                            </th>
+                            <th>
+                                Destino
+                            </th>
+                            <th>
+                                Cantidad días
+                            </th>
+                            <th>
+                                Pernoctado
+                            </th>
+                            <th>
+                                Viático
+                            </th>
+                            <th>
+                                Transporte
+                            </th>
+                            
+                            <th>
+                                Eliminar
+                            </th>
+                            </thead>
+                            <tbody id="bodyTablaViaticos">
+                            
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
             </div>
             
         </fieldset>

@@ -37,7 +37,13 @@ class TipoOperacionAdmin(admin.ModelAdmin):
     search_fields = ('operacion', 'descripcion')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
-class RutaAdmin(admin.ModelAdmin):
+class ViaticoAdmin(admin.ModelAdmin):
+
+    list_display = ('id','origen', 'destino','transporte', 'viatico_pernoctado', 'viatico_pernoctado_sede', 'viatico_sin_pernoctar', 'viatico_sin_pernoctar_sede')
+    search_fields = ('origen', 'destino')
+    # fields = ('id_colaborador', 'nombre', 'activo')
+
+class TablaViaticosAdmin(admin.ModelAdmin):
 
     list_display = ('id','origen', 'destino','transporte', 'viatico_pernoctado', 'viatico_pernoctado_sede', 'viatico_sin_pernoctar', 'viatico_sin_pernoctar_sede')
     search_fields = ('origen', 'destino')
@@ -59,7 +65,8 @@ admin.site.register(models.Colaborador, ColaboradorAdmin)
 admin.site.register(models.Municipio, MunicipioAdmin)
 admin.site.register(models.EstadoSolicitud, EstadoSolicitudAdmin)
 admin.site.register(models.TipoOperacion, TipoOperacionAdmin)
-admin.site.register(models.Ruta, RutaAdmin)
+admin.site.register(models.Viatico, ViaticoAdmin)
+admin.site.register(models.TablaViaticos, TablaViaticosAdmin)
 admin.site.register(models.SolicitudRecurso, SolicitudRecursoAdmin)
 admin.site.register(models.Actividad, ActividadAdmin)
 admin.site.register(models.Regional, RegionalAdmin)

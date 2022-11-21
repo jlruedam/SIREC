@@ -8,42 +8,39 @@
 {% endblock stylesheets %}
 
 {% block content %}
-
+<!-- Colocar página slices aquí  -->
 <div>
-  <h1 class="myTitle">
-    BIENVENIDO
-  </h1>
+    <h1 class="myTitle">
+      BIENVENIDO
+    </h1>
 
-  <hr class="lineaDivisora">
+    <hr class="lineaDivisora">
 
-<div class="slideshow-container">
-  <div class="mySlides1">
-    <img src="../../static/assets/img/SerSocial/casa.jpg" style="width:100%">
+  <div class="slideshow-container">
+    <div class="mySlides1">
+      <img src="../../static/assets/img/SerSocial/casa.jpg" style="width:100%">
+    </div>
+
+    <div class="mySlides1">
+      <img src="../../static/assets/img/SerSocial/IMG_2049.JPG" style="width:100%">
+    </div>
+
+    <div class="mySlides1">
+      <img src="../../static/assets/img/SerSocial/IMG_2106.JPG" style="width:100%">
+    </div>
+
+    <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
   </div>
 
-  <div class="mySlides1">
-    <img src="../../static/assets/img/SerSocial/IMG_2049.JPG" style="width:100%">
-  </div>
-
-  <div class="mySlides1">
-    <img src="../../static/assets/img/SerSocial/IMG_2106.JPG" style="width:100%">
-  </div>
-
-  <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
-  <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
 </div>
 
-</div>
-
-
-
-</div>
   
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-
+<!-- Eliminar este Scrtip -->
   <script>
       let slideIndex = [1,1];
       let slideId = ["mySlides1", "mySlides2"]

@@ -1,90 +1,119 @@
+/*PARÁMETROS GENERALES*/
 const rutas = [];
 const gastosAdicionales = [];
-const camposTabla = 8;
-const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
-const selectTipoSolicitud = document.querySelector('#selectTipoSolicitud')
-const btnNuevaSolicitud = document.querySelector('#BotonNuevaSolicitud');
-const contenedorFormViaticos = document.querySelector('#contenedorFormViaticos');
-const contenedorFormAnticipo= document.querySelector('#contenedorFormAnticipo'); 
-const contenedorFormReembolso = document.querySelector('#contenedorFormReembolso'); 
-const selectSedeRuta = document.querySelector('#lista-municipios-sedes');
-const selectDestinoRuta = document.querySelector('#lista-municipios-destinos');
-const valorTranporte = document.querySelector('#valor_transporte');
-const valorViatico= document.querySelector('#valor_viatico');
-const pernoctar = document.querySelector('#Si_pernocta');
-const btnCargarViatico = document.querySelector('#btnCargarViatico');
-const tablaViaticos = document.querySelector('#tablaViaticos');
-const bodyTablaViaticos = document.querySelector('#bodyTablaViaticos');
-const fechaActividad = document.querySelector('#fecha_actividad');
-const diasViatico = document.querySelector('#dias_actividad');
-const botonBorrarRuta = document.querySelector('#botonBorrarRuta');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Se utiliza para poder enviar petición tipo POST a Django
+
+
+/* VIÁTICOS */
+// # Variables Formulario
+
+// ## Datos actividad
+const tipoSolicitud= document.querySelector('#tipoSolicitud');
+const regional = document.querySelector('#regional');
+const proyecto = document.querySelector('#proyecto');
+const sede = document.querySelector('#sede');
+const observacionesSolicitud = document.querySelector('observacionesSolicitud');
+
+// ## Estadía y ruta
+const origenTramo = document.querySelector('#origenTramo');
+const destinoTramo = document.querySelector('#destinoTramo');
+const fechaInicial = document.querySelector('#fechaInicial');
+const fechaFinal = document.querySelector('#fechaFinal');
+const diasPernoctar = document.querySelector('#diasPernoctar');
+const pernoctar = document.querySelector('#pernoctar');
+const valorViatico = document.querySelector('#valorViatico');
+const valorTranporte = document.querySelector('#valorTransporte');
 const rutaAprobada = document.querySelector('#rutaAprobada');
-const btnCargarGastoAdicional = document.querySelector("#btnCargarGastoAdicional");
+
+// ## Gastos Adicionales
 const tipoGasto = document.querySelector('#tipoGasto');
 const descripcionGastoAdicional = document.querySelector('#descripcionGastoAdicional');
-const valorGastoAdicional = document.querySelector('#valorGastoAdicional');
 const municipioGastoAdicional = document.querySelector('#municipioGastoAdicional');
+const valorGastoAdicional = document.querySelector('#valorGastoAdicional');
+
+// # Botones
+const btnNuevaSolicitud = document.querySelector('#BotonNuevaSolicitud');
+const btnCargarViatico = document.querySelector('#btnCargarViatico');
+const btnBorrarRuta = document.querySelector('#btnBorrarRuta');
+const btnCargarGastoAdicional = document.querySelector("#btnCargarGastoAdicional")
+const btnBorrarAdicional = document.querySelector('#btnBorrarAdicional');
+const btnEnviarSolicitudViatico = document.querySelector('#btnEnviarSolicitudViatico');
+
+// # Contenedores
+const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
+const contenedorFormViaticos = document.querySelector('#contenedorFormViaticos');
+const contenedorFormAnticipo= document.querySelector('#contenedorFormAnticipo'); 
+const contenedorFormReembolso = document.querySelector('#contenedorFormReembolso');
+
+// # Tablas
+const tablaViaticos = document.querySelector('#tablaViaticos');
+const bodyTablaViaticos = document.querySelector('#bodyTablaViaticos');
 const tablaGastosAdicionales = document.querySelector('#tablaGastosAdicionales');
 const bodyTablaGastosAdicionales = document.querySelector('#bodyTablaGastosAdicionales');
-const botonBorrarAdicional = document.querySelector('#botonBorrarAdicional');
 
+// #EVENTOS
 
-btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
-selectTipoSolicitud.addEventListener('change',eligeTipoSolicitud );
-selectSedeRuta.addEventListener('change', cargarSedeDestino);
-selectDestinoRuta.addEventListener('change',cargarSedeDestino);
-btnCargarViatico.addEventListener('click',cargarViatico );
+tipoSolicitud.addEventListener('change',eligeTipoSolicitud );
+origenTramo.addEventListener('change', cargarOrigenDestino);
+destinoTramo.addEventListener('change',cargarOrigenDestino);
+
 tablaViaticos.addEventListener('click', eliminarViatico);
 tablaGastosAdicionales.addEventListener('click', eliminarGastoAdicional);
+
+btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
+btnCargarViatico.addEventListener('click',cargarViatico );
 btnCargarGastoAdicional.addEventListener('click', cargarGastoAdicional);
+btnEnviarSolicitudViatico.addEventListener('click', enviarSolicitudViatico);
 
-// botonBorrarRuta.addEventListener('click', eliminarViatico);
-// fechaActividad = addEventListener('load', cargarFechaActividad);
+function constuirTablaViaticos(){
+    
+   //Eliminar toda la tabla
+    let idRuta = 0;
+    
+    while(bodyTablaViaticos.hasChildNodes()){
+        bodyTablaViaticos.removeChild(bodyTablaViaticos.firstChild);
+    }
 
+    for(let r of rutas){
+        idRuta += 1;
+    
+        let hilera = document.createElement("tr");
+        let celda = document.createElement("td");
+        let textoCelda = document.createTextNode(idRuta);
+        let btnBorrar = document.createElement('button');
+        
+        celda.appendChild(textoCelda);
+        hilera.setAttribute('id',idRuta);
+        hilera.classList.add("filasViaticos");
+        hilera.appendChild(celda);
 
+        btnBorrar.innerHTML="🗑️";
+        btnBorrar.setAttribute('id', "btnBorrarRuta");
+        btnBorrar.setAttribute('type', "button");
+        btnBorrar.setAttribute('ruta', idRuta);
 
-// function cargarFechaActividad(){
-//     var today = new Date();
-//     fechaActividad.defaultValue = today;
-// }
-
-function cargarSedeDestino(){
-    let sedeSeleccionada = selectSedeRuta.options[selectSedeRuta.selectedIndex].value;
-    let destinoSeleccionado = selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value;
-    let pernoctado = pernoctar.checked
-    $.ajax({
-        url:"datos-ruta/?sede="+sedeSeleccionada + "&destino="+destinoSeleccionado + "&pernoctar="+pernoctado,
-        type:"GET",
-        success:function(response){
-            console.log(response);
-            console.log("¿La ruta existe en al tabla de viaticos?"+response["rutaAprobada"]);
-            if(response["rutaAprobada"]){
-                rutaAprobada.innerHTML="😁 Ruta existe en tabla de viáticos ";
-                rutaAprobada.setAttribute('aprobada', "ok");
-            }else{
-                rutaAprobada.innerHTML="🙁 La ruta no se encuentra en la tabla de viáticos; por lo tanto, al agregarla los valores estarán en cero y pasarán a revisión por parte de contablidad";
-                rutaAprobada.setAttribute('aprobada', "pendiente");
-            }
-            valorTranporte.value = response["transporte"]
-            valorViatico.value = response["viaticos"]
-            console.log("Petición exitosa");
-            //location.reload();
-        }, 
-        error: function(error){
-            console.log("Hay un Pendejo error")
-            console.log(error);
+        for (let campo in r){
             
+            celda = document.createElement("td");
+            textoCelda = document.createTextNode(r[campo]);
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
         }
-    });  
-}
 
-function muestraOcultaFormulario(){  
-    formNuevaSolicitud.classList.toggle('inactive');
+        celda = document.createElement("td");
+        celda.appendChild(btnBorrar);
+        hilera.appendChild(celda);
+
+        bodyTablaViaticos.appendChild(hilera);
+        tablaViaticos.appendChild(bodyTablaViaticos);
+        
+    }
+   
 }
 
 function eligeTipoSolicitud(){
-    // console.log("El tipo de solicitud es:", selectTipoSolicitud.value);
-    switch(selectTipoSolicitud.value) {
+    
+    switch(tipoSolicitud.value) {
         case 'Viáticos':
             contenedorFormViaticos.style.display = 'block';
             contenedorFormAnticipo.style.display = 'none';
@@ -108,15 +137,49 @@ function eligeTipoSolicitud(){
 
 }
 
+function muestraOcultaFormulario(){  
+    formNuevaSolicitud.classList.toggle('inactive');
+}
+
+function cargarOrigenDestino(){
+    let origenSeleccionado = origenTramo.value;
+    let destinoSeleccionado = destinoTramo.value;
+    let pernoctado = true;
+
+    $.ajax({
+        url:"datos-ruta/?origen="+origenSeleccionado + "&destino="+destinoSeleccionado + "&pernoctar="+pernoctado,
+        type:"GET",
+        success:function(response){
+            
+            if(response["rutaAprobada"]){
+                rutaAprobada.innerHTML="😁 Ruta existe en tabla de viáticos ";
+                rutaAprobada.setAttribute('aprobada', "ok");
+            }else{
+                rutaAprobada.innerHTML="🙁 La ruta no se encuentra en la tabla de viáticos; por lo tanto, al agregarla los valores estarán en cero y pasarán a revisión por parte de contablidad";
+                rutaAprobada.setAttribute('aprobada', "pendiente");
+            }
+            valorTranporte.value = "$ " + response["transporte"]
+            valorViatico.value = "$ " + response["viaticos"]
+            console.log("Petición exitosa");
+            //location.reload();
+        }, 
+        error: function(error){
+            console.log("Hay un Pendejo error", error) 
+        }
+    });  
+}
+
 function cargarViatico(){
 
     let ruta = {
-        "origen": selectSedeRuta.options[selectSedeRuta.selectedIndex].value,
-        "destino": selectDestinoRuta.options[selectDestinoRuta.selectedIndex].value,
-        "diasActividad":diasViatico.value,
+        "origen": origenTramo.value,
+        "destino": destinoTramo.value,
+        "fechaInicial":fechaInicial.value,
+        "fechaFinal":fechaFinal.value,
+        "diasPernoctar":diasPernoctar.value,
         "pernoctar":pernoctar.checked,
-        "viaticos": "$ " + valorViatico.value,
         "transporte":"$ "+ valorTranporte.value,
+        "viaticos": "$ " + valorViatico.value,
         "estado": rutaAprobada.getAttribute("aprobada")
 
     }
@@ -139,36 +202,8 @@ function cargarViatico(){
         alert('El origen y el Destino no pueden ser iguales.');
 
     }else if(!rutaExistente){
-        let idRuta = rutas.push(ruta);
-        let hilera = document.createElement("tr");
-        let celda = document.createElement("td");
-        let textoCelda = document.createTextNode(idRuta);
-        let btnBorrar = document.createElement('button');
-
-        celda.appendChild(textoCelda);
-        celda.style.display = "none";
-        hilera.setAttribute('id',idRuta);
-        hilera.appendChild(celda);
-
-        btnBorrar.innerHTML="🗑️";
-        btnBorrar.setAttribute('id', "botonBorrarRuta");
-        btnBorrar.setAttribute('type', "button");
-        btnBorrar.setAttribute('ruta', idRuta);
-
-        for (let campo in rutas[idRuta-1]){
-            console.log(rutas[idRuta-1][campo]);
-            celda = document.createElement("td");
-            textoCelda = document.createTextNode(rutas[idRuta-1][campo]);
-            celda.appendChild(textoCelda);
-            hilera.appendChild(celda);
-        }  
-
-        celda = document.createElement("td");
-        celda.appendChild(btnBorrar);
-        hilera.appendChild(celda);
-        
-        bodyTablaViaticos.appendChild(hilera);
-        tablaViaticos.appendChild(bodyTablaViaticos);
+        let cantRutas = rutas.push(ruta);
+        constuirTablaViaticos(cantRutas);
     }
     
 }
@@ -176,13 +211,11 @@ function cargarViatico(){
 function eliminarViatico(e){
        
     let btn = e.path[0]
-    if(btn.id === "botonBorrarRuta"){
+    if(btn.id === "btnBorrarRuta"){
         let idRuta = btn.attributes[2].nodeValue;
-        document.getElementById(btn.attributes[2].nodeValue).remove();
-        rutas.pop(idRuta-1);
-        console.log(rutas);
+        rutas.splice(idRuta-1,1);
+        constuirTablaViaticos();
     }
-    
 }
 
 function cargarGastoAdicional(){
@@ -217,7 +250,7 @@ function cargarGastoAdicional(){
         hilera.appendChild(celda);
 
         btnBorrar.innerHTML="🗑️";
-        btnBorrar.setAttribute('id', "botonBorrarAdicional");
+        btnBorrar.setAttribute('id', "btnBorrarAdicional");
         btnBorrar.setAttribute('type', "button");
         btnBorrar.setAttribute('ruta', idAdicional);
 
@@ -243,11 +276,40 @@ function cargarGastoAdicional(){
 function eliminarGastoAdicional(e){
     console.log(e);
     let btn = e.path[0];;
-    if(btn.id === "botonBorrarAdicional"){
+    if(btn.id === "btnBorrarAdicional"){
         let idAdicional = btn.attributes[2].nodeValue;
         document.getElementById(btn.attributes[2].nodeValue).remove();
         gastosAdicionales.pop(idAdicional-1);
         console.log(gastosAdicionales);
     }
 
+    
+
 }
+
+function enviarSolicitudViatico(e){
+    console.log(e)
+    json = {
+        "rutasViaticos":rutas,
+        "gastosAdicionales":gastosAdicionales
+    }
+    $.ajax({
+        url:"cargarSolicitudViatico/",
+        method:"POST",
+        data: JSON.stringify(json),
+        headers: {'X-CSRFToken': csrftoken},
+        contentType: 'application/json; charset=utf-8',
+
+        success:function(response){
+            console.log(response);
+            console.log("Petición exitosa");
+            // location.reload();
+        }, 
+        error: function(error){
+            console.log("Hay un Pendejo error")
+            console.log(error);
+            
+        }
+    });  
+}
+

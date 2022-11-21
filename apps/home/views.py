@@ -8,9 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
-from apps.home.models import SolicitudRecurso, Colaborador, Regional, Municipio, TablaViaticos
+from apps.home.models import SolicitudRecurso, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion
 from django.shortcuts import render
 from django.contrib.auth.models import User
+
+import json
 
 @login_required(login_url="/login/")
 def index(request):
@@ -52,7 +54,7 @@ def pages(request):
 
         context['segment'] = load_template
         html_template = loader.get_template('home/' + load_template)
-        print("ACÁ NO!")
+        
         return HttpResponse(html_template.render(context, request))
 
     except template.TemplateDoesNotExist:
@@ -66,15 +68,15 @@ def pages(request):
 
 
 def data_ruta(request):
-    sede = Municipio.objects.filter(municipio=str(request.GET["sede"]))
+    origen = Municipio.objects.filter(municipio=str(request.GET["origen"]))
     destino = Municipio.objects.filter(municipio=str(request.GET["destino"]))
     pernoctar = request.GET["pernoctar"]
     data = {
         "transporte":0,
         "viaticos": 0,
     }
-    if len(sede) and len(destino):
-        rutaSeleccionada = TablaViaticos.objects.all().filter(origen = sede[0], destino=destino[0])
+    if len(origen) and len(destino):
+        rutaSeleccionada = TablaViaticos.objects.all().filter(origen = origen[0], destino=destino[0])
     
         if len(rutaSeleccionada) > 0:
            
@@ -91,7 +93,7 @@ def data_ruta(request):
                 else:
                     viaticos = rutaSeleccionada[0].viatico_sin_pernoctar
 
-            data["transporte"] = rutaSeleccionada[0].transporte
+            data["transporte"] = rutaSeleccionada[0].transporte/2
             data["viaticos"] = viaticos
             data["rutaAprobada"] = True
 
@@ -101,3 +103,32 @@ def data_ruta(request):
         
                    
     return JsonResponse(data)
+
+def cargarSolicitudViatico(request):
+    data = json.loads((request.body).decode('UTF-8'))
+    print(data["rutasViaticos"])
+    print(data["gastosAdicionales"])
+    
+    # Crear solicitud de viatico
+    # colaborador = User.objects.get(username=request.user.username)
+    # estado = EstadoSolicitud.objects.get(estado = "Solicitado")
+    # operacion = TipoOperacion.objects.get(operacion = "Viatico")
+    # solicitudViatico = SolicitudRecurso(
+    #     colaborador = colaborador, 
+    #     estado = estado, 
+    #     operacion = operacion, 
+    # )
+
+
+
+    
+
+
+
+
+    # for viatico in data["rutasViaticos"]:
+
+
+
+
+    return HttpResponse("OK")

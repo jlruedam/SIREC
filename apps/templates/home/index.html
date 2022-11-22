@@ -4,7 +4,7 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
-<link rel="stylesheet" href="../../static/assets/css/slideshow.css">
+<link rel="stylesheet" href="../../static/assets/css/estilos.css">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -16,52 +16,20 @@
 
     <hr class="lineaDivisora">
 
-  <div class="slideshow-container">
-    <div class="mySlides1">
-      <img src="../../static/assets/img/SerSocial/casa.jpg" style="width:100%">
+ <div class="banner">
+      <div class="capa"></div>
+      <div class="info">
+        <h1>BIENVENIDOS A SIREC</h1>
+        <p>PLAFORMA DE APOYO GRADUAL</p>
+        <a href="#">Leer Mas</a>
+      </div>
+ 
     </div>
-
-    <div class="mySlides1">
-      <img src="../../static/assets/img/SerSocial/IMG_2049.JPG" style="width:100%">
-    </div>
-
-    <div class="mySlides1">
-      <img src="../../static/assets/img/SerSocial/IMG_2106.JPG" style="width:100%">
-    </div>
-
-    <a class="prev" onclick="plusSlides(-1, 0)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1, 0)">&#10095;</a>
-  </div>
-
-</div>
 
   
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-<!-- Eliminar este Scrtip -->
-  <script>
-      let slideIndex = [1,1];
-      let slideId = ["mySlides1", "mySlides2"]
-      showSlides(1, 0);
-      showSlides(1, 1);
-
-      function plusSlides(n, no) {
-        showSlides(slideIndex[no] += n, no);
-      }
-
-      function showSlides(n, no) {
-        let i;
-        let x = document.getElementsByClassName(slideId[no]);
-        if (n > x.length) {slideIndex[no] = 1}    
-        if (n < 1) {slideIndex[no] = x.length}
-        for (i = 0; i < x.length; i++) {
-          x[i].style.display = "none";  
-        }
-        x[slideIndex[no]-1].style.display = "block";  
-      }
-
-  </script>
 
 {% endblock javascripts %}

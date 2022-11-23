@@ -331,6 +331,7 @@ function cargarGastoAdicional(){
     }else if(adicional.valor <= 0){
         alert("Debe registrar un valor mayor que $0");
     }else {
+
         let idAdicional=gastosAdicionales.push(adicional);
 
         let btnBorrar = document.createElement('button');
@@ -361,6 +362,11 @@ function cargarGastoAdicional(){
     
         bodyTablaGastosAdicionales.appendChild(hilera);
         tablaGastosAdicionales.appendChild(bodyTablaGastosAdicionales);
+
+        tipoGasto.value = "";
+        descripcionGastoAdicional.value = "";
+        valorGastoAdicional.value = "";
+        municipioGastoAdicional.value = "";
     }
 
     

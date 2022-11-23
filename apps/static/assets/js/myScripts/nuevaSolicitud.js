@@ -2,7 +2,10 @@
 const rutas = [];
 const gastosAdicionales = [];
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Se utiliza para poder enviar petición tipo POST a Django
-
+const topes = {
+    "transporte":320000,
+    "viaticos":280000
+}
 
 /* VIÁTICOS */
 // # Variables Formulario
@@ -24,6 +27,8 @@ const pernoctar = document.querySelector('#pernoctar');
 const valorViatico = document.querySelector('#valorViatico');
 const valorTranporte = document.querySelector('#valorTransporte');
 const rutaAprobada = document.querySelector('#rutaAprobada');
+const mensajeTopeTransporte = document.getElementById("mensajeTopeTransporte");
+const mensajeTopeViaticos = document.getElementById("mensajeTopeViaticos");
 
 // ## Gastos Adicionales
 const tipoGasto = document.querySelector('#tipoGasto');
@@ -94,6 +99,10 @@ function constuirTablaViaticos(){
 
         for (let campo in r){
             
+            if(campo == "transporte" || campo == "viaticos" ){
+                r[campo] = "$ " + r[campo];
+            }
+
             celda = document.createElement("td");
             textoCelda = document.createTextNode(r[campo]);
             celda.appendChild(textoCelda);
@@ -168,12 +177,20 @@ function cargarOrigenDestino(){
             if(response["rutaAprobada"]){
                 rutaAprobada.innerHTML="😁 Ruta existe en tabla de viáticos ";
                 rutaAprobada.setAttribute('aprobada', "ok");
+                valorTranporte.disabled = true;
+                valorViatico.disabled = true;
             }else{
-                rutaAprobada.innerHTML="🙁 La ruta no se encuentra en la tabla de viáticos; por lo tanto, al agregarla los valores estarán en cero y pasarán a revisión por parte de contablidad";
+                rutaAprobada.innerHTML="🙁 La ruta no se encuentra en la tabla de viáticos; Ingrese los valores estimados de transporte en un solo sentido y el valor del viatico para un solo día, indique si es pernoctado.";
                 rutaAprobada.setAttribute('aprobada', "pendiente");
+                
+                valorTranporte.disabled = false;
+                valorViatico.disabled = false;
+               
+
             }
-            valorTranporte.value = "$ " + response["transporte"]
-            valorViatico.value = "$ " + response["viaticos"]
+
+            valorTranporte.value = response["transporte"]
+            valorViatico.value =  response["viaticos"]
             console.log("Petición exitosa");
             //location.reload();
         }, 
@@ -195,12 +212,6 @@ function cargarViatico(){
         console.log(fi,ff,diffInDays);
         diasViaje.value = diffInDays+1;
 
-       
-
-        
-
-         
-
         let ruta = {
             "origen": origenTramo.value,
             "destino": destinoTramo.value,
@@ -211,7 +222,6 @@ function cargarViatico(){
             "transporte":valorTranporte.value,
             "viaticos": valorViatico.value,
             "estado": rutaAprobada.getAttribute("aprobada")
-    
         }
 
         if (diasViaje.value <= 1){
@@ -238,35 +248,54 @@ function cargarViatico(){
             alert('El origen y el Destino no pueden ser iguales.');
     
         }else if(!rutaExistente){
-            let cantRutas = rutas.push(ruta);
-            constuirTablaViaticos(cantRutas);
+            
+            let topesPermitidos = true;
+           
 
-            let ultimaRuta =  rutas[rutas.length-1];
+            if(ruta.transporte >= topes.transporte ){
+                mensajeTopeTransporte.innerHTML=".🚫 Valor de transporte no es valido";
+                topesPermitidos = false;
+            }
+
+            if(ruta.viaticos >= topes.viaticos ){
+                mensajeTopeViaticos.innerHTML="🚫 Valor del viatico no es valido"; 
+                topesPermitidos = false;               
+            }
+
+            if(topesPermitidos){
+                mensajeTopeTransporte.innerHTML=" ";
+                mensajeTopeViaticos.innerHTML=" "; 
+                let cantRutas = rutas.push(ruta);
+
+                constuirTablaViaticos(cantRutas);
+
+                let ultimaRuta =  rutas[rutas.length-1];
+
+                if (ultimaRuta){
+                    let ultimaFechaFinal = fechaFinal.value;
+                    let ultimoDestino = ultimaRuta.destino;
+
+                    fechaFinal.setAttribute("min", ultimaFechaFinal);
+                    fechaInicial.setAttribute("min", ultimaFechaFinal);
+
+                    console.log("La ultima fecha es: ",ultimaFechaFinal, ultimoDestino);
+                    fechaInicial.disabled = true;
+                    fechaInicial.value = ultimaFechaFinal;
+                    origenTramo.value = ultimoDestino;
+                    origenTramo.disabled = true;             
+                }
+                diasViaje.value = "";
+                valorTranporte.value = "0";
+                valorViatico.value = "0";
+            }
 
             
-
-            if (ultimaRuta){
-                let ultimaFechaFinal = fechaFinal.value;
-                let ultimoDestino = ultimaRuta.destino;
-
-                fechaFinal.setAttribute("min", ultimaFechaFinal);
-                fechaInicial.setAttribute("min", ultimaFechaFinal);
-
-                console.log("La ultima fecha es: ",ultimaFechaFinal, ultimoDestino);
-                fechaInicial.disabled = true;
-                fechaInicial.value = ultimaFechaFinal;
-                origenTramo.value = ultimoDestino;
-                origenTramo.disabled = true;             
-            }
-            diasViaje.value = "";
             
         }
     }else{
         alert("Debe diligenciar correctamente las fechas");
     }
-    
 
-    
     
 }
   

@@ -89,22 +89,22 @@
                     </div>
 
                     <div class="myForm__item">
-                        <label for="fechaInicial" class="myForm__label">Fecha inicial: </label>
+                        <label for="fechaInicial" class="myForm__label">Fecha inicial </label>
                         <input type="date" class="myForm__input" id="fechaInicial" >
                     </div>
 
                     <div class="myForm__item">
-                        <label for="fechaFinal" class="myForm__label">Fecha final: </label>
+                        <label for="fechaFinal" class="myForm__label">Fecha final </label>
                         <input type="date" class="myForm__input" id="fechaFinal" >
                     </div>
 
                     <div class="myForm__item">
-                        <label for="diasViaje" class="myForm__label">Días de viaje:</label>
-                        <input type="number" class="myForm__input" id="diasViaje" >
+                        <label for="diasViaje" class="myForm__label">Días de viaje</label>
+                        <input type="number" class="myForm__input" id="diasViaje" disabled>
                     </div>
 
                     <div class="myForm__item">
-                        <label for="valorTransporte" class="myForm__label">Transporte: </label>
+                        <label for="valorTransporte" class="myForm__label">Transporte $ </label>
                         <input type="text" class="myForm__input" id="valorTransporte" disabled >
                     </div>
 
@@ -114,13 +114,16 @@
                     </div>
                     
                     <div class="myForm__item">
-                        <label for="valorViatico" class="myForm__label">Valor víatico:</label>
+                        <label for="valorViatico" class="myForm__label">Valor víatico $</label>
                         <input type="text" class="myForm__input" id="valorViatico" disabled >
                     </div>
 
                     <div style="text-align:center; width: 100%;">
                         <p><span id="rutaAprobada"></span></p>
+                        <p><span id="mensajeTopeTransporte"></span></p>
+                        <p><span id="mensajeTopeViaticos"></span></p>
                     </div>
+                    
                     
                     <div class="myForm__item">
                         <button class="myButton" id="btnCargarViatico" type="button">
@@ -163,10 +166,10 @@
                                     Pernoctar
                                 </th>
                                 <th>
-                                    Viático
+                                    Transporte
                                 </th>
                                 <th>
-                                    Transporte
+                                    Viático
                                 </th>
                                 <th>
                                     Estado

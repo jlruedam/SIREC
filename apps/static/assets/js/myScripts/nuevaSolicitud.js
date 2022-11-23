@@ -19,7 +19,7 @@ const origenTramo = document.querySelector('#origenTramo');
 const destinoTramo = document.querySelector('#destinoTramo');
 const fechaInicial = document.querySelector('#fechaInicial');
 const fechaFinal = document.querySelector('#fechaFinal');
-const diasPernoctar = document.querySelector('#diasPernoctar');
+const diasViaje = document.querySelector('#diasViaje');
 const pernoctar = document.querySelector('#pernoctar');
 const valorViatico = document.querySelector('#valorViatico');
 const valorTranporte = document.querySelector('#valorTransporte');
@@ -146,6 +146,20 @@ function cargarOrigenDestino(){
     let destinoSeleccionado = destinoTramo.value;
     let pernoctado = true;
 
+    if(!rutas.length){
+        let hoy = new Date();
+        let dia = (hoy.getDate()).length < 2 ? "0" + hoy.getDate() : hoy.getDate();
+
+        hoy = hoy.getFullYear()+"-"+hoy.getMonth()+"-"+dia;
+        console.log(hoy);
+        fechaInicial.value = hoy;
+        fechaInicial.setAttribute("min", hoy);
+
+        fechaFinal.value = hoy;
+        fechaFinal.setAttribute("min", hoy);
+    }
+    
+
     $.ajax({
         url:"datos-ruta/?origen="+origenSeleccionado + "&destino="+destinoSeleccionado + "&pernoctar="+pernoctado,
         type:"GET",
@@ -171,40 +185,88 @@ function cargarOrigenDestino(){
 
 function cargarViatico(){
 
-    let ruta = {
-        "origen": origenTramo.value,
-        "destino": destinoTramo.value,
-        "fechaInicial":fechaInicial.value,
-        "fechaFinal":fechaFinal.value,
-        "diasPernoctar":diasPernoctar.value,
-        "pernoctar":pernoctar.checked,
-        "transporte":"$ "+ valorTranporte.value,
-        "viaticos": "$ " + valorViatico.value,
-        "estado": rutaAprobada.getAttribute("aprobada")
+    
+    if(fechaInicial.value && fechaFinal.value && fechaFinal >= fechaInicial){
+        
+        var fi = new Date(fechaInicial.value);
+        var ff = new Date(fechaFinal.value);
+        
+        const diffInDays = Math.floor((ff - fi) / (1000 * 60 * 60 * 24));
+        console.log(fi,ff,diffInDays);
+        diasViaje.value = diffInDays+1;
 
-    }
-    //validar que la ruta no se encuentra en la tabla para el mismo origen-destino.
-    let rutaExistente = false;
+       
 
-    for(let r of rutas){
-        if((r.origen === ruta.origen) && (r.destino === ruta.destino)){
-            
-            alert('Esta ruta ya fue seleccionada, seleccione otra diferente.');
-            rutaExistente = true;
-            break;
+        
+
+         
+
+        let ruta = {
+            "origen": origenTramo.value,
+            "destino": destinoTramo.value,
+            "fechaInicial":fechaInicial.value,
+            "fechaFinal":fechaFinal.value,
+            "diasViaje":diasViaje.value,
+            "pernoctar":pernoctar.checked,
+            "transporte":valorTranporte.value,
+            "viaticos": valorViatico.value,
+            "estado": rutaAprobada.getAttribute("aprobada")
+    
         }
+
+        if (diasViaje.value <= 1){
+            
+            ruta.pernoctar = false;
+        }
+
+        //validar que la ruta no se encuentra en la tabla para el mismo origen-destino.
+        let rutaExistente = false;
+    
+        for(let r of rutas){
+            if((r.origen === ruta.origen) && (r.destino === ruta.destino)){
+                
+                alert('Esta ruta ya fue seleccionada, seleccione otra diferente.');
+                rutaExistente = true;
+                break;
+            }
+        }
+    
+        if(ruta.origen.length == 0 || ruta.destino.length == 0){
+            alert('Debe diligenciar la ruta con su origen y destino.');
+    
+        }else if(ruta.origen === ruta.destino){
+            alert('El origen y el Destino no pueden ser iguales.');
+    
+        }else if(!rutaExistente){
+            let cantRutas = rutas.push(ruta);
+            constuirTablaViaticos(cantRutas);
+
+            let ultimaRuta =  rutas[rutas.length-1];
+
+            
+
+            if (ultimaRuta){
+                let ultimaFechaFinal = fechaFinal.value;
+                let ultimoDestino = ultimaRuta.destino;
+
+                fechaFinal.setAttribute("min", ultimaFechaFinal);
+                fechaInicial.setAttribute("min", ultimaFechaFinal);
+
+                console.log("La ultima fecha es: ",ultimaFechaFinal, ultimoDestino);
+                fechaInicial.disabled = true;
+                fechaInicial.value = ultimaFechaFinal;
+                origenTramo.value = ultimoDestino;
+                origenTramo.disabled = true;             
+            }
+            diasViaje.value = "";
+            
+        }
+    }else{
+        alert("Debe diligenciar correctamente las fechas");
     }
+    
 
-    if(ruta.origen.length == 0 || ruta.destino.length == 0){
-        alert('Debe diligenciar la ruta con su origen y destino.');
-
-    }else if(ruta.origen === ruta.destino){
-        alert('El origen y el Destino no pueden ser iguales.');
-
-    }else if(!rutaExistente){
-        let cantRutas = rutas.push(ruta);
-        constuirTablaViaticos(cantRutas);
-    }
+    
     
 }
   
@@ -214,6 +276,9 @@ function eliminarViatico(e){
     if(btn.id === "btnBorrarRuta"){
         let idRuta = btn.attributes[2].nodeValue;
         rutas.splice(idRuta-1,1);
+        if(!rutas.length){
+            location.reload();
+        }
         constuirTablaViaticos();
     }
 }

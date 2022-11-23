@@ -13,12 +13,12 @@
     
 }
 
-#botonBorrarRuta, #botonBorrarAdicional{
+#btnBorrarRuta, #btnBorrarAdicional{
     border: 0;
     background-color: transparent;
 }
 
-#botonBorrarRuta:hover{
+#btnBorrarRuta:hover{
     font-size: 1.8rem;
 }
 
@@ -203,6 +203,7 @@
     border-top-right-radius: 30px;
 }
 
+
 .myForm__label {
     
     padding: 3px;
@@ -231,6 +232,11 @@
     height: 2rem;
     cursor: pointer;
     box-shadow: 10px 10px 15px 0px gray;
+}
+
+.myForm__input_checkbox {
+
+    box-shadow: none;
 }
 
 

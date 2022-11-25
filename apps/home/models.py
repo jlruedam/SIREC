@@ -1,17 +1,25 @@
 # -*- encoding: utf-8 -*-
 """
-Copyright (c) 2019 - present AppSeed.us
+    |Copyright (c) 2019 - present AppSeed.us
 """
 
-from email.policy import default
-from enum import unique
-from pydoc import describe
-from unittest.mock import DEFAULT
-from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+class Regional(models.Model):
+    id = models.AutoField(primary_key =True)
+    regional = models.CharField(max_length = 50)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+    class meta:
+        verbose_name="Regional"
+        verbose_name_plural="Regionales"
+        db_table="Regionales"
+        ordering=["id","regional"]
+
+    def __str__(self) -> str:
+        return "{}".format(self.regional)
 
 class Colaborador(models.Model):
     id = models.AutoField(primary_key =True)
@@ -86,8 +94,8 @@ class SolicitudRecurso(models.Model):
     estado = models.ForeignKey(EstadoSolicitud, models.SET_NULL, blank=True,null=True)
     operacion = models.ForeignKey(TipoOperacion, models.SET_NULL, blank=True,null=True)
     fecha = models.DateTimeField()
-    #Regional
-    valorTotal = models.FloatField(default = 0.0)
+    regional = models.ForeignKey(Regional, models.SET_NULL, blank=True,null=True)
+    valor_total = models.FloatField(default = 0.0)
     Observaciones = models.CharField(max_length = 150)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
@@ -107,9 +115,9 @@ class Actividad(models.Model):
     solicitud = models.ForeignKey(SolicitudRecurso, on_delete = models.CASCADE)
     fecha_actividad = models.DateField()
     proyecto = models.CharField(max_length = 50)
-    concepto = models.CharField(max_length = 150)
+    descripcion = models.CharField(max_length = 150)
     valor = models.FloatField(default = 0.0)
-    #municipio
+    municipio = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
@@ -117,10 +125,10 @@ class Actividad(models.Model):
         verbose_name="Actividad"
         verbose_name_plural="Actividades"
         db_table="Actividades"
-        ordering=["id","solicitud","fecha_actividad", "concepto"]
+        ordering=["id","solicitud","fecha_actividad", "descripcion"]
 
     def __str__(self) -> str:
-        return "{} - {} - {}".format(self.id, self.concepto, self.valor)
+        return "{} - {} - {}".format(self.id, self.descripcion, self.valor)
 
 class TablaViaticos(models.Model):
     id = models.AutoField(primary_key =True)
@@ -144,28 +152,29 @@ class TablaViaticos(models.Model):
     def __str__(self) -> str:
         return "Viaticos de Ruta {} - {} - {}".format(self.id, self.origen, self.destino)
 
-class Viatico(TablaViaticos):
-    actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
-    num_dias = models.IntegerField()
-    esPernoctado = models.BooleanField(default=False)
-    rutaAprobada = models.BooleanField(default=False)
+class RutaViatico(models.Model):
+    id = models.AutoField(primary_key =True)
+    actividad = models.ForeignKey(Actividad, on_delete = models.CASCADE)
+    origen = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='punto_origen')
+    destino = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True, related_name='punto_final')
+    fecha_inicial = models.DateField()
+    fecha_final = models.DateField()
+    dias_viaje = models.IntegerField()
+    pernoctar = models.BooleanField()
+    transporte = models.FloatField()
+    viatico = models.FloatField()
+    estado = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
 
-    class meta:
-        verbose_name="Viatico"
-        verbose_name_plural="Viaticos"
-        db_table="Viaticos"
-        ordering=["id","Origen","Destino"]
-
-    def __str__(self) -> str:
-        return "Viatico {} - {} - {}".format(self.id, self.origen, self.destino)
 
 class GastoAdicional(models.Model):
     id = models.AutoField(primary_key =True)
-    Actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
+    actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
     fecha = models.DateField()
-    tipo = models.CharField(max_length=20)
+    tipo = models.CharField(max_length=20, blank=True,null=True)
     descripcion = models.CharField(max_length = 150)
-    valor = models.FloatField()
+    valor = models.FloatField(default = 0.0)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
@@ -173,25 +182,11 @@ class GastoAdicional(models.Model):
         verbose_name="Gasto adicional"
         verbose_name_plural="Gastos adicionales"
         db_table="GastosAdicionales"
-        ordering=["id","regional"]
+        ordering=["id","actividad", "valor"]
 
     def __str__(self) -> str:
-        return "{}".format(self.regional)
+        return "{}".format(self.id)
     
-class Regional(models.Model):
-    id = models.AutoField(primary_key =True)
-    regional = models.CharField(max_length = 50)
-    created_at = models.DateTimeField(auto_now_add = True)
-    updated_at = models.DateTimeField(auto_now = True)
 
-    class meta:
-        verbose_name="Regional"
-        verbose_name_plural="Regionales"
-        db_table="Regionales"
-        ordering=["id","regional"]
-
-    def __str__(self) -> str:
-        return "{}".format(self.regional)
-    
 
 

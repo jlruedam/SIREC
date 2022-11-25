@@ -363,13 +363,13 @@ function cargarGastoAdicional(){
         bodyTablaGastosAdicionales.appendChild(hilera);
         tablaGastosAdicionales.appendChild(bodyTablaGastosAdicionales);
 
+        // Limpiar campos en el fomulario
+
         tipoGasto.value = "";
         descripcionGastoAdicional.value = "";
         valorGastoAdicional.value = "";
         municipioGastoAdicional.value = "";
     }
-
-    
 
 }
 

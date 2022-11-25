@@ -37,9 +37,9 @@ class TipoOperacionAdmin(admin.ModelAdmin):
     search_fields = ('operacion', 'descripcion')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
-class ViaticoAdmin(admin.ModelAdmin):
+class RutaViaticoAdmin(admin.ModelAdmin):
 
-    list_display = ('id','origen', 'destino','transporte', 'viatico_pernoctado', 'viatico_pernoctado_sede', 'viatico_sin_pernoctar', 'viatico_sin_pernoctar_sede')
+    list_display = ('id','origen', 'destino', 'fecha_inicial', 'fecha_final', 'dias_viaje', 'pernoctar', 'transporte', 'viatico', 'estado' )
     search_fields = ('origen', 'destino')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
@@ -51,13 +51,13 @@ class TablaViaticosAdmin(admin.ModelAdmin):
 
 class SolicitudRecursoAdmin(admin.ModelAdmin):
 
-    list_display = ('id','colaborador', 'estado','operacion', 'fecha', 'valorTotal','Observaciones', 'created_at', 'created_at')
+    list_display = ('id','colaborador', 'estado','operacion', 'fecha', 'valor_total','Observaciones', 'created_at', 'created_at')
     search_fields = ('colaborador', 'estado', 'operacion', 'fecha')
     # fields = ('id_colaborador', 'nombre', 'activo')
     
 class ActividadAdmin(admin.ModelAdmin):
 
-    list_display = ('id','solicitud', 'proyecto','concepto', 'valor', 'created_at', 'created_at')
+    list_display = ('id','solicitud', 'proyecto','descripcion', 'valor', 'created_at', 'created_at')
     search_fields = ('solicitud', 'proyecto','concepto')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
@@ -65,7 +65,7 @@ admin.site.register(models.Colaborador, ColaboradorAdmin)
 admin.site.register(models.Municipio, MunicipioAdmin)
 admin.site.register(models.EstadoSolicitud, EstadoSolicitudAdmin)
 admin.site.register(models.TipoOperacion, TipoOperacionAdmin)
-admin.site.register(models.Viatico, ViaticoAdmin)
+admin.site.register(models.RutaViatico, RutaViaticoAdmin)
 admin.site.register(models.TablaViaticos, TablaViaticosAdmin)
 admin.site.register(models.SolicitudRecurso, SolicitudRecursoAdmin)
 admin.site.register(models.Actividad, ActividadAdmin)

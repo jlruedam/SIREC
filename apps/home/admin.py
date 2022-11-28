@@ -51,7 +51,7 @@ class TablaViaticosAdmin(admin.ModelAdmin):
 
 class SolicitudRecursoAdmin(admin.ModelAdmin):
 
-    list_display = ('id','colaborador', 'estado','operacion', 'fecha', 'valor_total','Observaciones', 'created_at', 'created_at')
+    list_display = ('id','colaborador', 'estado','operacion', 'fecha', 'valor_total','observaciones', 'created_at', 'created_at')
     search_fields = ('colaborador', 'estado', 'operacion', 'fecha')
     # fields = ('id_colaborador', 'nombre', 'activo')
     
@@ -59,6 +59,12 @@ class ActividadAdmin(admin.ModelAdmin):
 
     list_display = ('id','solicitud', 'proyecto','descripcion', 'valor', 'created_at', 'created_at')
     search_fields = ('solicitud', 'proyecto','concepto')
+    # fields = ('id_colaborador', 'nombre', 'activo')
+
+class GastoAdicionalAdmin(admin.ModelAdmin):
+
+    list_display = ('id','actividad','tipo','valor','created_at', 'created_at')
+    search_fields = ('id','actividad','tipo','valor')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
 admin.site.register(models.Colaborador, ColaboradorAdmin)
@@ -70,6 +76,7 @@ admin.site.register(models.TablaViaticos, TablaViaticosAdmin)
 admin.site.register(models.SolicitudRecurso, SolicitudRecursoAdmin)
 admin.site.register(models.Actividad, ActividadAdmin)
 admin.site.register(models.Regional, RegionalAdmin)
+admin.site.register(models.GastoAdicional, GastoAdicionalAdmin)
 
 
 

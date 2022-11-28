@@ -8,9 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from django.urls import reverse
-from apps.home.models import SolicitudRecurso, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion
+from apps.home.models import SolicitudRecurso, Actividad, RutaViatico, GastoAdicional, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion
 from django.shortcuts import render
 from django.contrib.auth.models import User
+import datetime
 
 import json
 
@@ -106,29 +107,88 @@ def data_ruta(request):
 
 def cargarSolicitudViatico(request):
     data = json.loads((request.body).decode('UTF-8'))
+    print(data["datosSolicitud"]["sede"])
     print(data["rutasViaticos"])
     print(data["gastosAdicionales"])
+
+    solicitante = User.objects.get(username = request.user.username)
+    estado = EstadoSolicitud.objects.get(estado = "Solicitado")
+    operacion = TipoOperacion.objects.get(operacion = "Viatico")
+    regional = Regional.objects.get(regional = data["datosSolicitud"]["regional"])
     
     # Crear solicitud de viatico
-    # colaborador = User.objects.get(username=request.user.username)
-    # estado = EstadoSolicitud.objects.get(estado = "Solicitado")
-    # operacion = TipoOperacion.objects.get(operacion = "Viatico")
-    # solicitudViatico = SolicitudRecurso(
-    #     colaborador = colaborador, 
-    #     estado = estado, 
-    #     operacion = operacion, 
-    # )
+    solicitud_viatico = SolicitudRecurso(
+        colaborador = solicitante,
+        estado = estado, 
+        operacion = operacion,
+        fecha = datetime.datetime.now(),
+        regional = regional,
+        observaciones = data["datosSolicitud"]["observaciones"]      
+    )
 
+    solicitud_viatico.save()
+
+    # Crear la actividad
+    
+    municipio_actividad = Municipio.objects.filter(municipio = data["datosSolicitud"]["sede"] )
+    
+    actividad_viatico = Actividad(
+        solicitud = solicitud_viatico,
+        fecha_actividad = data["rutasViaticos"][0]["fechaInicial"],
+        proyecto = data["datosSolicitud"]["proyecto"],
+        descripcion = data["datosSolicitud"]["observaciones"],
+        municipio = municipio_actividad[0]
+    )
+    
+    actividad_viatico.save()
+    total_transporte = 0
+    total_viaticos = 0
+    # Crear las rutas de viático
+    for ruta in data["rutasViaticos"]:
+        origen = Municipio.objects.filter(municipio = ruta["origen"])
+        destino = Municipio.objects.filter(municipio = ruta["destino"])
+        ruta_viatico = RutaViatico(
+           actividad = actividad_viatico,
+           origen =  origen[0],
+           destino = destino[0],
+           fecha_inicial = ruta["fechaInicial"],
+           fecha_final = ruta["fechaFinal"],
+           dias_viaje = ruta["diasViaje"],
+           pernoctar = True if ruta["pernoctar"] == "true" else False,
+           transporte = float(ruta["transporte"]),
+           viatico = float(ruta["viaticos"]),
+           estado = ruta["estado"],
+        ) 
+        ruta_viatico.save()
+
+        total_transporte += float(ruta["transporte"])
+        total_viaticos += float(ruta["viaticos"])*(int(ruta["diasViaje"])-1)
+    
+    actividad_viatico.valor = total_transporte + total_viaticos
+    actividad_viatico.save()
 
 
     
 
+    # Crear gastos adicionales.
+    total_adicionales =  0
+    for adicional in data["gastosAdicionales"]:
+        lugar = Municipio.objects.filter(municipio=adicional["municipio"])
+        gasto_adicional = GastoAdicional(
+            actividad = actividad_viatico,
+            tipo = adicional["tipoGasto"],
+            descripcion = adicional["descripcion"],
+            valor = float(adicional["valor"]),
+            lugar = lugar[0],
+        )
 
+        gasto_adicional.save()
+        total_adicionales += float(adicional["valor"])
 
-
-    # for viatico in data["rutasViaticos"]:
-
-
-
+    solicitud_viatico.valor_total = actividad_viatico.valor + total_adicionales
+    solicitud_viatico.save()
 
     return HttpResponse("OK")
+
+
+

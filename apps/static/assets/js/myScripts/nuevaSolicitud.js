@@ -15,7 +15,7 @@ const tipoSolicitud= document.querySelector('#tipoSolicitud');
 const regional = document.querySelector('#regional');
 const proyecto = document.querySelector('#proyecto');
 const sede = document.querySelector('#sede');
-const observacionesSolicitud = document.querySelector('observacionesSolicitud');
+const observacionesSolicitud = document.querySelector('#observacionesSolicitud');
 
 // ## Estadía y ruta
 const origenTramo = document.querySelector('#origenTramo');
@@ -99,12 +99,14 @@ function constuirTablaViaticos(){
 
         for (let campo in r){
             
-            if(campo == "transporte" || campo == "viaticos" ){
-                r[campo] = "$ " + r[campo];
-            }
-
             celda = document.createElement("td");
-            textoCelda = document.createTextNode(r[campo]);
+
+            if(campo == "transporte" || campo == "viaticos" ){
+                textoCelda = document.createTextNode("$ " + r[campo])
+            }else {
+                textoCelda = document.createTextNode(r[campo]);
+            }
+           
             celda.appendChild(textoCelda);
             hilera.appendChild(celda);
         }
@@ -388,8 +390,16 @@ function eliminarGastoAdicional(e){
 }
 
 function enviarSolicitudViatico(e){
-    console.log(e)
+    e.preventDefault();
+    console.log(observacionesSolicitud.value,regional.value, sede.value);
+    console.log(e);
     json = {
+        "datosSolicitud": {
+            "sede": sede.value,
+            "observaciones": observacionesSolicitud.value,
+            "regional": regional.value,
+            "proyecto": proyecto.value
+        },
         "rutasViaticos":rutas,
         "gastosAdicionales":gastosAdicionales
     }

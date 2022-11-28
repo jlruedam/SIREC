@@ -90,15 +90,16 @@ class TipoOperacion(models.Model):
 
 class SolicitudRecurso(models.Model):
     id = models.AutoField(primary_key =True)
-    colaborador = models.ForeignKey(Colaborador, models.SET_NULL, blank=True,null=True)
+    colaborador = models.ForeignKey(User, models.SET_NULL, blank=True,null=True)
     estado = models.ForeignKey(EstadoSolicitud, models.SET_NULL, blank=True,null=True)
     operacion = models.ForeignKey(TipoOperacion, models.SET_NULL, blank=True,null=True)
     fecha = models.DateTimeField()
     regional = models.ForeignKey(Regional, models.SET_NULL, blank=True,null=True)
+    observaciones = models.CharField(max_length = 150)
     valor_total = models.FloatField(default = 0.0)
-    Observaciones = models.CharField(max_length = 150)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    
 
 
     class meta:
@@ -120,6 +121,7 @@ class Actividad(models.Model):
     municipio = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
+    # Beneficiario
 
     class meta:
         verbose_name="Actividad"
@@ -167,17 +169,16 @@ class RutaViatico(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
-
 class GastoAdicional(models.Model):
     id = models.AutoField(primary_key =True)
-    actividad = models.ForeignKey(Actividad, models.SET_NULL, blank=True,null=True)
-    fecha = models.DateField()
+    actividad = models.ForeignKey(Actividad, on_delete = models.CASCADE)
+    # fecha = models.DateField()
     tipo = models.CharField(max_length=20, blank=True,null=True)
     descripcion = models.CharField(max_length = 150)
     valor = models.FloatField(default = 0.0)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
-
+    lugar = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True)
     class meta:
         verbose_name="Gasto adicional"
         verbose_name_plural="Gastos adicionales"

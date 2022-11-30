@@ -26,6 +26,7 @@ def index(request):
 def pages(request):
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
+    
     context = {}
     
     try:
@@ -45,6 +46,7 @@ def pages(request):
             numero_solicitudes = len(solicitudes)+1
             usuario_actual = User.objects.get(username=request.user.username)
             context = {
+                "lista_solicitudes": solicitudes,
                 "solicitudes": str(numero_solicitudes),
                 "colaboradores": colaboradores,
                 "regionales": regionales,
@@ -106,17 +108,15 @@ def data_ruta(request):
     return JsonResponse(data)
 
 def cargarSolicitudViatico(request):
+    # Convertir la Carga en formato JSON en un diccionario.
     data = json.loads((request.body).decode('UTF-8'))
-    print(data["datosSolicitud"]["sede"])
-    print(data["rutasViaticos"])
-    print(data["gastosAdicionales"])
 
     solicitante = User.objects.get(username = request.user.username)
     estado = EstadoSolicitud.objects.get(estado = "Solicitado")
     operacion = TipoOperacion.objects.get(operacion = "Viatico")
     regional = Regional.objects.get(regional = data["datosSolicitud"]["regional"])
     
-    # Crear solicitud de viatico
+    # Crear solicitud de viático
     solicitud_viatico = SolicitudRecurso(
         colaborador = solicitante,
         estado = estado, 
@@ -129,9 +129,7 @@ def cargarSolicitudViatico(request):
     solicitud_viatico.save()
 
     # Crear la actividad
-    
     municipio_actividad = Municipio.objects.filter(municipio = data["datosSolicitud"]["sede"] )
-    
     actividad_viatico = Actividad(
         solicitud = solicitud_viatico,
         fecha_actividad = data["rutasViaticos"][0]["fechaInicial"],
@@ -141,8 +139,10 @@ def cargarSolicitudViatico(request):
     )
     
     actividad_viatico.save()
+    
     total_transporte = 0
     total_viaticos = 0
+
     # Crear las rutas de viático
     for ruta in data["rutasViaticos"]:
         origen = Municipio.objects.filter(municipio = ruta["origen"])

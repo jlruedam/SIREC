@@ -37,7 +37,8 @@ const municipioGastoAdicional = document.querySelector('#municipioGastoAdicional
 const valorGastoAdicional = document.querySelector('#valorGastoAdicional');
 
 // # Botones
-const btnNuevaSolicitud = document.querySelector('#BotonNuevaSolicitud');
+const btnNuevaSolicitud = document.querySelector('#btnNuevaSolicitud');
+const btnBuscarSolicitudes = document.querySelector('#btnBuscarSolicitudes');
 const btnCargarViatico = document.querySelector('#btnCargarViatico');
 const btnBorrarRuta = document.querySelector('#btnBorrarRuta');
 const btnCargarGastoAdicional = document.querySelector("#btnCargarGastoAdicional")
@@ -46,6 +47,7 @@ const btnEnviarSolicitudViatico = document.querySelector('#btnEnviarSolicitudVia
 
 // # Contenedores
 const formNuevaSolicitud = document.querySelector('#formNuevaSolicitud');
+const buscarSolicitudes = document.querySelector('#buscarSolicitudes');
 const contenedorFormViaticos = document.querySelector('#contenedorFormViaticos');
 const contenedorFormAnticipo= document.querySelector('#contenedorFormAnticipo'); 
 const contenedorFormReembolso = document.querySelector('#contenedorFormReembolso');
@@ -66,6 +68,7 @@ tablaViaticos.addEventListener('click', eliminarViatico);
 tablaGastosAdicionales.addEventListener('click', eliminarGastoAdicional);
 
 btnNuevaSolicitud.addEventListener('click', muestraOcultaFormulario);
+btnBuscarSolicitudes.addEventListener('click',muestraOcultaFormulario);
 btnCargarViatico.addEventListener('click',cargarViatico );
 btnCargarGastoAdicional.addEventListener('click', cargarGastoAdicional);
 btnEnviarSolicitudViatico.addEventListener('click', enviarSolicitudViatico);
@@ -150,6 +153,7 @@ function eligeTipoSolicitud(){
 
 function muestraOcultaFormulario(){  
     formNuevaSolicitud.classList.toggle('inactive');
+    buscarSolicitudes.classList.toggle('inactive')
 }
 
 function cargarOrigenDestino(){

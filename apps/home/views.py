@@ -69,7 +69,6 @@ def pages(request):
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 
-
 def data_ruta(request):
     origen = Municipio.objects.filter(municipio=str(request.GET["origen"]))
     destino = Municipio.objects.filter(municipio=str(request.GET["destino"]))
@@ -107,7 +106,7 @@ def data_ruta(request):
                    
     return JsonResponse(data)
 
-def cargarSolicitudViatico(request):
+def cargar_solicitud_viatico(request):
     # Convertir la Carga en formato JSON en un diccionario.
     data = json.loads((request.body).decode('UTF-8'))
 
@@ -190,5 +189,24 @@ def cargarSolicitudViatico(request):
 
     return HttpResponse("OK")
 
+def ver_solicitud(request, id_solicitud):
 
+    rutas_viaticos = 0
+    gastos_adicionales = 0
+
+    solicitud = SolicitudRecurso.objects.get(id = id_solicitud)
+    actividades = Actividad.objects.filter(solicitud = solicitud)
+    print(actividades[0])
+    if solicitud.operacion.operacion == "Viatico" and len(actividades) == 1:
+        rutas_viaticos = RutaViatico.objects.filter(actividad = actividades[0])
+        gastos_adicionales = GastoAdicional.objects.filter(actividad = actividades[0])
+
+    context = {
+        "solicitud": solicitud,
+        "actividades": actividades,
+        "rutas_viaticos": rutas_viaticos,
+        "gastos_adicionales": gastos_adicionales
+    }
+    html_template = loader.get_template('gestionSolicitudes/verSolicitud.html')   
+    return HttpResponse(html_template.render(context, request))
 

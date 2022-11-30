@@ -1,0 +1,142 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+<div class="myFormContainer">
+    <div class="myForm__section">
+        <h1 class="myTitle">
+            Solicitud # {{solicitud.id}}
+            <p>
+                {{solicitud.operacion}}
+            </p> 
+            
+        </h1>
+    </div>
+    <div class="myFormContainer">
+        <h2>
+            Datos solicitud
+        </h2>
+
+        <table class="table">
+            <thead class="my-color-primary">
+              <th>Colaborador</th>
+              <th>Observaciones</th>
+              <th>Estado</th>
+              <th>Fecha Solicitud</th>
+              <th>Regional</th>
+              <th>Valor total</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{solicitud.colaborador}}</td>
+                <td>{{solicitud.observaciones}}</td>
+                <td>{{solicitud.estado}}</td>
+                <td>{{solicitud.fecha}}</td>
+                <td>{{solicitud.regional}}</td>
+                <td> $ {{solicitud.valor_total}}</td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="myFormContainer">
+        <h2>
+            Actividades
+        </h2>
+        <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit asperiores vitae beatae aliquid impedit illum accusamus quisquam recusandae optio molestias dicta, sit placeat. Tempore, debitis doloremque error iusto eum consectetur.
+        </p>
+
+        {% for actividad in actividades %}
+        <div class="myFormContainer">
+            <h3>
+            Actividad # {{actividad.id}}
+            </h3>
+            <p>
+                Datos de la actividad
+            </p>
+    
+            {% if rutas_viaticos %}
+            <div class="myFormContainer">
+                <h3>
+                    Rutas
+                </h3>
+                <table class="table">
+                    <thead class="my-color-primary">
+                    <th>Colaborador</th>
+                    <th>Observaciones</th>
+                    <th>Estado</th>
+                    <th>Fecha Solicitud</th>
+                    <th>Regional</th>
+                    <th>Valor total</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{solicitud.colaborador}}</td>
+                        <td>{{solicitud.observaciones}}</td>
+                        <td>{{solicitud.estado}}</td>
+                        <td>{{solicitud.fecha}}</td>
+                        <td>{{solicitud.regional}}</td>
+                        <td> $ {{solicitud.valor_total}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+             </div>
+             {% endif %}
+             {% if gastos_adicionales %}
+             <div class="myFormContainer">
+                 <h3>
+                     Gastos adicionales
+                 </h3>
+                 <table class="table">
+                     <thead class="my-color-primary">
+                       <th>Colaborador</th>
+                       <th>Observaciones</th>
+                       <th>Estado</th>
+                       <th>Fecha Solicitud</th>
+                       <th>Regional</th>
+                       <th>Valor total</th>
+                     </thead>
+                     <tbody>
+                       <tr>
+                         <td>{{solicitud.colaborador}}</td>
+                         <td>{{solicitud.observaciones}}</td>
+                         <td>{{solicitud.estado}}</td>
+                         <td>{{solicitud.fecha}}</td>
+                         <td>{{solicitud.regional}}</td>
+                         <td> $ {{solicitud.valor_total}}</td>
+                       </tr>
+                     </tbody>
+                 </table>
+             </div>
+             {% endif %}
+        </div>
+        
+        {% endfor %}
+        
+    </div>
+    
+
+    
+
+    <div class="myFormContainer">
+        <a href="">Editar</a>
+        <a href="">Eliminar</a>
+        <a href="">Imprimir PDF</a>
+    </div>
+    
+</div>
+
+  
+  
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+{% endblock javascripts %}

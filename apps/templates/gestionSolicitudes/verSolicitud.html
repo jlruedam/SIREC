@@ -10,122 +10,215 @@
     <div class="myForm__section">
         <h1 class="myTitle">
             Solicitud # {{solicitud.id}}
-            <p>
-                {{solicitud.operacion}}
-            </p> 
-            
         </h1>
     </div>
     <div class="myFormContainer">
-        <h2>
-            Datos solicitud
-        </h2>
+        <div class="card">
+            <div class="card-header card-header-primary my-bg">
+                <h4 class="card-title ">Datos solicitud</h4>
+                <p class="card-category">{{solicitud.operacion}}</p>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="my-color-primary">
+                          <th>Colaborador</th>
+                          <th>Observaciones</th>
+                          <th>Estado</th>
+                          <th>Fecha Solicitud</th>
+                          <th>Regional</th>
+                          <th>Valor total</th>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{{solicitud.colaborador}}</td>
+                            <td>{{solicitud.observaciones}}</td>
+                            <td>{{solicitud.estado}}</td>
+                            <td>{{solicitud.fecha}}</td>
+                            <td>{{solicitud.regional}}</td>
+                            <td> $ {{solicitud.valor_total}}</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-        <table class="table">
-            <thead class="my-color-primary">
-              <th>Colaborador</th>
-              <th>Observaciones</th>
-              <th>Estado</th>
-              <th>Fecha Solicitud</th>
-              <th>Regional</th>
-              <th>Valor total</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{solicitud.colaborador}}</td>
-                <td>{{solicitud.observaciones}}</td>
-                <td>{{solicitud.estado}}</td>
-                <td>{{solicitud.fecha}}</td>
-                <td>{{solicitud.regional}}</td>
-                <td> $ {{solicitud.valor_total}}</td>
-              </tr>
-            </tbody>
-        </table>
     </div>
+    
     <div class="myFormContainer">
-        <h2>
-            Actividades
-        </h2>
+        <div class="myForm__section">
+            <h2 class="myTitle">
+                Actividades
+            </h2>
+        </div>
         <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit asperiores vitae beatae aliquid impedit illum accusamus quisquam recusandae optio molestias dicta, sit placeat. Tempore, debitis doloremque error iusto eum consectetur.
-        </p>
 
         {% for actividad in actividades %}
         <div class="myFormContainer">
-            <h3>
-            Actividad # {{actividad.id}}
+            <h3 class="myTitle">
+            Actividad # {{forloop.counter}}
             </h3>
-            <p>
-                Datos de la actividad
-            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>Actividad:</i></span>
+                            </div>
+                            <div class="col-md-6">
+                                {{actividad.fecha_actividad}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>Proyecto:</i></span> 
+                            </div>
+                            <div class="col-md-6">
+                                {{actividad.proyecto}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>Municipio:</i></span>
+                            </div>
+                            <div class="col-md-6">
+                                {{actividad.municipio}} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>Total actividad:</i></span>
+                            </div>
+                            <div class="col-md-6">
+                                $ {{actividad.valor}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="myform__section">
+                        <h3 class="mySubtitle">
+                            Descripción:
+                        </h3>
+                        <div class="myForm__item">
+                                {{actividad.descripcion}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+                
+            
     
             {% if rutas_viaticos %}
             <div class="myFormContainer">
-                <h3>
-                    Rutas
-                </h3>
-                <table class="table">
-                    <thead class="my-color-primary">
-                    <th>Colaborador</th>
-                    <th>Observaciones</th>
-                    <th>Estado</th>
-                    <th>Fecha Solicitud</th>
-                    <th>Regional</th>
-                    <th>Valor total</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{solicitud.colaborador}}</td>
-                        <td>{{solicitud.observaciones}}</td>
-                        <td>{{solicitud.estado}}</td>
-                        <td>{{solicitud.fecha}}</td>
-                        <td>{{solicitud.regional}}</td>
-                        <td> $ {{solicitud.valor_total}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-             </div>
-             {% endif %}
-             {% if gastos_adicionales %}
-             <div class="myFormContainer">
-                 <h3>
-                     Gastos adicionales
-                 </h3>
-                 <table class="table">
-                     <thead class="my-color-primary">
-                       <th>Colaborador</th>
-                       <th>Observaciones</th>
-                       <th>Estado</th>
-                       <th>Fecha Solicitud</th>
-                       <th>Regional</th>
-                       <th>Valor total</th>
-                     </thead>
-                     <tbody>
-                       <tr>
-                         <td>{{solicitud.colaborador}}</td>
-                         <td>{{solicitud.observaciones}}</td>
-                         <td>{{solicitud.estado}}</td>
-                         <td>{{solicitud.fecha}}</td>
-                         <td>{{solicitud.regional}}</td>
-                         <td> $ {{solicitud.valor_total}}</td>
-                       </tr>
-                     </tbody>
-                 </table>
-             </div>
-             {% endif %}
+                <div class="card">
+                    <div class="card-header card-header-primary my-bg">
+                        <h4 class="card-title ">Rutas</h4>
+                        <p class="card-category">Detalle rutas por tramo</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="my-color-primary">
+                                    <th>#</th>
+                                    <th>Origen</th>
+                                    <th>Destino</th>
+                                    <th>Fecha inicial</th>
+                                    <th>Fecha final</th>
+                                    <!-- <th>Días de viaje</th> -->
+                                    <th>Pernoctar</th>
+                                    <th>Transporte</th>
+                                    <th>Viático</th>
+                                    <th>Estado</th>
+                                </thead>
+                                <tbody>
+                                {% for ruta in rutas_viaticos %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{ruta.origen}}</td>
+                                    <td>{{ruta.destino}}</td>
+                                    <td>{{ruta.fecha_inicial}}</td>
+                                    <td>{{ruta.fecha_final}}</td>
+                                    <!-- <td>{{ruta.dias_viaje}}</td> -->
+                                    <td>{{ruta.pernoctar}}</td>
+                                    <td>$ {{ruta.transporte}}</td>
+                                    <td>$ {{ruta.viatico}}</td>
+                                    <td>{{ruta.estado}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endif %}
+
+            {% if gastos_adicionales %}
+            <div class="myFormContainer">
+                <div class="card">
+                    <div class="card-header card-header-primary my-bg">
+                        <h4 class="card-title ">Gastos adicionales</h4>
+                        <p class="card-category">Detalle adicionales</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="my-color-primary">
+                                    <th>#</th>
+                                    <th>Tipo</th>
+                                    <th>Descripcion</th>
+                                    <th>Lugar</th>
+                                    <th>Valor</th>
+                                </thead>
+                                <tbody>
+                                    {% for adicional in gastos_adicionales %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{adicional.tipo}}</td>
+                                        <td>{{adicional.descripcion}}</td>
+                                        <td>{{adicional.lugar}}</td>
+                                        <td> $ {{adicional.valor}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
         
         {% endfor %}
         
     </div>
-    
-
-    
-
     <div class="myFormContainer">
-        <a href="">Editar</a>
-        <a href="">Eliminar</a>
-        <a href="">Imprimir PDF</a>
+        <div class="myForm__section">
+            <a href="">Editar</a>
+            <a href="">Eliminar</a>
+            <a href="">Imprimir PDF</a>
+        </div>
     </div>
     
 </div>

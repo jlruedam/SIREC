@@ -189,14 +189,15 @@ def cargar_solicitud_viatico(request):
 
     return HttpResponse("OK")
 
+@login_required(login_url="/login/")
 def ver_solicitud(request, id_solicitud):
 
-    rutas_viaticos = 0
-    gastos_adicionales = 0
+    rutas_viaticos = []
+    gastos_adicionales = []
 
     solicitud = SolicitudRecurso.objects.get(id = id_solicitud)
     actividades = Actividad.objects.filter(solicitud = solicitud)
-    print(actividades[0])
+
     if solicitud.operacion.operacion == "Viatico" and len(actividades) == 1:
         rutas_viaticos = RutaViatico.objects.filter(actividad = actividades[0])
         gastos_adicionales = GastoAdicional.objects.filter(actividad = actividades[0])

@@ -21,7 +21,6 @@ def index(request):
     html_template = loader.get_template('home/index.html')
     return HttpResponse(html_template.render(context, request))
 
-
 @login_required(login_url="/login/")
 def pages(request):
     # All resource paths end in .html.
@@ -69,6 +68,7 @@ def pages(request):
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 
+@login_required(login_url="/login/")
 def data_ruta(request):
     origen = Municipio.objects.filter(municipio=str(request.GET["origen"]))
     destino = Municipio.objects.filter(municipio=str(request.GET["destino"]))
@@ -106,6 +106,7 @@ def data_ruta(request):
                    
     return JsonResponse(data)
 
+@login_required(login_url="/login/")
 def cargar_solicitud_viatico(request):
     # Convertir la Carga en formato JSON en un diccionario.
     data = json.loads((request.body).decode('UTF-8'))
@@ -188,6 +189,10 @@ def cargar_solicitud_viatico(request):
     solicitud_viatico.save()
 
     return HttpResponse("OK")
+
+@login_required(login_url="/login/")
+def cargar_solicitud_anticipo(request):
+    pass
 
 @login_required(login_url="/login/")
 def ver_solicitud(request, id_solicitud):

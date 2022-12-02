@@ -1,22 +1,46 @@
 /*PARÁMETROS GENERALES*/
 const rutas = [];
 const gastosAdicionales = [];
+const actividadesAnticipos = [];
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Se utiliza para poder enviar petición tipo POST a Django
 const topes = {
     "transporte":320000,
     "viaticos":280000
 }
-
-/* VIÁTICOS */
-// # Variables Formulario
-
-// ## Datos actividad
+/* GENERALES */
+// # Datos Solicitud
 const tipoSolicitud= document.querySelector('#tipoSolicitud');
 const regional = document.querySelector('#regional');
 const proyecto = document.querySelector('#proyecto');
 const sede = document.querySelector('#sede');
 const observacionesSolicitud = document.querySelector('#observacionesSolicitud');
 
+/* ANTICIPOS */
+
+// # Actividades
+const fechaActividadAnticipo = document.querySelector('#fechaActividadAnticipo');
+const lugarActividadAnticipo = document.querySelector('#lugarActividadAnticipo');
+const nombreActividad = document.querySelector('#nombreActividad');
+const valorActividadAnticipo = document.querySelector("#valorActividadAnticipo");
+
+// # Botones
+const btnCargarActividad = document.querySelector('#btnCargarActividad');
+const btnBorrarActividadAnticipo = document.querySelector('#btnBorrarActividadAnticipo');
+const btnEnviarSolicitudAnticipo = document.querySelector('#btnEnviarSolicitudAnticipo');
+
+const bodyTablaActividadesAnticipos = document.querySelector('#bodyTablaActividadesAnticipos');
+const tablaActividadesAnticipos = document.querySelector('#tablaActividadesAnticipos');
+
+// # Eventos
+tablaActividadesAnticipos.addEventListener('click',eliminarActividadAnticipo);
+btnEnviarSolicitudAnticipo.addEventListener('click', enviarSolicitudAnticipo);
+btnCargarActividad.addEventListener('click', cargarActividadAnticipo);
+
+
+
+
+/* VIÁTICOS */
+// # Variables Formulario
 // ## Estadía y ruta
 const origenTramo = document.querySelector('#origenTramo');
 const destinoTramo = document.querySelector('#destinoTramo');
@@ -385,12 +409,9 @@ function eliminarGastoAdicional(e){
     if(btn.id === "btnBorrarAdicional"){
         let idAdicional = btn.attributes[2].nodeValue;
         document.getElementById(btn.attributes[2].nodeValue).remove();
-        gastosAdicionales.pop(idAdicional-1);
+        gastosAdicionales.splice(idAdicional-1,1);
         console.log(gastosAdicionales);
     }
-
-    
-
 }
 
 function enviarSolicitudViatico(e){
@@ -427,3 +448,114 @@ function enviarSolicitudViatico(e){
     });  
 }
 
+
+function cargarActividadAnticipo(){
+    console.log("Cargar Actividad: ");
+    let solicitud = {
+        "regional" : regional.value,
+        "observacionesSolicitud" : observacionesSolicitud.value
+    }
+    let actividad = {
+        "fechaActividadAnticipo": fechaActividadAnticipo.value,
+        "lugarActividadAnticipo": lugarActividadAnticipo.value,
+        "proyecto": proyecto.value,
+        "nombreActividad": nombreActividad.value,
+        "valorActividadAnticipo" : valorActividadAnticipo.value
+    }
+
+    console.log(actividad, actividad.lugarActividadAnticipo);
+
+    if(actividad.fechaActividadAnticipo.length == 0){
+        alert("Debe ingresar la fecha correctamente.");
+    }else if(actividad.lugarActividadAnticipo.length == 0){
+        alert("Debe diligenciar la ciudad o municipio.");
+    }else if(actividad.nombreActividad.length == 0){
+        alert("Debe diligenciar el nombre de la actividad.");
+    }else if(eval(actividad.valorActividadAnticipo) <= 0){
+        alert("Debe registrar un valor mayor que $ 0");
+    }else {
+
+        let idActividad = actividadesAnticipos.push(actividad);
+
+        let btnBorrar = document.createElement('button');
+        let hilera = document.createElement("tr");
+        let celda = document.createElement("td");
+        let textoCelda = document.createTextNode(idActividad);
+
+        celda.appendChild(textoCelda);
+        celda.style.display = "none";
+        hilera.setAttribute('id',idActividad);
+        hilera.appendChild(celda);
+
+        btnBorrar.innerHTML="🗑️";
+        btnBorrar.setAttribute('id', "btnBorrarActividadAnticipo");
+        btnBorrar.setAttribute('type', "button");
+        btnBorrar.setAttribute('ruta', idActividad);
+
+        for (let campo in actividad){
+            
+            celda = document.createElement("td");
+            if(campo == "valorActividadAnticipo") {
+                textoCelda = document.createTextNode("$ " + actividad[campo]);
+            }else {
+                textoCelda = document.createTextNode(actividad[campo]);
+            }
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+
+        }
+    
+        celda = document.createElement("td");
+        celda.appendChild(btnBorrar);
+        hilera.appendChild(celda);
+    
+        bodyTablaActividadesAnticipos.appendChild(hilera);
+        tablaActividadesAnticipos.appendChild(bodyTablaActividadesAnticipos);
+
+        // Limpiar campos en el fomulario
+
+        fechaActividadAnticipo.value = "";
+        lugarActividadAnticipo.value = "";
+        proyecto.value = "";
+        nombreActividad.value = "";
+        valorActividadAnticipo.value = 0;
+    }
+
+}
+
+function eliminarActividadAnticipo(e){
+    console.log(e);
+    let btn = e.path[0];;
+    if(btn.id === "btnBorrarActividadAnticipo"){
+        let idActividad = btn.attributes[2].nodeValue;
+        document.getElementById(btn.attributes[2].nodeValue).remove();
+        actividadesAnticipos.splice(idActividad-1,1);
+        console.log(actividadesAnticipos);
+    }
+}
+
+function enviarSolicitudAnticipo(e){
+    e.preventDefault();
+    console.log(e);
+    json = {
+        
+    }
+    $.ajax({
+        url:"cargarSolicitudAnticipo/",
+        method:"POST",
+        data: JSON.stringify(json),
+        headers: {'X-CSRFToken': csrftoken},
+        contentType: 'application/json; charset=utf-8',
+
+        success:function(response){
+            console.log(response);
+            console.log("Petición exitosa");
+            // location.reload();
+        }, 
+        error: function(error){
+            console.log("Hay un Pendejo error")
+            console.log(error);
+            
+        }
+    });  
+}

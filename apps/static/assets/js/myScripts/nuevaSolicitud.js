@@ -538,7 +538,11 @@ function enviarSolicitudAnticipo(e){
     e.preventDefault();
     console.log(e);
     json = {
-        
+        "datosSolicitud": {
+            "regional":regional.value,
+            "observaciones": observacionesSolicitud.value,
+        },
+        "actividadesAnticipos": actividadesAnticipos
     }
     $.ajax({
         url:"cargarSolicitudAnticipo/",

@@ -192,7 +192,47 @@ def cargar_solicitud_viatico(request):
 
 @login_required(login_url="/login/")
 def cargar_solicitud_anticipo(request):
-    pass
+     # Convertir la Carga en formato JSON en un diccionario.
+    data = json.loads((request.body).decode('UTF-8'))
+
+    solicitante = User.objects.get(username = request.user.username)
+    estado = EstadoSolicitud.objects.get(estado = "Solicitado")
+    operacion = TipoOperacion.objects.get(operacion = "Anticipo")
+    regional = Regional.objects.get(regional = data["datosSolicitud"]["regional"])
+    
+    # Crear solicitud de viático
+    solicitud_anticipo = SolicitudRecurso(
+        colaborador = solicitante,
+        estado = estado, 
+        operacion = operacion,
+        fecha = datetime.datetime.now(),
+        regional = regional,
+        observaciones = data["datosSolicitud"]["observaciones"]      
+    )
+
+    solicitud_anticipo.save()
+
+    # Crear la actividades
+    total_solicitud = 0
+    for act in data["actividadesAnticipos"]:
+
+        municipio_actividad = Municipio.objects.filter(municipio = act["lugarActividadAnticipo"])
+        actividad_anticipo = Actividad(
+            solicitud = solicitud_anticipo,
+            fecha_actividad = act["fechaActividadAnticipo"],
+            proyecto = act["proyecto"],
+            descripcion = act["nombreActividad"],
+            municipio = municipio_actividad[0],
+            valor = act["valorActividadAnticipo"]
+        )
+        
+        actividad_anticipo.save()
+        total_solicitud += float(act["valorActividadAnticipo"])
+        
+    solicitud_anticipo.valor_total = total_solicitud
+    solicitud_anticipo.save()
+
+    return HttpResponse("OK")
 
 @login_required(login_url="/login/")
 def ver_solicitud(request, id_solicitud):

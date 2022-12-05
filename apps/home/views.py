@@ -41,6 +41,7 @@ def pages(request):
             colaboradores = Colaborador.objects.all()
             regionales = Regional.objects.all()
             municipios = Municipio.objects.all()
+            estados_solicitudes = EstadoSolicitud.objects.all()
 
             numero_solicitudes = len(solicitudes)+1
             usuario_actual = User.objects.get(username=request.user.username)
@@ -50,7 +51,8 @@ def pages(request):
                 "colaboradores": colaboradores,
                 "regionales": regionales,
                 "municipios":municipios,
-                "usuario_actual":usuario_actual
+                "usuario_actual":usuario_actual,
+                "estados_solicitudes": estados_solicitudes
             }
             
 

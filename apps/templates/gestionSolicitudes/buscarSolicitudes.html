@@ -4,10 +4,82 @@
 
 <div class="myFormContainer" id="buscarSolicitudes">
   <div class="myFormContainer">
-      Aquí van los filtros
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta fugiat inventore quas facilis minus unde, praesentium dicta mollitia, quia atque tempora doloribus quam? Sit perspiciatis, similique itaque illum maxime delectus!
+      <div class="row">
+        
+        <div class="col">
+          <div class = "myForm__section">
+            <div class="myForm__item">
+              <label for="filtroTipoSolicitud" class="myForm__label">Tipo solicitud</label>
+              <select name="tipoSolicitud" id="filtroTipoSolicitud" class="myForm__select">
+                  <option value=""></option>
+                  <option value="viatico">Viático</option>
+                  <option value="anticipo">anticipo</option>
+                  <option value="reembolso">Reembolso</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class = "myForm__section">
+            <div class="myForm__item">
+              <label for="filtroEstado" class="myForm__label">Estado</label>
+              <select name="tipoSolicitud" id="filtroEstado" class="myForm__select">
+                  <option value=""></option>
+                  {% for estado in estados_solicitudes %}
+                  <option value="{{estado.id}}">{{estado.estado}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class = "myForm__section">
+            <div class="myForm__item">
+              <label for="filtroRegional" class="myForm__label">Regional</label>
+              <select name="tipoSolicitud" id="filtroRegional" class="myForm__select">
+                  <option value=""></option>
+                  {% for reg in regionales %}
+                  <option value="{{reg.id}}">{{reg.regional}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class = "myForm__section">
+            <div class="myForm__item">
+              <label for="fechaSolicitudDesde" class="myForm__label">Desde</label>
+              <input type="date" class="myForm__input" id="fechaSolicitudDesde" >
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class = "myForm__section">
+            <div class="myForm__item">
+              <button>
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class = "myForm__section">
+            <div class="myForm__item">
+              <label for="fechaSolicitudDesde" class="myForm__label">Hasta</label>
+              <input type="date" class="myForm__input" id="fechaSolicitudDesde" >
+            </div>
+          </div>
+        </div>
+
+        
+
+      </div>
       
-  
   </div>
   <div class="myFormContainer">
     <div class="row">

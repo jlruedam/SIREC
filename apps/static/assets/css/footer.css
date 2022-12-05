@@ -1,10 +1,10 @@
 .site-footer
 {
-  background-color: whitesmoke;
-  padding:45px 0 20px;
+  
+  /* padding:45px 0 20px; */
   font-size:15px;
-  line-height:24px;
-  color:#737373;
+  /* line-height:24px; */
+  
 }
 .site-footer hr
 {

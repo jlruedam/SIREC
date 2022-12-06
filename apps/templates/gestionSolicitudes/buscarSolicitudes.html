@@ -83,79 +83,77 @@
       
   </div>
   <div class="myFormContainer">
-    <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-primary my-bg">
-              <h4 class="card-title ">Solicitudes</h4>
-              <p class="card-category">Tabla Solicitudes</p>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead class="my-color-primary">
-                    <th>
-                      id
-                    </th>
-                    <th>
-                      Fecha solicitud
-                    </th>
-                    <th>
-                      Estado
-                    </th>
-                    <th>
-                      Colaborador
-                    </th>
-                    <th>
-                      Regional
-                    </th>
-                    <th>
-                      Tipo Operación
-                    </th>
-                    <th>
-                      Valor
-                    </th>
-                    <th>
-                      Gestionar
-                    </th>
-                    
-                  </thead>
-                  <tbody>
-                    {% for solicitud in lista_solicitudes %}
-                    <tr>
-                      <td>
-                        {{solicitud.id}}
-                      </td>
-                      <td>
-                        {{solicitud.fecha}}
-                      </td>
-                      <td>
-                        {{solicitud.estado}}
-                      </td>
-                      <td>
-                        {{solicitud.colaborador}}
-                      </td>
-                      <td>
-                        {{solicitud.regional}}
-                      </td>
-                      <td>
-                        {{solicitud.operacion}}
-                      </td>
-                      <td>
-                        $ {{solicitud.valor_total}}
-                      </td>
-                      <td>
-                        <a href="{% url 'ver_solicitud' solicitud.id %}">Ver...</a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                    
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+
+    <div class="card">
+      <div class="card-header card-header-primary my-bg">
+        <h4 class="card-title ">Solicitudes</h4>
+        <p class="card-category">Tabla Solicitudes</p>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table" id="listadoSolicitudes">
+            <thead class="my-color-primary">
+              <th>
+                id
+              </th>
+              <th>
+                Fecha solicitud
+              </th>
+              <th>
+                Estado
+              </th>
+              <th>
+                Colaborador
+              </th>
+              <th>
+                Regional
+              </th>
+              <th>
+                Tipo Operación
+              </th>
+              <th>
+                Valor
+              </th>
+              <th>
+                Gestionar
+              </th>
+              
+            </thead>
+            <tbody>
+              {% for solicitud in lista_solicitudes %}
+              <tr>
+                <td>
+                  {{solicitud.id}}
+                </td>
+                <td>
+                  {{solicitud.fecha}}
+                </td>
+                <td>
+                  {{solicitud.estado}}
+                </td>
+                <td>
+                  {{solicitud.colaborador}}
+                </td>
+                <td>
+                  {{solicitud.regional}}
+                </td>
+                <td>
+                  {{solicitud.operacion}}
+                </td>
+                <td>
+                  $ {{solicitud.valor_total}}
+                </td>
+                <td>
+                  <a href="{% url 'ver_solicitud' solicitud.id %}">Ver...</a>
+                </td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
         </div>
+      </div>
+    
   </div> 
    
 </div>

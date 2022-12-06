@@ -415,8 +415,7 @@ function eliminarGastoAdicional(e){
 }
 
 function enviarSolicitudViatico(e){
-    e.preventDefault();
-    console.log(observacionesSolicitud.value,regional.value, sede.value);
+    // e.preventDefault();
     console.log(e);
     json = {
         "datosSolicitud": {
@@ -438,11 +437,14 @@ function enviarSolicitudViatico(e){
         success:function(response){
             console.log(response);
             console.log("Petición exitosa");
-            // location.reload();
+            alert("Solicitud cargada correctamente");
+            location.reload();
         }, 
         error: function(error){
             console.log("Hay un Pendejo error")
             console.log(error);
+            alert("Solicitud no pudo ser cargada");
+            location.reload();
             
         }
     });  
@@ -535,7 +537,7 @@ function eliminarActividadAnticipo(e){
 }
 
 function enviarSolicitudAnticipo(e){
-    e.preventDefault();
+    // e.preventDefault();
     console.log(e);
     json = {
         "datosSolicitud": {
@@ -554,11 +556,14 @@ function enviarSolicitudAnticipo(e){
         success:function(response){
             console.log(response);
             console.log("Petición exitosa");
-            // location.reload();
+            alert("Solicitud cargada correctamente");
+            location.reload();
         }, 
         error: function(error){
             console.log("Hay un Pendejo error")
             console.log(error);
+            alert("Solicitud no pudo ser cargada");
+            location.reload();
             
         }
     });  

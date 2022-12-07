@@ -5,14 +5,14 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import template
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.template import loader
 from django.urls import reverse
 from apps.home.models import SolicitudRecurso, Actividad, RutaViatico, GastoAdicional, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion
 from django.shortcuts import render
 from django.contrib.auth.models import User
 import datetime
-
+from .generador_pdf import Solicitud_pdf
 import json
 
 @login_required(login_url="/login/")
@@ -258,3 +258,18 @@ def ver_solicitud(request, id_solicitud):
     html_template = loader.get_template('gestionSolicitudes/verSolicitud.html')   
     return HttpResponse(html_template.render(context, request))
 
+@login_required(login_url="/login/")
+def imprimir_pdf_solicitud(request, id_solicitud):
+
+    solicitud = SolicitudRecurso.objects.get(id = id_solicitud)
+    viatico_pdf = Solicitud_pdf(solicitud.id)
+    viatico_pdf.alias_nb_pages()
+    viatico_pdf.add_page()
+    viatico_pdf.set_font('Times', '', 12)
+    viatico_pdf.info(solicitud)
+
+    # for i in range(1, 41):
+    #     viatico_pdf.cell(0, 10, 'Printing line number ' + str(i), 0, 1)
+    viatico_pdf.output('solicitud.pdf', 'F')
+
+    return FileResponse(open('solicitud.pdf', 'rb'), as_attachment=True, filename="solicitud.pdf")

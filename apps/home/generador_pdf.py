@@ -3,9 +3,10 @@ from fpdf import FPDF
 
 class Solicitud_pdf(FPDF):
 
-    def __init__(self, num_solicitud = 0):
+    def __init__(self, solicitud):
         super().__init__()
-        self.num_solicitud = num_solicitud
+        self.solicitud = solicitud
+    
 
     def header(self):
         # Logo
@@ -15,25 +16,37 @@ class Solicitud_pdf(FPDF):
         # Move to the right
         self.cell(80)
         # Title
-        self.cell(30, 10, f'Solicitud # {self.num_solicitud}', 0, 0, 'C')
+        self.cell(50, 10, f'Solicitud # {self.solicitud.id} - {self.solicitud.operacion}', 0, 1, 'C')
         
 
-    def info(self, solicitud):
-        self.cell(30, 10, f'{solicitud.operacion}', 0, 0, 'C')
-        # Line break
-        self.ln(20)
-        self.cell(0,10, f'Colaborador: {solicitud.colaborador}',0, 1)
-        self.cell(0,10, f'Estado: {solicitud.estado}',0, 1)
-        self.cell(0,10, f'Fecha de Solicitud: {solicitud.fecha}',0, 1)
-        self.cell(0,10, f'Regional: {solicitud.regional}',0, 1)
-        self.cell(0,10, f'Observaciones: {solicitud.observaciones}',0, 1)
-        self.cell(0,10, f'Valor total:$ {solicitud.valor_total}',0, 1)
+    def info(self):
+        
+        self.cell(0,10, f'Fecha de Solicitud: {self.solicitud.fecha}',0, 1, 'C')
+        self.cell(50,10, f'Regional: {self.solicitud.regional}',0, 0, 'C')
+        self.cell(50,10, f'Estado: {self.solicitud.estado}',0, 0, 'C')
+        self.cell(50,10, f'Colaborador: {self.solicitud.colaborador}',0,0, 'C')
+        self.cell(50,10, f'Valor total:$ {self.solicitud.valor_total}',0, 1)
+        self.cell(80)
+        self.cell(50, 10, 'Observaciones:', 0, 1, 'C')
+        self.cell(80)
+        self.cell(50,10, self.solicitud.observaciones,0, 1, 'C')
+        
 
     def content(self):
-        pass
+        
+        self.cell(80)
+        self.cell(50, 10, 'Actividades:', 0, 1, 'C')
+
+        self.cell(80)
+        self.cell(50, 10, 'Rutas de viáticos:', 0, 1, 'C')
+
+        self.cell(80)
+        self.cell(50, 10, 'Gastos adicionales:', 0, 1, 'C')
 
     def sign(self):
-        pass
+    
+        self.cell(0,10, f'Firma colaborador:_________________________',0,1, 'R')
+        self.cell(0,10, f'C.C:_____________________________________',0,0, 'R')
 
     def footer(self):
         # Position at 1.5 cm from bottom
@@ -42,5 +55,6 @@ class Solicitud_pdf(FPDF):
         self.set_font('Arial', 'I', 8)
         # Page number
         self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
+        
 
 

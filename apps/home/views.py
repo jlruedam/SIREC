@@ -262,11 +262,14 @@ def ver_solicitud(request, id_solicitud):
 def imprimir_pdf_solicitud(request, id_solicitud):
 
     solicitud = SolicitudRecurso.objects.get(id = id_solicitud)
-    viatico_pdf = Solicitud_pdf(solicitud.id)
+    viatico_pdf = Solicitud_pdf(solicitud)
     viatico_pdf.alias_nb_pages()
     viatico_pdf.add_page()
     viatico_pdf.set_font('Times', '', 12)
-    viatico_pdf.info(solicitud)
+    viatico_pdf.info()
+    viatico_pdf.content()
+    viatico_pdf.sign()
+    
 
     # for i in range(1, 41):
     #     viatico_pdf.cell(0, 10, 'Printing line number ' + str(i), 0, 1)

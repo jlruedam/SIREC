@@ -11,7 +11,6 @@ const topes = {
 // # Datos Solicitud
 const tipoSolicitud= document.querySelector('#tipoSolicitud');
 const regional = document.querySelector('#regional');
-const proyecto = document.querySelector('#proyecto');
 const sede = document.querySelector('#sede');
 const observacionesSolicitud = document.querySelector('#observacionesSolicitud');
 
@@ -22,6 +21,8 @@ const fechaActividadAnticipo = document.querySelector('#fechaActividadAnticipo')
 const lugarActividadAnticipo = document.querySelector('#lugarActividadAnticipo');
 const nombreActividad = document.querySelector('#nombreActividad');
 const valorActividadAnticipo = document.querySelector("#valorActividadAnticipo");
+const proyectoAnticipo = document.querySelector('#proyectoAnticipo');
+const proyecto = document.querySelector('#proyecto');
 
 // # Botones
 const btnCargarActividad = document.querySelector('#btnCargarActividad');
@@ -450,7 +451,6 @@ function enviarSolicitudViatico(e){
     });  
 }
 
-
 function cargarActividadAnticipo(){
     console.log("Cargar Actividad: ");
     let solicitud = {
@@ -460,12 +460,12 @@ function cargarActividadAnticipo(){
     let actividad = {
         "fechaActividadAnticipo": fechaActividadAnticipo.value,
         "lugarActividadAnticipo": lugarActividadAnticipo.value,
-        "proyecto": proyecto.value,
+        "proyecto": proyectoAnticipo.value,
         "nombreActividad": nombreActividad.value,
         "valorActividadAnticipo" : valorActividadAnticipo.value
     }
 
-    console.log(actividad, actividad.lugarActividadAnticipo);
+    console.log(actividad, actividad.proyecto);
 
     if(actividad.fechaActividadAnticipo.length == 0){
         alert("Debe ingresar la fecha correctamente.");

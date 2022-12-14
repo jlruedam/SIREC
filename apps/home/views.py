@@ -262,12 +262,39 @@ def ver_solicitud(request, id_solicitud):
 def imprimir_pdf_solicitud(request, id_solicitud):
 
     solicitud = SolicitudRecurso.objects.get(id = id_solicitud)
+    actividades = Actividad.objects.filter(solicitud = solicitud)
+    
+    
+
     viatico_pdf = Solicitud_pdf(solicitud)
     viatico_pdf.alias_nb_pages()
     viatico_pdf.add_page()
     viatico_pdf.set_font('Times', '', 12)
-    viatico_pdf.info()
-    viatico_pdf.content()
+    viatico_pdf.info_solicitud()
+    i = 0
+    
+    
+    for actividad in actividades:
+        i+=1
+        j = 0
+        viatico_pdf.encabezado_actividad(i)
+        viatico_pdf.actividad(actividad)
+        rutas_viaticos = RutaViatico.objects.filter(actividad = actividad)
+        gastos_adicionales = GastoAdicional.objects.filter(actividad = actividad)
+        
+        if len(rutas_viaticos):
+            viatico_pdf.encabezado_ruta_viatico()
+
+            for ruta in rutas_viaticos:
+                viatico_pdf.ruta_viatico(ruta)
+
+        if len(gastos_adicionales):
+            viatico_pdf.encabezado_gastos_adicionales()
+
+            for adicional in gastos_adicionales:
+                j+=1
+                viatico_pdf.gasto_adicional(adicional, j)
+
     viatico_pdf.sign()
     
 

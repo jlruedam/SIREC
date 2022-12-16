@@ -90,6 +90,7 @@ class TipoOperacion(models.Model):
 
 class SolicitudRecurso(models.Model):
     id = models.AutoField(primary_key =True)
+    solicitud_asociada = models.ForeignKey('self', models.SET_NULL, blank=True,null=True, related_name='solicitud_relacionada')
     colaborador = models.ForeignKey(User, models.SET_NULL, blank=True,null=True)
     estado = models.ForeignKey(EstadoSolicitud, models.SET_NULL, blank=True,null=True)
     operacion = models.ForeignKey(TipoOperacion, models.SET_NULL, blank=True,null=True)
@@ -100,8 +101,6 @@ class SolicitudRecurso(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     
-
-
     class meta:
         verbose_name="Solicitud de Recurso"
         verbose_name_plural="Solicitudes de Recurso"
@@ -111,8 +110,17 @@ class SolicitudRecurso(models.Model):
     def __str__(self) -> str:
         return " Solicitud #{} - {}".format(self.id, self.operacion)
 
+class Beneficiario(models.Model):
+    id = models.AutoField(primary_key =True)
+    beneficiario = models.CharField(max_length = 50)
+    tipo_id_beneficiario = models.CharField(max_length = 20)
+    nombre = models.CharField(max_length = 50)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
 class Actividad(models.Model):
     id = models.AutoField(primary_key =True)
+    beneficiario = models.ForeignKey(Beneficiario, models.SET_NULL, blank=True,null=True)
     solicitud = models.ForeignKey(SolicitudRecurso, on_delete = models.CASCADE)
     fecha_actividad = models.DateField()
     proyecto = models.CharField(max_length = 50)
@@ -121,8 +129,7 @@ class Actividad(models.Model):
     municipio = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
-    # Beneficiario
-
+    
     class meta:
         verbose_name="Actividad"
         verbose_name_plural="Actividades"
@@ -188,6 +195,28 @@ class GastoAdicional(models.Model):
     def __str__(self) -> str:
         return "{}".format(self.id)
     
+
+
+# class ActivividadReembolso(models.Model):
+#     id = models.AutoField(primary_key =True)
+#     solicitud = models.ForeignKey(SolicitudRecurso, on_delete = models.CASCADE)
+#     beneficiario = models.ForeignKey(Beneficiario, models.SET_NULL, blank=True,null=True)
+#     fecha_actividad = models.DateField()
+#     proyecto = models.CharField(max_length = 50)
+#     descripcion = models.CharField(max_length = 150)
+#     valor = models.FloatField(default = 0.0)
+#     municipio = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True)
+#     created_at = models.DateTimeField(auto_now_add = True)
+#     updated_at = models.DateTimeField(auto_now = True)
+    
+#     class meta:
+#         verbose_name="Actividad Reembolso"
+#         verbose_name_plural="Actividades de reembolso"
+#         db_table="Actividades_de_Reembolso"
+#         ordering=["id","solicitud","fecha_actividad", "descripcion", "beneficiario"]
+
+#     def __str__(self) -> str:
+#         return "Actividad Reembolso {} - {} - {} - {}".format(self.id, self.descripcion, self.valor, self.beneficiario)
 
 
 

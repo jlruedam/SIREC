@@ -13,7 +13,7 @@
     
 }
 
-#btnBorrarRuta, #btnBorrarAdicional{
+#btnBorrarRuta, #btnBorrarAdicional, #btnBorrarActividadReembolso{
     border: 0;
     background-color: transparent;
 }

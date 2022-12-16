@@ -2,6 +2,7 @@
 const rutas = [];
 const gastosAdicionales = [];
 const actividadesAnticipos = [];
+const actividadesReembolsos = [];
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Se utiliza para poder enviar petición tipo POST a Django
 const topes = {
     "transporte":320000,
@@ -14,6 +15,31 @@ const regional = document.querySelector('#regional');
 const sede = document.querySelector('#sede');
 const observacionesSolicitud = document.querySelector('#observacionesSolicitud');
 
+
+/* REEMBOLSOS */
+// # Datos Solicitud
+const solicitudAsociada = document.querySelector('#solicitudAsociada');
+// # Actividades
+const fechaActividadReembolso = document.querySelector('#fechaActividadReembolso');
+const lugarActividadReembolso = document.querySelector('#lugarActividadReembolso');
+const nombreActividadReembolso = document.querySelector('#nombreActividadReembolso');
+const valorActividadReembolso = document.querySelector("#valorActividadReembolso");
+const proyectoReembolso = document.querySelector('#proyectoReembolso');
+// # Beneficiario
+const numIdentificacion = document.querySelector('#numIdentificacion');
+const tipoIdentificacion = document.querySelector('#tipoIdentificacion');
+const nombreBeneficiario = document.querySelector('#nombreBeneficiario');
+// # Botones
+const btnCargarReembolso = document.querySelector('#btnCargarReembolso');
+const btnEnviarSolicitudReembolso = document.querySelector('#btnEnviarSolicitudReembolso');
+// # Tablas
+const tablaActividadesReembolsos = document.querySelector('#tablaActividadesReembolsos');
+const bodyTablaActividadesReembolsos = document.querySelector('#bodyTablaActividadesReembolsos');
+// # Eventos
+tablaActividadesReembolsos.addEventListener('click',eliminarActividadReembolso);
+btnEnviarSolicitudReembolso.addEventListener('click', enviarSolicitudReembolso);
+btnCargarReembolso.addEventListener('click', cargarActividadReembolso);
+
 /* ANTICIPOS */
 
 // # Actividades
@@ -23,19 +49,18 @@ const nombreActividad = document.querySelector('#nombreActividad');
 const valorActividadAnticipo = document.querySelector("#valorActividadAnticipo");
 const proyectoAnticipo = document.querySelector('#proyectoAnticipo');
 const proyecto = document.querySelector('#proyecto');
-
 // # Botones
 const btnCargarActividad = document.querySelector('#btnCargarActividad');
 const btnBorrarActividadAnticipo = document.querySelector('#btnBorrarActividadAnticipo');
 const btnEnviarSolicitudAnticipo = document.querySelector('#btnEnviarSolicitudAnticipo');
-
+// # Tablas
 const bodyTablaActividadesAnticipos = document.querySelector('#bodyTablaActividadesAnticipos');
 const tablaActividadesAnticipos = document.querySelector('#tablaActividadesAnticipos');
 
 // # Eventos
 tablaActividadesAnticipos.addEventListener('click',eliminarActividadAnticipo);
 btnEnviarSolicitudAnticipo.addEventListener('click', enviarSolicitudAnticipo);
-btnCargarActividad.addEventListener('click', cargarActividadAnticipo);
+btnCargarActividad.addEventListener('click', cargarActividadReembolso);
 
 
 
@@ -548,6 +573,129 @@ function enviarSolicitudAnticipo(e){
     }
     $.ajax({
         url:"cargarSolicitudAnticipo/",
+        method:"POST",
+        data: JSON.stringify(json),
+        headers: {'X-CSRFToken': csrftoken},
+        contentType: 'application/json; charset=utf-8',
+
+        success:function(response){
+            console.log(response);
+            console.log("Petición exitosa");
+            alert("Solicitud cargada correctamente");
+            location.reload();
+        }, 
+        error: function(error){
+            console.log("Hay un Pendejo error")
+            console.log(error);
+            alert("Solicitud no pudo ser cargada");
+            location.reload();
+            
+        }
+    });  
+}
+
+function cargarActividadReembolso(){
+    console.log("Cargar Actividad: ");
+
+    let beneficiario = {
+        "identificacionBeneficiario": numIdentificacion.value,
+        "tipoIdentificacion": tipoIdentificacion.value,
+        "nombreBeneficiario": nombreBeneficiario.value
+    }
+
+    let actividad = {
+        "fechaActividadReembolso": fechaActividadReembolso.value,
+        "lugarActividadReembolso": lugarActividadReembolso.value,
+        "proyectoReembolso": proyectoReembolso.value,
+        "beneficiario": beneficiario,
+        "nombreActividadReembolso": nombreActividadReembolso.value,
+        "valorActividadReembolso" : valorActividadReembolso.value,
+    }
+
+
+    if(actividad.fechaActividadReembolso.length == 0){
+        alert("Debe ingresar la fecha correctamente.");
+    }else if(actividad.lugarActividadReembolso.length == 0){
+        alert("Debe diligenciar la ciudad o municipio.");
+    }else if(actividad.nombreActividadReembolso.length == 0){
+        alert("Debe diligenciar el nombre de la actividad.");
+    }else if(eval(actividad.valorActividadReembolso) <= 0){
+        alert("Debe registrar un valor mayor que $ 0");
+    }else {
+
+        let idActividad = actividadesReembolsos.push(actividad);
+
+        let btnBorrar = document.createElement('button');
+        let hilera = document.createElement("tr");
+        let celda = document.createElement("td");
+        let textoCelda = document.createTextNode(idActividad);
+
+        celda.appendChild(textoCelda);
+        celda.style.display = "none";
+        hilera.setAttribute('id',idActividad);
+        hilera.appendChild(celda);
+
+        btnBorrar.innerHTML="🗑️";
+        btnBorrar.setAttribute('id', "btnBorrarActividadReembolso");
+        btnBorrar.setAttribute('type', "button");
+        btnBorrar.setAttribute('ruta', idActividad);
+
+        for (let campo in actividad){
+            
+            celda = document.createElement("td");
+            if (campo == "beneficiario"){
+                textoCelda = document.createTextNode(actividad[campo]["nombreBeneficiario"])
+            }else if(campo == "valorActividadReembolso") {
+                textoCelda = document.createTextNode("$ " + actividad[campo]);
+            }else {
+                textoCelda = document.createTextNode(actividad[campo]);
+            }
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+        }
+    
+        celda = document.createElement("td");
+        celda.appendChild(btnBorrar);
+        hilera.appendChild(celda);
+    
+        bodyTablaActividadesReembolsos.appendChild(hilera);
+        tablaActividadesReembolsos.appendChild(bodyTablaActividadesReembolsos);
+
+        // Limpiar campos en el fomulario
+
+        fechaActividadReembolso.value = "";
+        lugarActividadReembolso.value = "";
+        proyectoReembolso.value = "";
+        nombreActividadReembolso.value = "";
+        valorActividadReembolso.value = 0;
+    }
+
+}
+
+function eliminarActividadReembolso(e){
+    console.log(e);
+    let btn = e.path[0];;
+    if(btn.id === "btnBorrarActividadReembolso"){
+        let idActividad = btn.attributes[2].nodeValue;
+        document.getElementById(btn.attributes[2].nodeValue).remove();
+        actividadesRembolsos.splice(idActividad-1,1);
+        console.log(actividadesRembolsos);
+    }
+}
+
+function enviarSolicitudReembolso(e){
+    // e.preventDefault();
+    console.log(e);
+    
+    let json = {
+        "datosSolicitud": {
+            "regional":regional.value,
+            "observaciones": observacionesSolicitud.value,
+        },
+        "actividadesReembolsos": actividadesReembolsos,
+    }
+    $.ajax({
+        url:"cargarSolicitudReembolso/",
         method:"POST",
         data: JSON.stringify(json),
         headers: {'X-CSRFToken': csrftoken},

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.template import loader
 from django.urls import reverse
-from apps.home.models import SolicitudRecurso, Actividad, RutaViatico, GastoAdicional, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion
+from apps.home.models import SolicitudRecurso, Actividad, RutaViatico, GastoAdicional, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion, Beneficiario
 from django.shortcuts import render
 from django.contrib.auth.models import User
 import datetime
@@ -233,6 +233,63 @@ def cargar_solicitud_anticipo(request):
         
     solicitud_anticipo.valor_total = total_solicitud
     solicitud_anticipo.save()
+
+    return HttpResponse("OK")
+
+@login_required(login_url="/login/")
+def cargar_solicitud_reembolso(request):
+     # Convertir la Carga en formato JSON en un diccionario.
+    data = json.loads((request.body).decode('UTF-8'))
+
+    solicitante = User.objects.get(username = request.user.username)
+    estado = EstadoSolicitud.objects.get(estado = "Solicitado")
+    operacion = TipoOperacion.objects.get(operacion = "Reembolso")
+    regional = Regional.objects.get(regional = data["datosSolicitud"]["regional"])
+
+    
+    
+    # Crear solicitud de viático
+    solicitud_reembolso= SolicitudRecurso(
+        colaborador = solicitante,
+        estado = estado, 
+        operacion = operacion,
+        fecha = datetime.datetime.now(),
+        regional = regional,
+        observaciones = data["datosSolicitud"]["observaciones"],  
+           
+    )
+
+    solicitud_reembolso.save()
+
+    # Crear la actividades
+    total_solicitud = 0
+    for act in data["actividadesReembolsos"]:
+
+        # Crear Beneficiario
+        beneficiario = Beneficiario(
+            beneficiario = act["beneficiario"]["identificacionBeneficiario"],
+            tipo_id_beneficiario = act["beneficiario"]["tipoIdentificacion"],
+            nombre = act["beneficiario"]["nombreBeneficiario"],
+        )
+        beneficiario.save()
+
+        municipio_actividad = Municipio.objects.filter(municipio = act["lugarActividadReembolso"])
+
+        actividad_reembolso = Actividad(
+            solicitud = solicitud_reembolso,
+            fecha_actividad = act["fechaActividadReembolso"],
+            proyecto = act["proyectoReembolso"],
+            descripcion = act["nombreActividadReembolso"],
+            municipio = municipio_actividad[0],
+            valor = act["valorActividadReembolso"],
+            beneficiario = beneficiario
+        )
+        
+        actividad_reembolso.save()
+        total_solicitud += float(act["valorActividadReembolso"])
+        
+    solicitud_reembolso.valor_total = total_solicitud
+    solicitud_reembolso.save()
 
     return HttpResponse("OK")
 

@@ -13,6 +13,12 @@ class ColaboradorAdmin(admin.ModelAdmin):
     search_fields = ('cedula', 'nombre')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
+class BeneficiarioAdmin(admin.ModelAdmin):
+
+    list_display = ('id','beneficiario', 'nombre','tipo_id_beneficiario','created_at', 'updated_at')
+    search_fields = ('beneficario', 'nombre', 'tipo_id_beneficiario')
+    # fields = ('id_colaborador', 'nombre', 'activo')
+
 class RegionalAdmin(admin.ModelAdmin):
 
     list_display = ('id','regional')
@@ -51,15 +57,21 @@ class TablaViaticosAdmin(admin.ModelAdmin):
 
 class SolicitudRecursoAdmin(admin.ModelAdmin):
 
-    list_display = ('id','colaborador', 'estado','operacion', 'fecha', 'valor_total','observaciones', 'created_at', 'created_at')
+    list_display = ('id','colaborador', 'estado','operacion','solicitud_asociada', 'fecha', 'valor_total','observaciones', 'created_at', 'created_at')
     search_fields = ('colaborador', 'estado', 'operacion', 'fecha')
     # fields = ('id_colaborador', 'nombre', 'activo')
     
 class ActividadAdmin(admin.ModelAdmin):
 
     list_display = ('id','solicitud', 'proyecto','descripcion', 'valor', 'created_at', 'created_at')
-    search_fields = ('solicitud', 'proyecto','concepto')
+    search_fields = ('solicitud', 'proyecto','descripcion')
     # fields = ('id_colaborador', 'nombre', 'activo')
+
+# class ActividadReembolsoAdmin(admin.ModelAdmin):
+
+#     list_display = ('id','solicitud','beneficiario', 'proyecto','descripcion', 'valor', 'created_at', 'created_at')
+#     search_fields = ('solicitud', 'proyecto','descripcion', 'fecha_actividad' 'beneficiario')
+#     # fields = ('id_colaborador', 'nombre', 'activo')
 
 class GastoAdicionalAdmin(admin.ModelAdmin):
 
@@ -77,6 +89,8 @@ admin.site.register(models.SolicitudRecurso, SolicitudRecursoAdmin)
 admin.site.register(models.Actividad, ActividadAdmin)
 admin.site.register(models.Regional, RegionalAdmin)
 admin.site.register(models.GastoAdicional, GastoAdicionalAdmin)
+admin.site.register(models.Beneficiario, BeneficiarioAdmin)
+# admin.site.register(models.ActivividadReembolso, ActividadReembolsoAdmin)
 
 
 

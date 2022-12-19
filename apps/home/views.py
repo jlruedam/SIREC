@@ -305,7 +305,7 @@ def ver_solicitud(request, id_solicitud):
     if solicitud.operacion.operacion == "Viatico" and len(actividades) == 1:
         rutas_viaticos = RutaViatico.objects.filter(actividad = actividades[0])
         gastos_adicionales = GastoAdicional.objects.filter(actividad = actividades[0])
-
+ 
     context = {
         "solicitud": solicitud,
         "actividades": actividades,

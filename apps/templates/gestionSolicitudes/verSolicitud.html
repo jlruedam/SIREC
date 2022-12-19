@@ -123,6 +123,46 @@
                     </div>
                 </div>
             </div>
+            {% if actividad.beneficiario %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>ID Beneficiario:</i></span>
+                            </div>
+                            <div class="col-md-6">
+                                {{actividad.beneficiario.beneficiario}} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-4">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>Tipo ID:</i></span>
+                            </div>
+                            <div class="col-md-6">
+                                $ {{actividad.valor}}
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-6">
+                    <div class="myform__item">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span><i>Nombre Beneficario:</i></span>
+                            </div>
+                            <div class="col-md-6">
+                                {{actividad.beneficiario.nombre}} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
             <div class="row">
                 <div class="col-md-12">
                     <div class="myform__section">

@@ -262,11 +262,24 @@
         {% endfor %}
         
     </div>
+
     <div class="myFormContainer">
         <div class="myForm__section">
             <a href="">Editar</a>
             <a href="">Eliminar</a>
             <a target="_blank" href="{% url 'imprimir_pdf_solicitud' solicitud.id %}">Imprimir PDF</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="myForm__section">
+                <div class="myForm__item">
+                    <button class="myButton" id="btnRetrocederSolicitud" type="button">
+                        <a href="/solicitudes.html"><img src="../../static/assets/img/return.png" alt="return"></a>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     

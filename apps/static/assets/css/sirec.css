@@ -237,10 +237,27 @@
 }
 
 .myForm__input_checkbox {
-
     box-shadow: none;
 }
 
+
+.myForm__input_file {
+    
+    border: 1px solid var(--azul-cielo);
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--azul-cielo);
+
+}
+
+input[type="file"]{
+    display: none;
+}
+
+.myForm__input_file:focus + label{
+    color: var(--naranja);
+}
 
 
 .myForm__textArea {

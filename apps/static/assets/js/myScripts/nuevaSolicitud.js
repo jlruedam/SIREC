@@ -19,6 +19,8 @@ const observacionesSolicitud = document.querySelector('#observacionesSolicitud')
 /* REEMBOLSOS */
 // # Datos Solicitud
 const solicitudAsociada = document.querySelector('#solicitudAsociada');
+const adjuntoReembolso = document.querySelector("#adjuntoReembolso");
+const archivoCargado = document.querySelector("#archivoCargado");
 // # Actividades
 const fechaActividadReembolso = document.querySelector('#fechaActividadReembolso');
 const lugarActividadReembolso = document.querySelector('#lugarActividadReembolso');
@@ -39,6 +41,7 @@ const bodyTablaActividadesReembolsos = document.querySelector('#bodyTablaActivid
 tablaActividadesReembolsos.addEventListener('click',eliminarActividadReembolso);
 btnEnviarSolicitudReembolso.addEventListener('click', enviarSolicitudReembolso);
 btnCargarReembolso.addEventListener('click', cargarActividadReembolso);
+adjuntoReembolso.addEventListener('change', adjuntarArchivo)
 
 /* ANTICIPOS */
 
@@ -684,9 +687,10 @@ function eliminarActividadReembolso(e){
 }
 
 function enviarSolicitudReembolso(e){
-    // e.preventDefault();
-    console.log(e);
-    
+    e.preventDefault();
+    let formData = new FormData();
+    let fileData = adjuntoReembolso.files[0]
+
     let json = {
         "datosSolicitud": {
             "regional":regional.value,
@@ -694,12 +698,21 @@ function enviarSolicitudReembolso(e){
         },
         "actividadesReembolsos": actividadesReembolsos,
     }
+
+    dataReembolso = JSON.stringify(json)
+
+    formData.append("dataReembolso",dataReembolso);
+    formData.append("soporte",fileData)
+
     $.ajax({
         url:"cargarSolicitudReembolso/",
         method:"POST",
-        data: JSON.stringify(json),
+        data: formData,
         headers: {'X-CSRFToken': csrftoken},
-        contentType: 'application/json; charset=utf-8',
+        contentType: false,
+        enctype:'multipart/form-data',
+        processData: false,
+        cache: false,
 
         success:function(response){
             console.log(response);
@@ -715,4 +728,46 @@ function enviarSolicitudReembolso(e){
             
         }
     });  
+}
+
+function adjuntarArchivo(){
+    archivoCargado.innerHTML = adjuntoReembolso.files[0].name;
+    // console.log(adjuntoReembolso.files[0]);
+
+    // let formData = new FormData();
+    // let fileData = adjuntoReembolso.files[0]; 
+    // json = {
+    //     "prueba":"json de prueba"
+    // }
+
+    // dataPrueba = JSON.stringify(json)
+
+    // formData.append("datosPrueba",dataPrueba);
+
+    // formData.append("soporte",fileData)
+
+    // $.ajax({
+    //     url:"adjuntarSoporte/",
+    //     method:"POST",
+    //     data: formData,
+    //     headers: {'X-CSRFToken': csrftoken},
+    //     contentType: false,
+    //     enctype:'multipart/form-data',
+    //     processData: false,
+    //     cache: false,
+
+    //     success:function(response){
+    //         console.log(response);
+    //         console.log("Petición exitosa");
+    //         alert("Solicitud cargada correctamente");
+    //         location.reload();
+    //     }, 
+    //     error: function(error){
+    //         console.log("Hay un Pendejo error")
+    //         console.log(error);
+    //         alert("Solicitud no pudo ser cargada");
+    //         location.reload();
+            
+    //     }
+    // });  
 }

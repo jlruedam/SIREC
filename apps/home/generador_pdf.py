@@ -10,7 +10,7 @@ class Solicitud_pdf(FPDF):
 
     def header(self):
         # Logo
-        self.image('C:\ProyectosDesarrolloWeb\SERSOCIAL_IPS_horizontal.png', 10, 8, 33)
+        self.image('C:\\Users\\jrueda\\OneDrive - Fundacion SERSOCIAL\\Documentos\\Proyectos SerSocial\\SIREC\\SIREC\\apps\\static\\assets\\img\\SERSOCIAL_IPS_horizontal.png', 10, 8, 33)
         # Arial bold 15
         self.set_font('Arial', 'B', 15)
         # Move to the right

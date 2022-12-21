@@ -57,6 +57,30 @@
         </div>
 
     </div>
+
+    <div class="myFormContainer">
+        <div class="myForm__section">
+            <h2 class="myTitle">
+                Documentos Adjuntos
+            </h2>
+
+            <div class="myForm__section">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a target="_blank" href="{% url 'imprimir_pdf_solicitud' solicitud.id %}">Solicitud firmada</a>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <a target="_blank" href="{% url 'imprimir_pdf_solicitud' solicitud.id %}">Soportes Actividades</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+
+        
+    </div>
     
     <div class="myFormContainer">
         <div class="myForm__section">

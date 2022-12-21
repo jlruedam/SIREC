@@ -18,6 +18,8 @@ def guadar_soporte_ftp(num_solicitud, tipo_solicitud, archivo):
         #Crear Folder de la carga
         ftp.login()
         ftp.dir()
+        print(ftp.getwelcome())
+        print(ftp.pwd())
         # try:
         #     print(ftp.getwelcome())
         #     print(ftp.pwd())
@@ -47,5 +49,9 @@ def guadar_soporte_local(num_solicitud, tipo_solicitud, archivo):
         dump(archivo, f)
 
     return f"./media/{nombre_archivo}"
+
+
+guadar_soporte_ftp("prueba","prueba", "prueba")
+
 
     

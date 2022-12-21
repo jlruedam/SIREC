@@ -299,7 +299,7 @@ def cargar_solicitud_reembolso(request):
     solicitud_reembolso.valor_total = total_solicitud
     solicitud_reembolso.save()
 
-    ruta = guadar_soporte_local(solicitud_reembolso.id, solicitud_reembolso.operacion, soporte)
+    ruta = guadar_soporte_ftp(solicitud_reembolso.id, solicitud_reembolso.operacion, soporte)
     print(ruta)
     
     return HttpResponse("OK")

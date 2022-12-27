@@ -79,6 +79,12 @@ class GastoAdicionalAdmin(admin.ModelAdmin):
     search_fields = ('id','actividad','tipo','valor')
     # fields = ('id_colaborador', 'nombre', 'activo')
 
+class DocumentoAdmin(admin.ModelAdmin):
+
+    list_display = ("id","tipo", "solicitud", "document_path", "server",'created_at', 'created_at')
+    search_fields = ("id","tipo", "solicitud", "document_path", "server")
+    # fields = ('id_colaborador', 'nombre', 'activo')
+
 admin.site.register(models.Colaborador, ColaboradorAdmin)
 admin.site.register(models.Municipio, MunicipioAdmin)
 admin.site.register(models.EstadoSolicitud, EstadoSolicitudAdmin)
@@ -90,6 +96,7 @@ admin.site.register(models.Actividad, ActividadAdmin)
 admin.site.register(models.Regional, RegionalAdmin)
 admin.site.register(models.GastoAdicional, GastoAdicionalAdmin)
 admin.site.register(models.Beneficiario, BeneficiarioAdmin)
+admin.site.register(models.Documento, DocumentoAdmin)
 # admin.site.register(models.ActivividadReembolso, ActividadReembolsoAdmin)
 
 

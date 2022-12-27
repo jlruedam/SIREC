@@ -1,12 +1,12 @@
 from ftplib import FTP
 from os import remove
 from pickle import dump
-
+from . import var_entorno
 
 # Datos para la conexión
-HOST = '10.244.16.148'
-USER ='Administrador'
-PASSWD ='C0lumbu$2016'
+HOST = var_entorno.HOST
+USER = var_entorno.USER
+PASSWD = var_entorno.PASSWD
 
 def guadar_soporte_ftp(num_solicitud, tipo_solicitud, archivo):
 
@@ -40,6 +40,25 @@ def guadar_soporte_ftp(num_solicitud, tipo_solicitud, archivo):
         # # remove(f"C:\inetpub\wwwroot\FastCard\media\static\{nombre_archivo}")
     return f"/{nombre_folder}/{nombre_archivo}"
 
+def descargar_soporte_ftp(file_path, filename):
+    
+    with FTP(HOST, USER, PASSWD) as ftp:
+        print(ftp.pwd())
+        try:
+            # Abre un archivo de texto localmente para escritura
+            with open(file_path, 'wb') as local_file:  
+                # Escribe el archivo traido del ftp sobre el archivo local en el servidor.
+                response = ftp.retrbinary(f'RETR {filename}', local_file.write)
+                print(response)
+                # Revisa la respuesta
+                # https://en.wikipedia.org/wiki/List_of_FTP_server_return_codes
+                if response.startswith('226'):  # Transferencia completa
+                    print('Transferencia completa')
+                else:
+                    print('Error de transferencia. El archivo puede estar incompleto o corrupto.')
+        except Exception as e:
+            print("Error al intentar transcribir el archivo desde el servidor: ",e)
+
 def guadar_soporte_local(num_solicitud, tipo_solicitud, archivo):
 
     nombre_archivo = f'soporte_solicitud_#{num_solicitud}_{tipo_solicitud}.pdf'
@@ -49,7 +68,6 @@ def guadar_soporte_local(num_solicitud, tipo_solicitud, archivo):
     return f"./media/{nombre_archivo}"
 
 
-# guadar_soporte_ftp("prueba","prueba", "prueba")
 
 
     

@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.template import loader
 from django.urls import reverse
-from apps.home.models import SolicitudRecurso, Actividad, RutaViatico, GastoAdicional, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion, Beneficiario
+from apps.home.models import SolicitudRecurso, Actividad, RutaViatico, GastoAdicional, Colaborador, Regional, Municipio, TablaViaticos, EstadoSolicitud, TipoOperacion, Beneficiario, Documento
 from django.shortcuts import render
 from django.contrib.auth.models import User
 import datetime
@@ -16,7 +16,9 @@ from .generador_pdf import Solicitud_pdf
 import json
 from pickle import dump
 import ast
-from .cliente_ftp import guadar_soporte_ftp, guadar_soporte_local
+from .cliente_ftp import guadar_soporte_ftp, descargar_soporte_ftp
+from . import var_entorno
+import os
 
 @login_required(login_url="/login/")
 def index(request):
@@ -299,9 +301,18 @@ def cargar_solicitud_reembolso(request):
     solicitud_reembolso.valor_total = total_solicitud
     solicitud_reembolso.save()
 
+    # Crear Documento y relacionar Solicitud
+    
     ruta = guadar_soporte_ftp(solicitud_reembolso.id, solicitud_reembolso.operacion, soporte)
     print(ruta)
-    
+
+    documento_reembolso = Documento(
+        solicitud = solicitud_reembolso,
+        tipo = solicitud_reembolso.operacion.operacion, 
+        document_path = ruta , 
+        server = var_entorno.HOST
+    )
+    documento_reembolso.save()
     return HttpResponse("OK")
 
 
@@ -311,8 +322,9 @@ def ver_solicitud(request, id_solicitud):
     rutas_viaticos = []
     gastos_adicionales = []
 
-    solicitud = SolicitudRecurso.objects.get(id=id_solicitud)
-    actividades = Actividad.objects.filter(solicitud=solicitud)
+    solicitud = SolicitudRecurso.objects.get(id = id_solicitud)
+    actividades = Actividad.objects.filter(solicitud = solicitud)
+    documentos = Documento.objects.filter(solicitud = solicitud)
 
     if solicitud.operacion.operacion == "Viatico" and len(actividades) == 1:
         rutas_viaticos = RutaViatico.objects.filter(actividad=actividades[0])
@@ -323,7 +335,8 @@ def ver_solicitud(request, id_solicitud):
         "solicitud": solicitud,
         "actividades": actividades,
         "rutas_viaticos": rutas_viaticos,
-        "gastos_adicionales": gastos_adicionales
+        "gastos_adicionales": gastos_adicionales,
+        "documentos": documentos
     }
     html_template = loader.get_template('gestionSolicitudes/verSolicitud.html')
     return HttpResponse(html_template.render(context, request))
@@ -390,6 +403,22 @@ def adjuntarSoporte(request):
     #     print("Error al cargar el soporte ", e)
         
     return HttpResponse("OK")
+
+def descargar_documento(request, id_documento):
+    doc = Documento.objects.get(id = id_documento)
+    path = (doc.document_path).split("/")
+    filename = path[-1]
+    file_path = f"C:\\Users\\jrueda\\OneDrive - Fundacion SERSOCIAL\\Documentos\\Proyectos SerSocial\\SIREC\\SIREC\\media\\soporte_reembolso.pdf"
+    
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+        print("File has been deleted")
+    else:
+        print("File does not exist")
+        
+    descargar_soporte_ftp(file_path, filename)
+
+    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=filename)
 
 
     

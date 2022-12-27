@@ -195,28 +195,20 @@ class GastoAdicional(models.Model):
     def __str__(self) -> str:
         return "{}".format(self.id)
     
-
-
-# class ActivividadReembolso(models.Model):
-#     id = models.AutoField(primary_key =True)
-#     solicitud = models.ForeignKey(SolicitudRecurso, on_delete = models.CASCADE)
-#     beneficiario = models.ForeignKey(Beneficiario, models.SET_NULL, blank=True,null=True)
-#     fecha_actividad = models.DateField()
-#     proyecto = models.CharField(max_length = 50)
-#     descripcion = models.CharField(max_length = 150)
-#     valor = models.FloatField(default = 0.0)
-#     municipio = models.ForeignKey(Municipio, models.SET_NULL, blank=True,null=True)
-#     created_at = models.DateTimeField(auto_now_add = True)
-#     updated_at = models.DateTimeField(auto_now = True)
+class Documento(models.Model):
+    id = models.AutoField(primary_key =True)
+    solicitud = models.ForeignKey(SolicitudRecurso, models.SET_NULL, blank=True,null=True)
+    tipo = models.CharField(max_length = 20)
+    document_path = models.CharField(max_length = 200)
+    server = models.CharField(max_length = 150)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
     
-#     class meta:
-#         verbose_name="Actividad Reembolso"
-#         verbose_name_plural="Actividades de reembolso"
-#         db_table="Actividades_de_Reembolso"
-#         ordering=["id","solicitud","fecha_actividad", "descripcion", "beneficiario"]
+    class meta:
+        verbose_name ="Documento"
+        verbose_name_plural = "Documentos"
+        db_table = "Documentos"
+        ordering = ["id","tipo", "solicitud", "document_path", "server"]
 
-#     def __str__(self) -> str:
-#         return "Actividad Reembolso {} - {} - {} - {}".format(self.id, self.descripcion, self.valor, self.beneficiario)
-
-
-
+    def __str__(self) -> str:
+        return "{} - {} - {} ".format(self.id, self.tipo, self.server)

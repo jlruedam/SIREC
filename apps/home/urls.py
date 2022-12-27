@@ -12,6 +12,7 @@ urlpatterns = [
     # The home page
     path('', views.index, name='home'),
     path('ver-solicitud/<id_solicitud>', views.ver_solicitud, name='ver_solicitud'),
+    path('descargar_documento/<id_documento>', views.descargar_documento, name='descargar_documento'),
     # My Pages
     path('datos-ruta/', views.data_ruta, name='datos-ruta'),
     path('imprimir_pdf_solicitud/<id_solicitud>', views.imprimir_pdf_solicitud, name='imprimir_pdf_solicitud'),

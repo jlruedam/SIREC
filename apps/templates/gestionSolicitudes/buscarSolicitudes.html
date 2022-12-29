@@ -86,8 +86,20 @@
 
     <div class="card">
       <div class="card-header card-header-primary my-bg">
-        <h4 class="card-title ">Solicitudes</h4>
-        <p class="card-category">Tabla Solicitudes</p>
+        <div class="row">
+
+          <div class="col-10">
+            <h4 class="card-title ">Solicitudes</h4>
+            <p class="card-category">Tabla Solicitudes</p>
+          </div>
+
+          <div class="col-2">
+            <a href="{% url 'exportar_excel' %}"><img src="../../static/assets/img/icons8-ms-excel-40.png" alt="excel"></a>
+          </div>
+
+        </div>
+        
+        
       </div>
       <div class="card-body">
         <div class="table-responsive">

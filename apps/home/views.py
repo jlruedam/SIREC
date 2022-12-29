@@ -13,12 +13,16 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 import datetime
 from .generador_pdf import Solicitud_pdf
+from .generador_excel import genera_excel
 import json
 from pickle import dump
 import ast
 from .cliente_ftp import guadar_soporte_ftp, descargar_soporte_ftp
 from . import var_entorno
 import os
+
+LISTADO_SOLICITUDES = {}
+
 
 @login_required(login_url="/login/")
 def index(request):
@@ -44,6 +48,9 @@ def pages(request):
         if load_template == 'solicitudes.html':
 
             solicitudes = SolicitudRecurso.objects.all()
+            global LISTADO_SOLICITUDES 
+            LISTADO_SOLICITUDES = solicitudes
+
             colaboradores = Colaborador.objects.all()
             regionales = Regional.objects.all()
             municipios = Municipio.objects.all()
@@ -52,7 +59,7 @@ def pages(request):
             numero_solicitudes = len(solicitudes)+1
             usuario_actual = User.objects.get(username=request.user.username)
             context = {
-                "lista_solicitudes": solicitudes,
+                "lista_solicitudes": LISTADO_SOLICITUDES,
                 "solicitudes": str(numero_solicitudes),
                 "colaboradores": colaboradores,
                 "regionales": regionales,
@@ -74,7 +81,6 @@ def pages(request):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
-
 
 @login_required(login_url="/login/")
 def data_ruta(request):
@@ -112,7 +118,6 @@ def data_ruta(request):
             data["rutaAprobada"] = False
 
     return JsonResponse(data)
-
 
 @login_required(login_url="/login/")
 def cargar_solicitud_viatico(request):
@@ -197,7 +202,6 @@ def cargar_solicitud_viatico(request):
 
     return HttpResponse("OK")
 
-
 @login_required(login_url="/login/")
 def cargar_solicitud_anticipo(request):
     # Convertir la Carga en formato JSON en un diccionario.
@@ -243,7 +247,6 @@ def cargar_solicitud_anticipo(request):
     solicitud_anticipo.save()
 
     return HttpResponse("OK")
-
 
 @login_required(login_url="/login/")
 def cargar_solicitud_reembolso(request):
@@ -315,7 +318,6 @@ def cargar_solicitud_reembolso(request):
     documento_reembolso.save()
     return HttpResponse("OK")
 
-
 @login_required(login_url="/login/")
 def ver_solicitud(request, id_solicitud):
 
@@ -340,7 +342,6 @@ def ver_solicitud(request, id_solicitud):
     }
     html_template = loader.get_template('gestionSolicitudes/verSolicitud.html')
     return HttpResponse(html_template.render(context, request))
-
 
 @login_required(login_url="/login/")
 def imprimir_pdf_solicitud(request, id_solicitud):
@@ -384,7 +385,6 @@ def imprimir_pdf_solicitud(request, id_solicitud):
 
     return FileResponse(open('solicitud.pdf', 'rb'), as_attachment=True, filename="solicitud.pdf")
 
-
 def adjuntarSoporte(request):
 
     # soporte = request.FILES["soporte"]
@@ -404,6 +404,7 @@ def adjuntarSoporte(request):
         
     return HttpResponse("OK")
 
+@login_required(login_url="/login/")
 def descargar_documento(request, id_documento):
     doc = Documento.objects.get(id = id_documento)
     path = (doc.document_path).split("/")
@@ -421,4 +422,8 @@ def descargar_documento(request, id_documento):
     return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=filename)
 
 
-    
+def exportar_excel(request):
+    file_path = "C:\\Users\\jrueda\\OneDrive - Fundacion SERSOCIAL\\Documentos\\Proyectos SerSocial\\SIREC\\SIREC\\media\\listado_solicitudes.xlsx"
+    print(LISTADO_SOLICITUDES)
+    genera_excel(LISTADO_SOLICITUDES, file_path)
+    return FileResponse(open(file_path, 'rb'), as_attachment=True, filename="listado_solicitudes.xlsx")

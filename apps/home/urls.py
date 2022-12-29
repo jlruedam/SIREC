@@ -11,9 +11,11 @@ urlpatterns = [
 
     # The home page
     path('', views.index, name='home'),
+    
+    # My Pages
     path('ver-solicitud/<id_solicitud>', views.ver_solicitud, name='ver_solicitud'),
     path('descargar_documento/<id_documento>', views.descargar_documento, name='descargar_documento'),
-    # My Pages
+    path('exportar_excel/', views.exportar_excel, name='exportar_excel'),
     path('datos-ruta/', views.data_ruta, name='datos-ruta'),
     path('imprimir_pdf_solicitud/<id_solicitud>', views.imprimir_pdf_solicitud, name='imprimir_pdf_solicitud'),
     path('adjuntarSoporte/', views.adjuntarSoporte, name='adjuntarSoporte'),

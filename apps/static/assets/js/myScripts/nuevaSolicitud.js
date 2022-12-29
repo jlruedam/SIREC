@@ -104,6 +104,7 @@ const buscarSolicitudes = document.querySelector('#buscarSolicitudes');
 const contenedorFormViaticos = document.querySelector('#contenedorFormViaticos');
 const contenedorFormAnticipo= document.querySelector('#contenedorFormAnticipo'); 
 const contenedorFormReembolso = document.querySelector('#contenedorFormReembolso');
+const contenedorFormLegalizacion = document.querySelector('#contenedorFormLegalizacion');
 
 // # Tablas
 const tablaViaticos = document.querySelector('#tablaViaticos');
@@ -181,25 +182,36 @@ function constuirTablaViaticos(){
 function eligeTipoSolicitud(){
     
     switch(tipoSolicitud.value) {
-        case 'Viáticos':
+        case 'Viaticos':
             contenedorFormViaticos.style.display = 'block';
             contenedorFormAnticipo.style.display = 'none';
             contenedorFormReembolso.style.display = 'none';
+            contenedorFormLegalizacion.style.display = 'none';
             break;
         case 'Anticipo':
             contenedorFormViaticos.style.display = 'none';
             contenedorFormReembolso.style.display = 'none';
             contenedorFormAnticipo.style.display = 'block';
+            contenedorFormLegalizacion.style.display = 'none';
             break;
         case 'Reembolso':
             contenedorFormViaticos.style.display = 'none';
             contenedorFormAnticipo.style.display = 'none';
             contenedorFormReembolso.style.display = 'block';
+            contenedorFormLegalizacion.style.display = 'none';
+            break;
+        case 'Legalizacion':
+            contenedorFormViaticos.style.display = 'none';
+            contenedorFormAnticipo.style.display = 'none';
+            contenedorFormReembolso.style.display = 'none';
+            contenedorFormLegalizacion.style.display = 'block';
+
             break;
         default:
             contenedorFormViaticos.style.display = 'none';
             contenedorFormAnticipo.style.display = 'none';
             contenedorFormReembolso.style.display = 'none';
+            contenedorFormLegalizacion.style.display = 'none';
     }
 
 }

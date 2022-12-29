@@ -5,10 +5,11 @@
     <div class="myForm__item myForm__item_especial">
         <!-- <label for="selectTipo" class="myForm__label"></label> -->
         <select name="tipoSolicitud" id="tipoSolicitud" class="myForm__select myForm__select_modify " >
-            <option value="" selected><strong>Tipo Solicitud</strong></option>
-            <option value="Viáticos">Viáticos</option>
+            <option value="" selected>___Tipo Solicitud___</option>
+            <option value="Viaticos">Viático</option>
             <option value="Anticipo">Anticipo</option>
             <option value="Reembolso">Reembolso</option>
+            <option value="Legalizacion">Legalización</option>
         </select>
     </div>
     
@@ -21,6 +22,9 @@
     </div>
     <div id="contenedorFormReembolso" class="contenedorForm" style="display: none;">
         {% include "gestionSolicitudes/formularioReembolso.html" %}
+    </div>
+    <div id="contenedorFormLegalizacion" class="contenedorForm" style="display: none;">
+        {% include "gestionSolicitudes/formularioLegalizacion.html" %}
     </div>
    
 </div>

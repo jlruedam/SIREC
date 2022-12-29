@@ -1,7 +1,7 @@
-{% block formReembolso %}
+{% block formLegalizacion %}
 
 <h2 class="mySubtitle">
-    FORMULARIO REEMBOLSO
+    FORMULARIO LEGALIZACIÓN
 </h2>
 
 <form action="" class="myForm" method="POST">
@@ -56,88 +56,18 @@
         
 
         <fieldset class="myForm__fieldset">
-            <legend class="myForm__legend"><h4 class="mySubtitle">ACTIVIDADES DE REEMBOLSO</h4></legend>
-
-            <div class="myForm__section">
-
-                <div class="myForm__item">
-                    <label for="fechaActividadReembolso" class="myForm__label">Fecha</label>
-                    <input type="date" class="myForm__input" id="fechaActividadReembolso" >
-                </div>
-
-                <div class="myForm__item">
-                    <label for="lugarActividadReembolso" class="myForm__label">Ciudad / Municipio</label>
-                    <input list="listadoMunicipios" class="myForm__input" id="lugarActividadReembolso">
-                    <datalist id="listadoMunicipios">
-                        {% for municipio in municipios%}
-                            <option value="{{municipio}}">{{municipio}}</option>
-                        {% endfor %} 
-                    </datalist>
-                </div>
-
-                <div class="myForm__item">
-                    <label for="proyectoReembolso" class="myForm__label">Proyecto</label>
-                    <input type="text" class="myForm__input" id="proyectoReembolso" >
-                </div>
-
-                <div class="myForm__item">
-                    <label for="nombreActividadReembolso" class="myForm__label">Nombre Actividad</label>
-                    <textarea  name="descripcionGastoAdicional" class="myForm__textArea" id="nombreActividadReembolso">...</textarea>
-                </div>
-                
-                <div class="myForm__item">
-                    <label for="valorActividadReembolso" class="myForm__label">Valor: $</label>
-                    <input type="number" class="myForm__input" id="valorActividadReembolso" >
-                </div>
-
-                <div class="myForm__item"></div>
-            </div>
-
-            <fieldset class="myForm__fieldset">
-                <legend class="myForm__legend"><h5 class="mySubtitle">Beneficario</h5></legend>
-                <div class="myForm__section">
-                    <div class="myForm__item">
-                        <label for="numIdentificacion" class="myForm__label"># Identificación</label>
-                        <input type="text" class="myForm__input" id="numIdentificacion">
-                    </div>
-    
-                    <div class="myForm__item">
-                        <label for="nombreBeneficiario" class="myForm__label">Nombre </label>
-                        <input type="text" class="myForm__input" id="nombreBeneficiario">
-                    </div>
-    
-                    <div class="myForm__item">
-                        <label for="tipoIdentificacion" class="myForm__label">Tipo Identificación</label>
-                        <select name="tipoIdentificacion" id="tipoIdentificacion" class="myForm__select">
-                            <option value="rut_cedula">nit</option>
-                            <option value="rut_cedula">rut / cédula</option>
-                        </select>
-                    </div>
-
-                    <div class="myForm__item"></div>
-                </div>
-                
-
-            </fieldset>
-
-            <div class="myForm__section">
-                <div class="myForm__item">
-                    <button class="myButton" id="btnCargarReembolso" type="button">
-                        <img src="../../static/assets/img/icons8-más-2-matemáticas-40.png" alt="">
-                    </button>
-                </div>
-            </div>
-
+            <legend class="myForm__legend"><h4 class="mySubtitle">ACTIVIDADES DE LEGALIZACIÓN</h4></legend>
+            
             <div class="myForm__section">
                 <div class="col-md-12">
                     <div class="card card-plain">
                     <div class="card-header card-header-primary my-bg">
-                        <h4 class="card-title mt-0"> Actividades reembolso </h4>
+                        <h4 class="card-title mt-0"> Actividades Legalizacion </h4>
                         <p class="card-category"> Detalle actividades </p>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                        <table class="table table-hover" id="tablaActividadesReembolsos">
+                        <table class="table table-hover" id="tablaActividadesLegalizacion">
                             <thead class="">
                             
                             <th>
@@ -161,7 +91,7 @@
                                 Eliminar
                             </th>
                             </thead>
-                            <tbody id="bodyTablaActividadesReembolsos">
+                            <tbody id="bodyTablaActividadesLegalizacion">
                             
                             </tbody>
                         </table>
@@ -177,8 +107,8 @@
             <legend class="myForm__legend"><h4 class="mySubtitle">Documentos legalización</h4></legend>
             <div class="myForm__section">
                 <div class="myForm__item">
-                    <label for="adjuntoReembolso" class="myForm__input_file">Adjunar soporte</label>
-                    <input type="file" id="adjuntoReembolso" accept=".pdf"><br>
+                    <label for="adjuntoLegalizacion" class="myForm__input_file">Adjunar soporte</label>
+                    <input type="file" id="adjuntoLegalizacion" accept=".pdf"><br>
                     
                 </div>
                 <div class="myForm__item">
@@ -191,7 +121,7 @@
 
         <div class="myForm__section">
             <div class="myForm__item">
-                <button type="submit" class="myButton myButton_submit" id="btnEnviarSolicitudReembolso">Enviar Solicitud</button>
+                <button type="submit" class="myButton myButton_submit" id="btnEnviarSolicitudLegalizacion">Enviar Solicitud</button>
             </div>
             
         </div>

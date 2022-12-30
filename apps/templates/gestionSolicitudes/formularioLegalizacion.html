@@ -26,8 +26,8 @@
             </div>
 
             <div class="myForm__item">
-                <label for="solicitudAsociada" class="myForm__label">Solicitud asociada</label>
-                <input list="listaSolicitudes" class="myForm__input" id="solicitudAsociada">
+                <label for="solicitudAsociadaLegalizacion" class="myForm__label">Solicitud asociada</label>
+                <input list="listaSolicitudes" class="myForm__input" id="solicitudAsociadaLegalizacion">
                 <datalist id="listaSolicitudes">
                     {% for s in lista_solicitudes %}
                         <option value="{{s.id}}">{{s}}</option>
@@ -107,7 +107,7 @@
             <legend class="myForm__legend"><h4 class="mySubtitle">Documentos legalización</h4></legend>
             <div class="myForm__section">
                 <div class="myForm__item">
-                    <label for="adjuntoLegalizacion" class="myForm__input_file">Adjunar soporte</label>
+                    <label for="adjuntoLegalizacion" class="myForm__input_file">Adjuntar soporte</label>
                     <input type="file" id="adjuntoLegalizacion" accept=".pdf"><br>
                     
                 </div>

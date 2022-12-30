@@ -15,6 +15,9 @@ const regional = document.querySelector('#regional');
 const sede = document.querySelector('#sede');
 const observacionesSolicitud = document.querySelector('#observacionesSolicitud');
 
+/* LEGALIZACIÓN */
+const solicitudAsociadaLegalizacion = document.querySelector('#solicitudAsociadaLegalizacion');
+solicitudAsociadaLegalizacion.addEventListener('change', cargaActividadesAsociadas);
 
 /* REEMBOLSOS */
 // # Datos Solicitud
@@ -126,6 +129,7 @@ btnBuscarSolicitudes.addEventListener('click',muestraOcultaFormulario);
 btnCargarViatico.addEventListener('click',cargarViatico );
 btnCargarGastoAdicional.addEventListener('click', cargarGastoAdicional);
 btnEnviarSolicitudViatico.addEventListener('click', enviarSolicitudViatico);
+
 
 function constuirTablaViaticos(){
     
@@ -782,4 +786,20 @@ function adjuntarArchivo(){
             
     //     }
     // });  
+}
+
+function cargaActividadesAsociadas(){
+    console.log("Entra a la función");
+    $.ajax({
+        url:"dataSolicitud/?solicitudAsociada="+solicitudAsociada.value,
+        type:"GET",
+        success:function(response){
+            console.log(response)
+            console.log("Petición exitosa");
+            //location.reload();
+        }, 
+        error: function(error){
+            console.log("Hay un Pendejo error", error) 
+        }
+    });  
 }

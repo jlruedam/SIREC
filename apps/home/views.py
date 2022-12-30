@@ -421,9 +421,18 @@ def descargar_documento(request, id_documento):
 
     return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=filename)
 
-
 def exportar_excel(request):
     file_path = "C:\\Users\\jrueda\\OneDrive - Fundacion SERSOCIAL\\Documentos\\Proyectos SerSocial\\SIREC\\SIREC\\media\\listado_solicitudes.xlsx"
     print(LISTADO_SOLICITUDES)
     genera_excel(LISTADO_SOLICITUDES, file_path)
     return FileResponse(open(file_path, 'rb'), as_attachment=True, filename="listado_solicitudes.xlsx")
+
+def data_solicitud(request):
+    solicitud_asociada = str(request.GET["solicitudAsociada"])
+
+    data = {
+        "Prueba": f"Esta es una prueba para la solicitud {solicitud_asociada}"
+    }
+    
+
+    return JsonResponse(data)

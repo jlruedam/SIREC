@@ -428,11 +428,31 @@ def exportar_excel(request):
     return FileResponse(open(file_path, 'rb'), as_attachment=True, filename="listado_solicitudes.xlsx")
 
 def data_solicitud(request):
-    solicitud_asociada = str(request.GET["solicitudAsociada"])
+    datos_actividades = []
+
+   
+    solicitud_buscada = str(request.GET["solicitudAsociada"])
+    solicitud_asociada = SolicitudRecurso.objects.get(id = solicitud_buscada)
+
+    actividades_asociadas = Actividad.objects.filter(solicitud = solicitud_asociada)
+    for actividad in actividades_asociadas:
+
+        act = {
+            "id": actividad.id,
+            "solicitud": actividad.solicitud.id,
+            "fecha_actividad": actividad.fecha_actividad,
+            "proyecto": actividad.proyecto,
+            "descripcion": actividad.descripcion,
+            "valor": actividad.valor,
+            "municipio": actividad.municipio.municipio,
+            "created_at": actividad.created_at,
+            "updated_at": actividad.updated_at
+        }
+
+        datos_actividades.append(act)
 
     data = {
-        "Prueba": f"Esta es una prueba para la solicitud {solicitud_asociada}"
+        "datos_actividades": datos_actividades
     }
-    
 
     return JsonResponse(data)

@@ -3,6 +3,7 @@ const rutas = [];
 const gastosAdicionales = [];
 const actividadesAnticipos = [];
 const actividadesReembolsos = [];
+const actividadesLegalizacion = [];
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value; // Se utiliza para poder enviar petición tipo POST a Django
 const topes = {
     "transporte":320000,
@@ -19,6 +20,37 @@ const observacionesSolicitud = document.querySelector('#observacionesSolicitud')
 const solicitudAsociadaLegalizacion = document.querySelector('#solicitudAsociadaLegalizacion');
 solicitudAsociadaLegalizacion.addEventListener('change', cargaActividadesAsociadas);
 
+/* Datos */
+const fechaActividadLegalizacion =  document.querySelector('#fechaActividadLegalizacion');
+const lugarActividadLegalizacion =  document.querySelector('#lugarActividadLegalizacion');
+const proyectoLegalizacion =  document.querySelector('#proyectoLegalizacion');
+const beneficiarioLegalizacion =  document.querySelector('#beneficiarioLegalizacion');
+const nombreActividadLegalizacion =  document.querySelector('#nombreActividadLegalizacion');
+const valorActividadLegalizacion =  document.querySelector('#valorActividadLegalizacion');
+const adjuntoLegalizacion = document.querySelector('#adjuntoLegalizacion');
+const totalLegalizado = document.querySelector('#totalLegalizado');
+// # Beneficiario
+const numIdentificacionLegalizar = document.querySelector('#numIdentificacionLegalizar');
+const tipoIdentificacionLegalizar = document.querySelector('#tipoIdentificacionLegalizar');
+const nombreBeneficiarioLegalizar = document.querySelector('#nombreBeneficiarioLegalizar');
+
+// # Botones
+const btnCargarLegalizacion = document.querySelector('#btnCargarLegalizacion');
+const btnEnviarSolicitudLegalizacion = document.querySelector('#btnEnviarSolicitudLegalizacion');
+
+// # Tablas
+const bodyTablaActividadesAnticipoAsociado = document.querySelector('#bodyTablaActividadesAnticipoAsociado');
+const bodyTablaActividadesLegalizacion = document.querySelector('#bodyTablaActividadesLegalizacion');
+const tablaActividadesAnticipoAsociado = document.querySelector('#tablaActividadesAnticipoAsociado');
+const tablaActividadesLegalizacion = document.querySelector('#tablaActividadesLegalizacion');
+const totalAnticipoLegalizar = document.querySelector('#totalAnticipoLegalizar');
+
+
+// # Eventos
+tablaActividadesLegalizacion.addEventListener('click',eliminarActividadLegalizacion);
+// btnEnviarSolicitudLegalizacion.addEventListener('click', enviarSolicitudLegalizacion);
+btnCargarLegalizacion.addEventListener('click', cargarActividadLegalizacion);
+adjuntoLegalizacion.addEventListener('change', adjuntarArchivo)
 /* REEMBOLSOS */
 // # Datos Solicitud
 const solicitudAsociada = document.querySelector('#solicitudAsociada');
@@ -66,7 +98,7 @@ const tablaActividadesAnticipos = document.querySelector('#tablaActividadesAntic
 // # Eventos
 tablaActividadesAnticipos.addEventListener('click',eliminarActividadAnticipo);
 btnEnviarSolicitudAnticipo.addEventListener('click', enviarSolicitudAnticipo);
-btnCargarActividad.addEventListener('click', cargarActividadReembolso);
+btnCargarActividad.addEventListener('click', cargarActividadAnticipo);
 
 
 
@@ -746,6 +778,103 @@ function enviarSolicitudReembolso(e){
     });  
 }
 
+function cargarActividadLegalizacion(){
+    console.log("Cargar Actividad: ");
+    var totalActividadesLegalizadas = eval(totalLegalizado.innerHTML);
+    let beneficiario = {
+        "identificacionBeneficiarioLegalizar": numIdentificacionLegalizar.value,
+        "tipoIdentificacionLegalizar": tipoIdentificacionLegalizar.value,
+        "nombreBeneficiarioLegalizar": nombreBeneficiarioLegalizar.value
+    }
+
+    let actividad = {
+        "fechaActividadLegalizacion": fechaActividadLegalizacion.value,
+        "lugarActividadLegalizacion": lugarActividadLegalizacion.value,
+        "proyectoLegalizacion": proyectoLegalizacion.value,
+        "beneficiario": beneficiario,
+        "nombreActividadLegalizacion": nombreActividadLegalizacion.value,
+        "valorActividadLegalizacion" : valorActividadLegalizacion.value,
+    }
+
+
+    if(actividad.fechaActividadLegalizacion.length == 0){
+        alert("Debe ingresar la fecha correctamente.");
+    }else if(actividad.lugarActividadLegalizacion.length == 0){
+        alert("Debe diligenciar la ciudad o municipio.");
+    }else if(actividad.nombreActividadLegalizacion.length == 0){
+        alert("Debe diligenciar el nombre de la actividad.");
+    }else if(eval(actividad.valorActividadLegalizacion) <= 0){
+        alert("Debe registrar un valor mayor que $ 0");
+    }else {
+
+        let idActividad = actividadesLegalizacion.push(actividad);
+
+        let btnBorrar = document.createElement('button');
+        let hilera = document.createElement("tr");
+        let celda = document.createElement("td");
+        let textoCelda = document.createTextNode(idActividad);
+
+        celda.appendChild(textoCelda);
+        celda.style.display = "none";
+        hilera.setAttribute('id',idActividad);
+        hilera.appendChild(celda);
+
+        btnBorrar.innerHTML="🗑️";
+        btnBorrar.setAttribute('id', "btnBorrarActividadLegalizacion");
+        btnBorrar.setAttribute('type', "button");
+        btnBorrar.setAttribute('ruta', idActividad);
+
+        for (let campo in actividad){
+            
+            celda = document.createElement("td");
+            if (campo == "beneficiario"){
+                textoCelda = document.createTextNode(actividad[campo]["nombreBeneficiarioLegalizar"])
+            }else if(campo == "valorActividadLegalizacion") {
+                totalActividadesLegalizadas = totalActividadesLegalizadas + eval(actividad[campo]);
+                textoCelda = document.createTextNode("$ " + actividad[campo]);
+            }else {
+                textoCelda = document.createTextNode(actividad[campo]);
+            }
+            celda.appendChild(textoCelda);
+            hilera.appendChild(celda);
+        }
+    
+        celda = document.createElement("td");
+        celda.appendChild(btnBorrar);
+        hilera.appendChild(celda);
+        totalLegalizado.innerHTML = totalActividadesLegalizadas;
+        bodyTablaActividadesLegalizacion.appendChild(hilera);
+        tablaActividadesLegalizacion.appendChild(bodyTablaActividadesLegalizacion);
+
+        // Limpiar campos en el fomulario
+
+        fechaActividadLegalizacion.value = "";
+        lugarActividadLegalizacion.value = "";
+        proyectoLegalizacion.value = "";
+        nombreActividadLegalizacion.value = "";
+        valorActividadLegalizacion.value = 0;
+    }
+
+}
+
+function eliminarActividadLegalizacion(e){
+    console.log(e);
+    let btn = e.path[0];
+    if(btn.id === "btnBorrarActividadLegalizacion"){
+        let idActividad = btn.attributes[2].nodeValue;
+        let actividad = document.getElementById(btn.attributes[2].nodeValue);
+        let elementos = actividad.getElementsByTagName("td");
+        let valorDescontar = elementos[6].innerHTML;
+
+        valorDescontar = eval(valorDescontar.slice(1));
+        totalLegalizado.innerHTML = eval(totalLegalizado.innerHTML) - valorDescontar;
+        
+        actividad.remove();
+        actividadesLegalizacion.splice(idActividad-1,1);
+       
+    }
+}
+
 function adjuntarArchivo(){
     archivoCargado.innerHTML = adjuntoReembolso.files[0].name;
     // console.log(adjuntoReembolso.files[0]);
@@ -790,13 +919,39 @@ function adjuntarArchivo(){
 
 function cargaActividadesAsociadas(){
     console.log("Entra a la función");
+    console.log(solicitudAsociadaLegalizacion.value);
+    var totalAnticipo = 0;
     $.ajax({
-        url:"dataSolicitud/?solicitudAsociada="+solicitudAsociada.value,
+        url:"dataSolicitud/?solicitudAsociada="+solicitudAsociadaLegalizacion.value,
         type:"GET",
         success:function(response){
-            console.log(response)
+            console.log(response);
             console.log("Petición exitosa");
             //location.reload();
+            let data_actividades = response.datos_actividades;
+
+            for (let actividad of data_actividades) {
+                console.log(actividad)
+                let hilera = document.createElement("tr");
+                datos_tabla = [
+                    actividad.fecha_actividad, actividad.municipio, actividad.proyecto,
+                    actividad.descripcion, "$"+actividad.valor
+                ]
+                totalAnticipo = totalAnticipo + eval(actividad.valor);
+
+                for(campo of datos_tabla){
+                    let celda = document.createElement("td");
+                    let textoCelda = document.createTextNode(campo);
+                    celda.appendChild(textoCelda);
+                    hilera.appendChild(celda);
+                }
+                
+                bodyTablaActividadesAnticipoAsociado.appendChild(hilera);  
+                
+            }
+            tablaActividadesAnticipoAsociado.appendChild(bodyTablaActividadesAnticipoAsociado);
+            console.log(totalAnticipo);
+            totalAnticipoLegalizar.innerHTML = totalAnticipo;
         }, 
         error: function(error){
             console.log("Hay un Pendejo error", error) 

@@ -318,6 +318,78 @@ def cargar_solicitud_reembolso(request):
     documento_reembolso.save()
     return HttpResponse("OK")
 
+
+@login_required(login_url="/login/")
+def cargar_solicitud_legalizacion(request):
+
+    print("Ingresa a la vista")
+    soporte = request.FILES["soporte"]
+    print(soporte)
+    data = request.POST
+    dict_data = ast.literal_eval(data["dataLegalizacion"])
+
+    solicitante = User.objects.get(username=request.user.username)
+    estado = EstadoSolicitud.objects.get(estado="Solicitado")
+    operacion = TipoOperacion.objects.get(operacion="Legalizacion")
+    regional = Regional.objects.get(regional=dict_data["datosSolicitud"]["regional"])
+
+    # Crear solicitud de viático
+    solicitud_legalizacion = SolicitudRecurso(
+        colaborador=solicitante,
+        estado=estado,
+        operacion=operacion,
+        fecha=datetime.datetime.now(),
+        regional=regional,
+        observaciones=dict_data["datosSolicitud"]["observaciones"],
+    )
+
+    solicitud_legalizacion.save()
+
+    # Crear la actividades
+    total_solicitud = 0
+    for act in dict_data["actividadesLegalizacion"]:
+    
+        # Crear Beneficiario
+        beneficiario = Beneficiario(
+            beneficiario=act["beneficiario"]["identificacionBeneficiarioLegalizar"],
+            tipo_id_beneficiario=act["beneficiario"]["tipoIdentificacionLegalizar"],
+            nombre=act["beneficiario"]["nombreBeneficiarioLegalizar"],
+        )
+        beneficiario.save()
+
+        municipio_actividad = Municipio.objects.filter(municipio=act["lugarActividadLegalizacion"])
+
+        actividad_reembolso = Actividad(
+            solicitud = solicitud_legalizacion,
+            fecha_actividad=act["fechaActividadLegalizacion"],
+            proyecto=act["proyectoLegalizacion"],
+            descripcion=act["nombreActividadLegalizacion"],
+            municipio=municipio_actividad[0],
+            valor=act["valorActividadLegalizacion"],
+            beneficiario=beneficiario
+        )
+
+        actividad_reembolso.save()
+        total_solicitud += float(act["valorActividadLegalizacion"])
+
+    solicitud_legalizacion.valor_total = total_solicitud
+    solicitud_legalizacion.save()
+
+    # Crear Documento y relacionar Solicitud
+    
+    ruta = guadar_soporte_ftp(solicitud_legalizacion.id, solicitud_legalizacion.operacion, soporte)
+    print(ruta)
+
+    documento_legalizacion = Documento(
+        solicitud = solicitud_legalizacion,
+        tipo = solicitud_legalizacion.operacion.operacion, 
+        document_path = ruta, 
+        server = var_entorno.HOST
+    )
+    documento_legalizacion.save()
+
+    return HttpResponse("OK")
+
 @login_required(login_url="/login/")
 def ver_solicitud(request, id_solicitud):
 

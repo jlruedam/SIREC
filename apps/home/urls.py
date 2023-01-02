@@ -23,7 +23,7 @@ urlpatterns = [
     path('cargarSolicitudReembolso/', views.cargar_solicitud_reembolso, name='cargar_solicitud_reembolso'),
     path('cargarSolicitudViatico/', views.cargar_solicitud_viatico, name='cargar_solicitud_viatico'),
     path('cargarSolicitudAnticipo/', views.cargar_solicitud_anticipo, name='cargar_solicitud_anticipo'),
-    path('cargarSolicitudReembolso/', views.cargar_solicitud_reembolso, name='cargar_solicitud_reembolso'),
+    path('cargarSolicitudLegalizacion/', views.cargar_solicitud_legalizacion, name='cargar_solicitud_Legalizacion'),
     
     # Matches any html file
     re_path(r'^.*\.*', views.pages, name='pages'),

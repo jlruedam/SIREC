@@ -45,10 +45,9 @@ const tablaActividadesAnticipoAsociado = document.querySelector('#tablaActividad
 const tablaActividadesLegalizacion = document.querySelector('#tablaActividadesLegalizacion');
 const totalAnticipoLegalizar = document.querySelector('#totalAnticipoLegalizar');
 
-
 // # Eventos
 tablaActividadesLegalizacion.addEventListener('click',eliminarActividadLegalizacion);
-// btnEnviarSolicitudLegalizacion.addEventListener('click', enviarSolicitudLegalizacion);
+btnEnviarSolicitudLegalizacion.addEventListener('click', enviarSolicitudLegalizacion);
 btnCargarLegalizacion.addEventListener('click', cargarActividadLegalizacion);
 adjuntoLegalizacion.addEventListener('change', adjuntarArchivo)
 /* REEMBOLSOS */
@@ -645,6 +644,8 @@ function enviarSolicitudAnticipo(e){
     });  
 }
 
+
+
 function cargarActividadReembolso(){
     console.log("Cargar Actividad: ");
 
@@ -778,6 +779,48 @@ function enviarSolicitudReembolso(e){
     });  
 }
 
+function cargaActividadesAsociadas(){
+    console.log("Entra a la función");
+    console.log(solicitudAsociadaLegalizacion.value);
+    var totalAnticipo = 0;
+    $.ajax({
+        url:"dataSolicitud/?solicitudAsociada="+solicitudAsociadaLegalizacion.value,
+        type:"GET",
+        success:function(response){
+            console.log(response);
+            console.log("Petición exitosa");
+            //location.reload();
+            let data_actividades = response.datos_actividades;
+
+            for (let actividad of data_actividades) {
+                console.log(actividad)
+                let hilera = document.createElement("tr");
+                datos_tabla = [
+                    actividad.fecha_actividad, actividad.municipio, actividad.proyecto,
+                    actividad.descripcion, "$"+actividad.valor
+                ]
+                totalAnticipo = totalAnticipo + eval(actividad.valor);
+
+                for(campo of datos_tabla){
+                    let celda = document.createElement("td");
+                    let textoCelda = document.createTextNode(campo);
+                    celda.appendChild(textoCelda);
+                    hilera.appendChild(celda);
+                }
+                
+                bodyTablaActividadesAnticipoAsociado.appendChild(hilera);  
+                
+            }
+            tablaActividadesAnticipoAsociado.appendChild(bodyTablaActividadesAnticipoAsociado);
+            console.log(totalAnticipo);
+            totalAnticipoLegalizar.innerHTML = totalAnticipo;
+        }, 
+        error: function(error){
+            console.log("Hay un Pendejo error", error) 
+        }
+    });  
+}
+
 function cargarActividadLegalizacion(){
     console.log("Cargar Actividad: ");
     var totalActividadesLegalizadas = eval(totalLegalizado.innerHTML);
@@ -868,7 +911,7 @@ function eliminarActividadLegalizacion(e){
 
         valorDescontar = eval(valorDescontar.slice(1));
         totalLegalizado.innerHTML = eval(totalLegalizado.innerHTML) - valorDescontar;
-        
+
         actividad.remove();
         actividadesLegalizacion.splice(idActividad-1,1);
        
@@ -876,85 +919,53 @@ function eliminarActividadLegalizacion(e){
 }
 
 function adjuntarArchivo(){
-    archivoCargado.innerHTML = adjuntoReembolso.files[0].name;
-    // console.log(adjuntoReembolso.files[0]);
-
-    // let formData = new FormData();
-    // let fileData = adjuntoReembolso.files[0]; 
-    // json = {
-    //     "prueba":"json de prueba"
-    // }
-
-    // dataPrueba = JSON.stringify(json)
-
-    // formData.append("datosPrueba",dataPrueba);
-
-    // formData.append("soporte",fileData)
-
-    // $.ajax({
-    //     url:"adjuntarSoporte/",
-    //     method:"POST",
-    //     data: formData,
-    //     headers: {'X-CSRFToken': csrftoken},
-    //     contentType: false,
-    //     enctype:'multipart/form-data',
-    //     processData: false,
-    //     cache: false,
-
-    //     success:function(response){
-    //         console.log(response);
-    //         console.log("Petición exitosa");
-    //         alert("Solicitud cargada correctamente");
-    //         location.reload();
-    //     }, 
-    //     error: function(error){
-    //         console.log("Hay un Pendejo error")
-    //         console.log(error);
-    //         alert("Solicitud no pudo ser cargada");
-    //         location.reload();
-            
-    //     }
-    // });  
+    if (adjuntoReembolso.files[0].name){
+        archivoCargado.innerHTML = adjuntoReembolso.files[0].name;
+    }else if (adjuntoLegalizacion.files[0].name){
+        archivoCargado.innerHTML = adjuntoLegalizacion.files[0].name;
+    }
 }
 
-function cargaActividadesAsociadas(){
-    console.log("Entra a la función");
-    console.log(solicitudAsociadaLegalizacion.value);
-    var totalAnticipo = 0;
+function enviarSolicitudLegalizacion(e){
+    e.preventDefault();
+    let formData = new FormData();
+    let fileData = adjuntoLegalizacion.files[0]
+
+    let json = {
+        "datosSolicitud": {
+            "regional":regional.value,
+            "observaciones": observacionesSolicitud.value,
+        },
+        "actividadesLegalizacion": actividadesLegalizacion,
+    }
+
+    dataLegalizacion = JSON.stringify(json)
+
+    formData.append("dataLegalizacion",dataLegalizacion);
+    formData.append("soporte",fileData)
+
     $.ajax({
-        url:"dataSolicitud/?solicitudAsociada="+solicitudAsociadaLegalizacion.value,
-        type:"GET",
+        url:"cargarSolicitudLegalizacion/",
+        method:"POST",
+        data: formData,
+        headers: {'X-CSRFToken': csrftoken},
+        contentType: false,
+        enctype:'multipart/form-data',
+        processData: false,
+        cache: false,
+
         success:function(response){
             console.log(response);
             console.log("Petición exitosa");
-            //location.reload();
-            let data_actividades = response.datos_actividades;
-
-            for (let actividad of data_actividades) {
-                console.log(actividad)
-                let hilera = document.createElement("tr");
-                datos_tabla = [
-                    actividad.fecha_actividad, actividad.municipio, actividad.proyecto,
-                    actividad.descripcion, "$"+actividad.valor
-                ]
-                totalAnticipo = totalAnticipo + eval(actividad.valor);
-
-                for(campo of datos_tabla){
-                    let celda = document.createElement("td");
-                    let textoCelda = document.createTextNode(campo);
-                    celda.appendChild(textoCelda);
-                    hilera.appendChild(celda);
-                }
-                
-                bodyTablaActividadesAnticipoAsociado.appendChild(hilera);  
-                
-            }
-            tablaActividadesAnticipoAsociado.appendChild(bodyTablaActividadesAnticipoAsociado);
-            console.log(totalAnticipo);
-            totalAnticipoLegalizar.innerHTML = totalAnticipo;
+            alert("Solicitud cargada correctamente");
+            location.reload();
         }, 
         error: function(error){
-            console.log("Hay un Pendejo error", error) 
+            console.log("Hay un Pendejo error")
+            console.log(error);
+            alert("Solicitud no pudo ser cargada");
+            location.reload();
+            
         }
     });  
 }
